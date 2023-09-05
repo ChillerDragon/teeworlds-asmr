@@ -15,3 +15,10 @@ sudo apt install nasm make
 make
 ./teeworlds_asmr
 ```
+
+## debug
+
+```
+strace ./teeworlds_asmr
+```
+

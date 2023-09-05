@@ -82,7 +82,7 @@ section    .data
                 db 0, 0, 0, 0, 0, 0, 0, 0
 
     ; tw protocol
-    MSG_CTRL_TOKEN db 04h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 05h, 51h, 3Bh, 59h, 46h
+    MSG_CTRL_TOKEN db 0x04, 0x00, 0x00, 0x0FF, 0xFF, 0xFF, 0xFF, 0x05, 0x51, 0x3B, 0x59, 0x46, 512 dup (0x00)
     MSG_CTRL_TOKEN_LEN equ $ - MSG_CTRL_TOKEN
 
     ; variables
