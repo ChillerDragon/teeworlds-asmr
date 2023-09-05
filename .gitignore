@@ -1,0 +1,5 @@
+*.o
+teeworlds_asmr
+tags
+.gdb_history
+
