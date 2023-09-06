@@ -97,8 +97,43 @@ section    .data
     orig        times       10000       db      0
     new         times       10000       db      0
     char        db          0,0,0,0,0
+    fmt_digit   db          "value of ebx is: %d", 10, 0
+    s_got_file_desc db "got file descriptor: "
+    l_got_file_desc equ $ - s_got_file_desc
 
 section     .text
+
+print_newline:
+    push    0x0a
+	mov     rax, SYS_WRITE
+	mov     edi, STDOUT
+	mov     rsi, rsp    ; use char on stack
+	mov     rdx, 1      ; size_t len = 1 char to write.
+	syscall            ; call the kernel, it looks at registers to decide what to do
+	add     rsp, 8      ; restore stack pointer
+	ret
+
+print_digit_rax:
+	; push    '!'
+    ; push    0x41
+    add     rax, 0x30
+    push    rax
+	mov     rax, SYS_WRITE
+	mov     edi, STDOUT
+	mov     rsi, rsp    ; use char on stack
+	mov     rdx, 1      ; size_t len = 1 char to write.
+	syscall            ; call the kernel, it looks at registers to decide what to do
+	add     rsp, 8      ; restore stack pointer
+    call    print_newline
+	ret
+
+print_dbg_fd:
+    mov         rsi,        s_got_file_desc
+    mov         rax,        SYS_WRITE
+    mov         rdi,        STDOUT
+    mov         rdx,        l_got_file_desc
+    syscall
+    ret
 
 print_menu:
     mov         rsi,        s_menu
@@ -154,6 +189,12 @@ send_udp:
     mov         rdx,        0 ; flags
     syscall
     mov         rdi,        rax ; socket file descriptor
+
+    mov r8, rax ; ugly hack to store rax
+    call print_dbg_fd
+    mov rax, r8
+	call print_digit_rax
+
     mov         rax,        SYS_SENDTO
     mov         rsi,        MSG_CTRL_TOKEN
     mov         rdx,        MSG_CTRL_TOKEN_LEN
