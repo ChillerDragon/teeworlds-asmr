@@ -61,6 +61,15 @@
 ; rsi - register source index (source for data copies)
 ; rdi - register destination index (destination for data copies)
 
+; calling convetion for this code base is matching the one
+; of linux sys calls
+; so function arguments have to be filled in those registers
+; in the following order:
+;
+; rax, rdi, rsi, rdx, r10, r8, r9
+;
+; and rax is used for the return value
+
 ; System call list
 ; /usr/include/asm/unistd_64.h
 ; /usr/include/x86_64-linux-gnu/asm/unistd_64.h
