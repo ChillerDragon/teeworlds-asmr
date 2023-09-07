@@ -31,3 +31,4 @@ And planning to gain some asm skills along the way. Currently im looking at thes
 [https://www.nasm.us/doc/nasmdoc3.html](https://www.nasm.us/doc/nasmdoc3.html)
 [http://www.egr.unlv.edu/~ed/assembly64.pdf](http://www.egr.unlv.edu/~ed/assembly64.pdf)
 [https://wiki.cdot.senecacollege.ca/wiki/X86_64_Register_and_Instruction_Quick_Start](https://wiki.cdot.senecacollege.ca/wiki/X86_64_Register_and_Instruction_Quick_Start)
+[https://www.felixcloutier.com/x86/](https://www.felixcloutier.com/x86/)
