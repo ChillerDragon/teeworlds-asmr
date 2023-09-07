@@ -96,6 +96,7 @@ section    .data
 
     ; application constants
     HEX_TABLE   db "0123456789ABCDEF", 0
+    NEWLINE db 0x0a
 
     ; networking
     SIZEOF_SOCKADDR db 128
@@ -191,14 +192,12 @@ print_uint32:
     ret
 
 print_newline:
-    push    0x0a
-	mov     rax, SYS_WRITE
-	mov     edi, STDOUT
-	mov     rsi, rsp ; use char on stack
-	mov     rdx, 1 ; len
-	syscall
-	add     rsp, 8 ; restore stack pointer
-	ret
+    mov rsi, NEWLINE
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rdx, 1
+    syscall
+    ret
 
 print_dbg_fd:
     ; print_dbg_fd
