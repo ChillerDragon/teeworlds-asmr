@@ -98,7 +98,7 @@ section    .data
     HEX_TABLE   db "0123456789ABCDEF", 0
 
     ; networking
-    SIZEOF_SOCKADDR equ 128
+    SIZEOF_SOCKADDR db 128
     ADDR_LOCALHOST dw AF_INET
                 db 20h, 6fh ; port 8303
                 db 7fh, 0h, 0h, 01h ; 127.0.0.1
@@ -265,15 +265,13 @@ recv_udp:
     ;
     ; listens for udp packet on the
     ; `socket` and fills the `udp_recv_buf`
-    ; rax, rdi, rsi, rdx, r10, r8, r9
     mov rax, SYS_RECVFROM
     mov rdi, [socket]
     mov rsi, udp_recv_buf
     mov rdx, NET_MAX_PACKETSIZE
     xor r10, r10
-    mov r8, udp_srv_addr
-    ; mov r9, [SIZEOF_SOCKADDR]
-    lea r9, SIZEOF_SOCKADDR ; currently fails with EFAULT (Bad address)
+    lea r8, [udp_srv_addr]
+    lea r9, [SIZEOF_SOCKADDR]
     syscall
 
 send_udp:
