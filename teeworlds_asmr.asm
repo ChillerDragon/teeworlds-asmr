@@ -315,8 +315,8 @@ hex_to_char:
     mov rbx, HEX_TABLE
 
     mov ah, al
-    shr ah, 4
-    and al, 0x0f
+    shr al, 4
+    and ah, 0x0f
     xlat
     xchg ah, al
     xlat
@@ -347,7 +347,7 @@ gametick:
     ;
     ; main gameloop using recursion
     call        keypresses
-    mov rax, 0x41
+    mov rax, 0xAF
     call        print_hex_byte
     call        gametick
     ret
