@@ -84,6 +84,9 @@ section    .data
     AF_INET     equ         2
     SOCK_DGRAM  equ         2
 
+    ; application constants
+    HEX_TABLE   db "0123456789ABCDEF", 0
+
     ; networking
     ADDR_LOCALHOST dw AF_INET
                 db 20h, 6fh ; port 8303
@@ -116,9 +119,16 @@ section .bss
     ; as long as we do not connect 1024 dummies we should be fine
     socket resb 1
 
+    hex_str resb 512
+
 section     .text
 
-print_digit_rax:
+print_uint32:
+    ; print_uint32 [rax]
+    ;
+    ; has a sub label toascii_digit
+    ; and prints the given value in rax
+    ; as a digit to stdout
     ; https://stackoverflow.com/a/46301894/6287070
     mov    ecx, 0xa              ; base 10
     push   rcx                   ; ASCII newline '\n' = 0xa = base
@@ -153,13 +163,18 @@ print_newline:
     push    0x0a
 	mov     rax, SYS_WRITE
 	mov     edi, STDOUT
-	mov     rsi, rsp    ; use char on stack
-	mov     rdx, 1      ; size_t len = 1 char to write.
-	syscall            ; call the kernel, it looks at registers to decide what to do
-	add     rsp, 8      ; restore stack pointer
+	mov     rsi, rsp ; use char on stack
+	mov     rdx, 1 ; len
+	syscall
+	add     rsp, 8 ; restore stack pointer
 	ret
 
 print_dbg_fd:
+    ; print_dbg_fd
+    ;
+    ; prints "got file descriptor: "
+    ; there is now new line and no
+    ; actual file descriptor being printed
     mov         rsi,        s_got_file_desc
     mov         rax,        SYS_WRITE
     mov         rdi,        STDOUT
@@ -215,6 +230,10 @@ sane_console:
     ret
 
 send_udp:
+    ; send_udp
+    ;
+    ; sends a udp packet to the `socket`
+    ; make sure to fist call open_socket
     mov         rax,        SYS_SENDTO
     mov         rsi,        MSG_CTRL_TOKEN
     mov         rdi,        [socket]
@@ -260,6 +279,10 @@ keypress_end:
     ret
 
 open_socket:
+    ; open_socket
+    ;
+    ; opens a udp socket and stores it in
+    ; the variable `socket`
     mov         rax,        SYS_SOCKET
     mov         rsi,        AF_INET
     mov         rdi,        SOCK_DGRAM
@@ -270,17 +293,59 @@ open_socket:
     mov [socket], rax
     call print_dbg_fd
     mov rax, [socket]
-    call print_digit_rax
+    call print_uint32
+    ret
+
+hex_to_char:
+    ; hex_to_char [rax]
+    ;
+    ; moves byte in `rax` as hex string into
+    ; the `hex_str` variable
+    ; https://stackoverflow.com/a/18879886/6287070
+    push rbx
+    mov rbx, HEX_TABLE
+
+    mov ah, al
+    shr ah, 4
+    and al, 0x0f
+    xlat
+    xchg ah, al
+    xlat
+
+    mov rbx, hex_str
+    xchg ah, al
+    mov [rbx], rax
+
+    pop rbx
+    ret
+
+print_hex_byte:
+    ; print_hex [rax]
+    ;
+    ; prints given arg as hex string
+    ; to stdout
+    call hex_to_char
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, hex_str
+    mov rdx,  2
+    syscall
     ret
 
 gametick:
+    ; gametick
+    ;
+    ; main gameloop using recursion
     call        keypresses
+    mov rax, 0x41
+    call        print_hex_byte
     call        gametick
     ret
 
 _start:
-    call        open_socket
     call        print_menu
+    call        open_socket
     call        gametick
 
 end:
