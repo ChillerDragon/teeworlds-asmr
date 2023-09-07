@@ -110,6 +110,12 @@ section    .data
     s_got_file_desc db "got file descriptor: "
     l_got_file_desc equ $ - s_got_file_desc
 
+section .bss
+    ; we only need 1 byte for the socket file descriptor
+    ; the value should be 3 at all times anyways
+    ; as long as we do not connect 1024 dummies we should be fine
+    socket resb 1
+
 section     .text
 
 print_digit_rax:
@@ -209,20 +215,9 @@ sane_console:
     ret
 
 send_udp:
-    mov         rax,        SYS_SOCKET
-    mov         rsi,        AF_INET
-    mov         rdi,        SOCK_DGRAM
-    mov         rdx,        0 ; flags
-    syscall
-    mov         rdi,        rax ; socket file descriptor
-
-    mov r8, rax ; ugly hack to store rax
-    call print_dbg_fd
-    mov rax, r8
-	call print_digit_rax
-
     mov         rax,        SYS_SENDTO
     mov         rsi,        MSG_CTRL_TOKEN
+    mov         rdi,        [socket]
     mov         rdx,        MSG_CTRL_TOKEN_LEN
     mov         r8,         ADDR_LOCALHOST
     mov         r9,         16 ; sockaddr size
@@ -264,12 +259,27 @@ keypresses:
 keypress_end:
     ret
 
+open_socket:
+    mov         rax,        SYS_SOCKET
+    mov         rsi,        AF_INET
+    mov         rdi,        SOCK_DGRAM
+    mov         rdx,        0 ; flags
+    syscall
+    mov         rdi,        rax ; socket file descriptor
+
+    mov [socket], rax
+    call print_dbg_fd
+    mov rax, [socket]
+    call print_digit_rax
+    ret
+
 gametick:
     call        keypresses
     call        gametick
     ret
 
 _start:
+    call        open_socket
     call        print_menu
     call        gametick
 
