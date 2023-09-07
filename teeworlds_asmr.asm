@@ -79,24 +79,26 @@ global _start:
 
 section    .data
     ; constants
-    SYS_READ    equ         0
-    SYS_WRITE   equ         1
-    SYS_OPEN    equ         2
-    SYS_CLOSE   equ         3
-    SYS_SOCKET  equ         41
-    SYS_SENDTO  equ         44
-    SYS_EXIT    equ         60
-    STDOUT      equ         1
-    KEY_A       equ         97
-    KEY_D       equ         100
-    KEY_ESC     equ         13
-    AF_INET     equ         2
-    SOCK_DGRAM  equ         2
+    SYS_READ     equ         0
+    SYS_WRITE    equ         1
+    SYS_OPEN     equ         2
+    SYS_CLOSE    equ         3
+    SYS_SOCKET   equ         41
+    SYS_SENDTO   equ         44
+    SYS_RECVFROM equ         45
+    SYS_EXIT     equ         60
+    STDOUT       equ         1
+    KEY_A        equ         97
+    KEY_D        equ         100
+    KEY_ESC      equ         13
+    AF_INET      equ         2
+    SOCK_DGRAM   equ         2
 
     ; application constants
     HEX_TABLE   db "0123456789ABCDEF", 0
 
     ; networking
+    SIZEOF_SOCKADDR equ 128
     ADDR_LOCALHOST dw AF_INET
                 db 20h, 6fh ; port 8303
                 db 7fh, 0h, 0h, 01h ; 127.0.0.1
@@ -105,6 +107,7 @@ section    .data
     ; tw protocol
     MSG_CTRL_TOKEN db 0x04, 0x00, 0x00, 0x0FF, 0xFF, 0xFF, 0xFF, 0x05, 0x51, 0x3B, 0x59, 0x46, 512 dup (0x00)
     MSG_CTRL_TOKEN_LEN equ $ - MSG_CTRL_TOKEN
+    NET_MAX_PACKETSIZE equ 1400
 
     ; variables
     s_menu      db          "+--+ teeworlds_asmr (RETURN to quit the game) +--+",0x0a
@@ -128,8 +131,27 @@ section .bss
     ; as long as we do not connect 1024 dummies we should be fine
     socket resb 1
 
+    ; this is too long
+    ; for now we only store 2 character in here
     hex_str resb 512
 
+    ; NET_MAX_PACKETSIZE 1400
+    ; tw codebase also calls recvfrom with it
+    udp_recv_buf resb 1400
+
+    ; i was too lazy to verify the size of
+    ; the sockaddr struct
+    ; but the tw code also uses 128 bytes :shrug:
+    ;
+    ; ok nvm i tested it
+    ;
+    ; #include <sys/socket.h>
+    ; printf("%d\n", sizeof(sockaddr));
+    ; => 16
+    ;
+    ; idk is tw using way too much space?
+    ; whatever ram is free these days
+    udp_srv_addr resb 128
 section     .text
 
 print_uint32:
@@ -238,15 +260,32 @@ sane_console:
     syscall
     ret
 
+recv_udp:
+    ; recv_udp
+    ;
+    ; listens for udp packet on the
+    ; `socket` and fills the `udp_recv_buf`
+    ; rax, rdi, rsi, rdx, r10, r8, r9
+    mov rax, SYS_RECVFROM
+    mov rdi, [socket]
+    mov rsi, udp_recv_buf
+    mov rdx, NET_MAX_PACKETSIZE
+    xor r10, r10
+    mov r8, udp_srv_addr
+    ; mov r9, [SIZEOF_SOCKADDR]
+    lea r9, SIZEOF_SOCKADDR ; currently fails with EFAULT (Bad address)
+    syscall
+
 send_udp:
     ; send_udp
     ;
     ; sends a udp packet to the `socket`
     ; make sure to fist call open_socket
     mov         rax,        SYS_SENDTO
-    mov         rsi,        MSG_CTRL_TOKEN
     mov         rdi,        [socket]
+    mov         rsi,        MSG_CTRL_TOKEN
     mov         rdx,        MSG_CTRL_TOKEN_LEN
+    xor         r10,        r10 ; flags
     mov         r8,         ADDR_LOCALHOST
     mov         r9,         16 ; sockaddr size
     syscall
@@ -259,6 +298,7 @@ key_a:
     mov         rdx,        l_a
     syscall
     call send_udp
+    call recv_udp
     jz          keypress_end
 
 key_d:
