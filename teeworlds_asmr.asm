@@ -127,6 +127,8 @@ section    .data
     l_got_file_desc equ $ - s_got_file_desc
     s_got_udp db "got udp: "
     l_got_udp equ $ - s_got_udp
+    s_len db "len="
+    l_len equ $ - s_got_udp
 
 section .bss
     ; we only need 1 byte for the socket file descriptor
@@ -155,6 +157,8 @@ section .bss
     ; idk is tw using way too much space?
     ; whatever ram is free these days
     udp_srv_addr resb 128
+
+    udp_read_len resb 4
 section     .text
 
 print_uint32:
@@ -274,15 +278,32 @@ recv_udp:
     lea r8, [udp_srv_addr]
     lea r9, [SIZEOF_SOCKADDR]
     syscall
+    mov [udp_read_len], rax
 
 print_udp:
+    ; got udp:
     mov rax, SYS_WRITE
     mov rdi, STDOUT
     mov rsi, s_got_udp
     mov rdx, l_got_udp
     syscall
-    mov byte rax, [udp_recv_buf+3] ; TODO: iterate instead of print 3rd byte hardcodet
+    ; hexdump
+print_udp_loop_bytes:
+    mov rcx, 12
+    mov rax, [udp_recv_buf+rcx*4] ; TODO: iterate instead of print 3rd byte hardcodet
     call print_hex_byte
+    call print_newline
+    inc rcx
+    cmp rcx, rax
+    jb print_udp_loop_bytes
+    ; len=%d
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, s_len
+    mov rdx, l_len
+    syscall
+    mov rax, [udp_read_len]
+    call print_uint32
     call print_newline
     ret
 
