@@ -52,6 +52,15 @@
 ; | 6   | r9       |
 ; +-----+----------+
 
+; rax - register a extended
+; rbx - register b extended
+; rcx - register c extended
+; rdx - register d extended
+; rbp - register base pointer (start of stack)
+; rsp - register stack pointer (current location in stack, growing downwards)
+; rsi - register source index (source for data copies)
+; rdi - register destination index (destination for data copies)
+
 ; System call list
 ; /usr/include/asm/unistd_64.h
 ; /usr/include/x86_64-linux-gnu/asm/unistd_64.h
