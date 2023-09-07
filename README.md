@@ -9,7 +9,7 @@
 sudo apt install nasm make
 ```
 
-# build
+## build
 
 ```bash
 make
