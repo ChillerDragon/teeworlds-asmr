@@ -125,6 +125,8 @@ section    .data
     fmt_digit   db          "value of ebx is: %d", 10, 0
     s_got_file_desc db "got file descriptor: "
     l_got_file_desc equ $ - s_got_file_desc
+    s_got_udp db "got udp: "
+    l_got_udp equ $ - s_got_udp
 
 section .bss
     ; we only need 1 byte for the socket file descriptor
@@ -273,6 +275,17 @@ recv_udp:
     lea r9, [SIZEOF_SOCKADDR]
     syscall
 
+print_udp:
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, s_got_udp
+    mov rdx, l_got_udp
+    syscall
+    mov byte rax, [udp_recv_buf+3] ; TODO: iterate instead of print 3rd byte hardcodet
+    call print_hex_byte
+    call print_newline
+    ret
+
 send_udp:
     ; send_udp
     ;
@@ -296,6 +309,7 @@ key_a:
     syscall
     call send_udp
     call recv_udp
+    call print_udp
     jz          keypress_end
 
 key_d:
@@ -384,8 +398,6 @@ gametick:
     ;
     ; main gameloop using recursion
     call        keypresses
-    mov rax, 0xAF
-    call        print_hex_byte
     call        gametick
     ret
 
