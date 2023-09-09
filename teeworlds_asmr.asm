@@ -174,7 +174,7 @@ print_uint32:
     sub    rsp, 16               ; not needed on 64-bit Linux, the red-zone is big enough.  Change the LEA below if you remove this.
 
 ;;; rsi is pointing at '\n' on the stack, with 16B of "allocated" space below that.
-.toascii_digit:                ; do {
+.print_uint32_toascii_digit:                ; do {
     xor    edx, edx
     div    ecx                   ; edx=remainder = low digit = 0..9.  eax/=10
                                  ;; DIV IS SLOW.  use a multiplicative inverse if performance is relevant.
@@ -183,7 +183,7 @@ print_uint32:
     mov    [rsi], dl
 
     test   eax,eax             ; } while(x);
-    jnz  .toascii_digit
+    jnz  .print_uint32_toascii_digit
 ;;; rsi points to the first digit
 
 
@@ -288,14 +288,14 @@ print_udp:
     mov rdx, l_got_udp
     syscall
     ; hexdump
-print_udp_loop_bytes:
+.print_udp_loop_bytes:
     mov rcx, 12
     mov rax, [udp_recv_buf+rcx*4] ; TODO: iterate instead of print 3rd byte hardcodet
     call print_hex_byte
     call print_newline
     inc rcx
     cmp rcx, rax
-    jb print_udp_loop_bytes
+    jb .print_udp_loop_bytes
     ; len=%d
     mov rax, SYS_WRITE
     mov rdi, STDOUT
