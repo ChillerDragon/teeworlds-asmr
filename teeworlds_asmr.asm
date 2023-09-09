@@ -198,11 +198,21 @@ print_uint32:
     ret
 
 print_newline:
-    mov rsi, NEWLINE
+    push rax
+    push rdi
+    push rsi
+    push rdx
+
     mov rax, SYS_WRITE
     mov rdi, STDOUT
+    mov rsi, NEWLINE
     mov rdx, 1
     syscall
+
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
     ret
 
 print_dbg_fd:
@@ -384,6 +394,7 @@ hex_to_char:
     ; the `hex_str` variable
     ; https://stackoverflow.com/a/18879886/6287070
     push rbx
+    push rax
     mov rbx, HEX_TABLE
 
     mov ah, al
@@ -397,6 +408,7 @@ hex_to_char:
     xchg ah, al
     mov [rbx], rax
 
+    pop rax
     pop rbx
     ret
 
@@ -405,6 +417,11 @@ print_hex_byte:
     ;
     ; prints given arg as hex string
     ; to stdout
+    push rax
+    push rdi
+    push rsi
+    push rdx
+
     call hex_to_char
 
     mov rax, SYS_WRITE
@@ -412,6 +429,11 @@ print_hex_byte:
     mov rsi, hex_str
     mov rdx,  2
     syscall
+
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
     ret
 
 gametick:
