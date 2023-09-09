@@ -299,6 +299,7 @@ recv_udp:
     lea r9, [SIZEOF_SOCKADDR]
     syscall
     mov [udp_read_len], rax
+    ret
 
 print_udp:
     ; got udp:
@@ -361,8 +362,8 @@ key_a:
     ; if recvfrom returned negativ
     ; we do not process the udp payload
     js keypress_end
-    jz on_udp_packet
-    jz keypress_end
+    call on_udp_packet
+    jmp keypress_end
 
 key_d:
     mov         rsi,        s_d
@@ -370,7 +371,7 @@ key_d:
     mov         rdi,        1
     mov         rdx,        l_d
     syscall
-    jz          keypress_end
+    jmp          keypress_end
 
 keypresses:
     call        insane_console
