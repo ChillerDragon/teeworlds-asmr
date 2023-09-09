@@ -1,4 +1,5 @@
 *.o
+*.txt
 teeworlds_asmr
 tags
 .gdb_history

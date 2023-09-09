@@ -168,6 +168,11 @@ print_uint32:
     ; and prints the given value in rax
     ; as a digit to stdout
     ; https://stackoverflow.com/a/46301894/6287070
+    push rax
+    push rsi
+    push rsp
+    push rcx
+
     mov    ecx, 0xa              ; base 10
     push   rcx                   ; ASCII newline '\n' = 0xa = base
     mov    rsi, rsp
@@ -195,6 +200,11 @@ print_uint32:
     syscall                     ; write(1, string /*RSI*/,  digits + 1)
 
     add  rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
+
+    pop rcx
+    pop rsp
+    pop rsi
+    pop rax
     ret
 
 print_newline:
@@ -298,14 +308,15 @@ print_udp:
     mov rdx, l_got_udp
     syscall
     ; hexdump
+    mov rcx, 0
+    mov rdi, [udp_read_len]
 .print_udp_loop_bytes:
-    mov rcx, 12
-    mov rax, [udp_recv_buf+rcx*4] ; TODO: iterate instead of print 3rd byte hardcodet
+    mov rax, [udp_recv_buf+rcx*1]
     call print_hex_byte
-    call print_newline
     inc rcx
-    cmp rcx, rax
+    cmp rcx, 10
     jb .print_udp_loop_bytes
+    call print_newline
     ; len=%d
     mov rax, SYS_WRITE
     mov rdi, STDOUT
@@ -421,6 +432,7 @@ print_hex_byte:
     push rdi
     push rsi
     push rdx
+    push rcx
 
     call hex_to_char
 
@@ -430,6 +442,7 @@ print_hex_byte:
     mov rdx,  2
     syscall
 
+    pop rcx
     pop rdx
     pop rsi
     pop rdi
