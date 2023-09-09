@@ -328,6 +328,10 @@ print_udp:
     call print_newline
     ret
 
+on_udp_packet:
+    call print_udp
+    ret
+
 send_udp:
     ; send_udp
     ;
@@ -351,8 +355,14 @@ key_a:
     syscall
     call send_udp
     call recv_udp
-    call print_udp
-    jz          keypress_end
+    mov rax, 0x414141 ; debug marker
+    mov rax, [udp_read_len]
+    test rax, rax
+    ; if recvfrom returned negativ
+    ; we do not process the udp payload
+    js keypress_end
+    jz on_udp_packet
+    jz keypress_end
 
 key_d:
     mov         rsi,        s_d
