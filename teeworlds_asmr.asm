@@ -128,7 +128,7 @@ section    .data
     s_got_udp db "got udp: "
     l_got_udp equ $ - s_got_udp
     s_len db "len="
-    l_len equ $ - s_got_udp
+    l_len equ $ - s_len
 
 section .bss
     ; we only need 1 byte for the socket file descriptor
