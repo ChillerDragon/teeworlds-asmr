@@ -36,3 +36,4 @@ And planning to gain some asm skills along the way. Currently im looking at thes
 - [https://web.stanford.edu/class/cs107/resources/x86-64-reference.pdf](https://web.stanford.edu/class/cs107/resources/x86-64-reference.pdf)
 - [https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf](https://cs.brown.edu/courses/cs033/docs/guides/x64_cheatsheet.pdf)
 - [https://www.cs.uaf.edu/2017/fall/cs301/reference/x86_64.html](https://www.cs.uaf.edu/2017/fall/cs301/reference/x86_64.html)
+- [https://lwn.net/Articles/604287/](https://lwn.net/Articles/604287/)
