@@ -170,7 +170,6 @@ print_uint32:
     ; https://stackoverflow.com/a/46301894/6287070
     push rax
     push rsi
-    push rsp
     push rcx
 
     mov    ecx, 0xa              ; base 10
@@ -202,7 +201,6 @@ print_uint32:
     add  rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
 
     pop rcx
-    pop rsp
     pop rsi
     pop rax
     ret
@@ -338,6 +336,7 @@ send_udp:
     ;
     ; sends a udp packet to the `socket`
     ; make sure to fist call open_socket
+    mov rax, 0x414141 ; debug marker
     mov         rax,        SYS_SENDTO
     mov         rdi,        [socket]
     mov         rsi,        MSG_CTRL_TOKEN
@@ -356,7 +355,6 @@ key_a:
     syscall
     call send_udp
     call recv_udp
-    mov rax, 0x414141 ; debug marker
     mov rax, [udp_read_len]
     test rax, rax
     ; if recvfrom returned negativ
