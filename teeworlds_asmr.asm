@@ -229,18 +229,18 @@ print_dbg_fd:
     ; prints "got file descriptor: "
     ; there is now new line and no
     ; actual file descriptor being printed
-    mov rsi, s_got_file_desc
-    mov rax, SYS_WRITE
-    mov rdi, STDOUT
-    mov rdx, l_got_file_desc
+    mov rsi, s_got_file_desc ; movabs
+    mov eax, SYS_WRITE
+    mov edi, STDOUT
+    mov edx, l_got_file_desc ; mov edx, 0x15
     syscall
     ret
 
 print_menu:
-    mov rsi, s_menu
-    mov rax, SYS_WRITE
-    mov rdi, STDOUT
-    mov rdx, l_menu
+    mov rsi, s_menu ; movabs
+    mov eax, SYS_WRITE
+    mov edi, STDOUT
+    mov edx, l_menu ; mov edx, 0x33
     syscall ; sys_write(1, s_end, l_end)
     ret
 
@@ -276,9 +276,9 @@ insane_console:
 
 sane_console:
     ; reset settings (with ioctl again)
-    mov rax, 16 ; __NR_ioctl
-    mov rdi, 0 ; fd: stdin
-    mov rsi, 21506 ; cmd: TCSETS
+    mov rax, 0x10 ; __NR_ioctl
+    mov rdi, 0x0 ; fd: stdin
+    mov rsi, 0x5402 ; cmd: TCSETS
     mov rdx, orig ; arg: the buffer, orig
     syscall
     ret
@@ -445,10 +445,10 @@ print_hex_byte:
 
     call hex_to_char
 
-    mov rax, SYS_WRITE
-    mov rdi, STDOUT
-    mov rsi, hex_str
-    mov rdx,  2
+    mov eax, SYS_WRITE
+    mov edi, STDOUT
+    mov rsi, hex_str ; movabs
+    mov edx, 0x2
     syscall
 
     pop rcx
