@@ -339,14 +339,13 @@ send_udp:
     ; sends a udp packet to the `socket`
     ; make sure to fist call open_socket
     mov rax, 0x414141 ; debug marker
-    mov rax, SYS_SENDTO
-
+    mov eax, SYS_SENDTO ; 0x2c
 
     xor rdi, rdi ; zero the whole rdi register
     movzx rdi, byte [socket] ; then only set the lowest byte
 
     mov rsi, MSG_CTRL_TOKEN
-    mov rdx, MSG_CTRL_TOKEN_LEN
+    mov edx, MSG_CTRL_TOKEN_LEN ; 0x20c
     xor r10, r10 ; flags
     mov r8, ADDR_LOCALHOST
     mov r9, 16 ; sockaddr size
