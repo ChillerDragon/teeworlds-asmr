@@ -90,7 +90,8 @@ section .data
     STDOUT       equ         1
     KEY_A        equ         97
     KEY_D        equ         100
-    KEY_ESC      equ         13
+    KEY_ESC      equ         27
+    KEY_RETURN   equ         13
     AF_INET      equ         2
     SOCK_DGRAM   equ         2
 
@@ -111,7 +112,7 @@ section .data
     NET_MAX_PACKETSIZE equ 1400
 
     ; variables
-    s_menu      db          "+--+ teeworlds_asmr (RETURN to quit the game) +--+",0x0a
+    s_menu      db          "+--+ teeworlds_asmr (ESCAPE to quit the game) +--+",0x0a
     l_menu      equ         $ - s_menu
     s_end       db          "quitting the game...",0x0a
     l_end       equ         $ - s_end
