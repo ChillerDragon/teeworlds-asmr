@@ -77,7 +77,7 @@
 
 global _start:
 
-section    .data
+section .data
     ; constants
     SYS_READ     equ         0
     SYS_WRITE    equ         1
@@ -159,7 +159,7 @@ section .bss
     udp_srv_addr resb 128
 
     udp_read_len resb 4
-section     .text
+section .text
 
 print_uint32:
     ; print_uint32 [rax]
