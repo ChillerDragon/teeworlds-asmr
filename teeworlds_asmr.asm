@@ -290,7 +290,8 @@ recv_udp:
     ; listens for udp packet on the
     ; `socket` and fills the `udp_recv_buf`
     mov rax, SYS_RECVFROM
-    mov rdi, [socket]
+    xor rdx, rdx ; zero the whole rdx register
+    mov dl, [socket] ; then only set the lowest byte
     mov rsi, udp_recv_buf
     mov rdx, NET_MAX_PACKETSIZE
     xor r10, r10
@@ -339,7 +340,11 @@ send_udp:
     ; make sure to fist call open_socket
     mov rax, 0x414141 ; debug marker
     mov rax, SYS_SENDTO
-    mov rdi, [socket]
+
+
+    xor rdi, rdi ; zero the whole rdi register
+    movzx rdi, byte [socket] ; then only set the lowest byte
+
     mov rsi, MSG_CTRL_TOKEN
     mov rdx, MSG_CTRL_TOKEN_LEN
     xor r10, r10 ; flags
