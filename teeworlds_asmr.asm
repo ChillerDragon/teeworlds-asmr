@@ -92,19 +92,19 @@ section .data
     KEY_D        equ         100
     KEY_ESC      equ         27
     KEY_RETURN   equ         13
-    AF_INET      equ         2
-    SOCK_DGRAM   equ         2
+    AF_INET      equ         0x2
+    SOCK_DGRAM   equ         0x2
 
     ; application constants
     HEX_TABLE   db "0123456789ABCDEF", 0
     NEWLINE db 0x0a
 
     ; networking
-    SIZEOF_SOCKADDR db 128
-    ADDR_LOCALHOST dw AF_INET
-                db 20h, 6fh ; port 8303
-                db 7fh, 0h, 0h, 01h ; 127.0.0.1
-                db 0, 0, 0, 0, 0, 0, 0, 0
+    SIZEOF_SOCKADDR db 128 ; borderline non sense
+    ADDR_LOCALHOST dw AF_INET ; 0x2
+                db 0x20, 0x6f ; port 8303
+                db 0x7f, 0x0, 0x0, 0x01 ; 127.0.0.1
+                db 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ; watafk is this?!
 
     ; tw protocol
     MSG_CTRL_TOKEN db 0x04, 0x00, 0x00, 0x0FF, 0xFF, 0xFF, 0xFF, 0x05, 0x51, 0x3B, 0x59, 0x46, 512 dup (0x00)
