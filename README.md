@@ -2,6 +2,11 @@
 
 [![asmr janina](https://i3.ytimg.com/vi/irZzz8Ul58Q/maxresdefault.jpg)](https://www.youtube.com/watch?v=irZzz8Ul58Q)
 
+## disclaimer and project state
+
+THIS IS NOT FINISHED OMG. ITS NOT A FUNCTIONAL TEEWORLDS CLIENT YET!
+ITS BARLEY A UDP HELLO WORLD!!!!!!!!!!
+
 ## deps
 
 ```
