@@ -18,9 +18,28 @@ make
 
 ## debug
 
+To debug syscalls you can use strace
+to see args passed to kernel calls
+and also see the error message the linux kernel gives you back.
+
 ```
 strace ./teeworlds_asmr
 ```
+
+For full on assembly debugging.
+You can turn on symbols and step instruction by instruction.
+
+```
+make clean
+make debug
+gdb ./teeworlds_asmr
+(gdb) layout asm
+(gdb) set disassembly-flavor intel
+(gdb) break _start
+(gdb) stepi
+```
+
+After the last stepi just spam enter to "run" the program.
 
 ## project goal
 
