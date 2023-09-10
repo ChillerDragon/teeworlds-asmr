@@ -101,7 +101,7 @@ section .data
 
     ; networking
     SIZEOF_SOCKADDR db 128 ; borderline non sense
-    ADDR_LOCALHOST dw AF_INET ; 0x2
+    ADDR_LOCALHOST dw AF_INET ; 0x2 0x00
                 db 0x20, 0x6f ; port 8303
                 db 0x7f, 0x0, 0x0, 0x01 ; 127.0.0.1
                 db 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ; watafk is this?!
