@@ -172,33 +172,33 @@ print_uint32:
     push rsi
     push rcx
 
-    mov    ecx, 0xa              ; base 10
-    push   rcx                   ; ASCII newline '\n' = 0xa = base
-    mov    rsi, rsp
-    sub    rsp, 16               ; not needed on 64-bit Linux, the red-zone is big enough.  Change the LEA below if you remove this.
+    mov ecx, 0xa ; base 10
+    push rcx ; ASCII newline '\n' = 0xa = base
+    mov rsi, rsp
+    sub rsp, 16 ; not needed on 64-bit Linux, the red-zone is big enough.  Change the LEA below if you remove this.
 
 ;;; rsi is pointing at '\n' on the stack, with 16B of "allocated" space below that.
 .print_uint32_toascii_digit:                ; do {
-    xor    edx, edx
-    div    ecx                   ; edx=remainder = low digit = 0..9.  eax/=10
+    xor edx, edx
+    div ecx ; edx=remainder = low digit = 0..9.  eax/=10
                                  ;; DIV IS SLOW.  use a multiplicative inverse if performance is relevant.
-    add    edx, '0'
-    dec    rsi                 ; store digits in MSD-first printing order, working backwards from the end of the string
-    mov    [rsi], dl
+    add edx, '0'
+    dec rsi ; store digits in MSD-first printing order, working backwards from the end of the string
+    mov [rsi], dl
 
-    test   eax,eax             ; } while(x);
+    test eax,eax ; } while(x);
     jnz  .print_uint32_toascii_digit
 ;;; rsi points to the first digit
 
 
-    mov    eax, SYS_WRITE
-    mov    edi, STDOUT
+    mov eax, SYS_WRITE
+    mov edi, STDOUT
     ; pointer already in RSI    ; buf = last digit stored = most significant
-    lea    edx, [rsp+16 + 1]    ; yes, it's safe to truncate pointers before subtracting to find length.
-    sub    edx, esi             ; RDX = length = end-start, including the \n
+    lea edx, [rsp+16 + 1]    ; yes, it's safe to truncate pointers before subtracting to find length.
+    sub edx, esi             ; RDX = length = end-start, including the \n
     syscall                     ; write(1, string /*RSI*/,  digits + 1)
 
-    add  rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
+    add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
 
     pop rcx
     pop rsi
@@ -229,57 +229,57 @@ print_dbg_fd:
     ; prints "got file descriptor: "
     ; there is now new line and no
     ; actual file descriptor being printed
-    mov         rsi,        s_got_file_desc
-    mov         rax,        SYS_WRITE
-    mov         rdi,        STDOUT
-    mov         rdx,        l_got_file_desc
+    mov rsi, s_got_file_desc
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rdx, l_got_file_desc
     syscall
     ret
 
 print_menu:
-    mov         rsi,        s_menu
-    mov         rax,        SYS_WRITE
-    mov         rdi,        STDOUT
-    mov         rdx,        l_menu
-    syscall     ; sys_write(1, s_end, l_end)
+    mov rsi, s_menu
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rdx, l_menu
+    syscall ; sys_write(1, s_end, l_end)
     ret
 
 insane_console:
     ; fetch the current terminal settings
-    mov         rax,        16          ; __NR_ioctl
-    mov         rdi,        0           ; fd: stdin
-    mov         rsi,        21505       ; cmd: TCGETS
-    mov         rdx,        orig        ; arg: the buffer, orig
+    mov rax, 16 ; __NR_ioctl
+    mov rdi, 0 ; fd: stdin
+    mov rsi, 21505 ; cmd: TCGETS
+    mov rdx, orig ; arg: the buffer, orig
     syscall
     ; agian, but this time for the 'new' buffer
-    mov         rax,        16
-    mov         rdi,        0
-    mov         rsi,        21505
-    mov         rdx,        new
+    mov rax, 16
+    mov rdi, 0
+    mov rsi, 21505
+    mov rdx, new
     syscall
     ; change settings
     ; ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON)
-    and         dword       [new+0],    -1516
+    and dword [new+0], -1516
     ; ~OPOST
-    and         dword       [new+4],    -2
+    and dword [new+4], -2
     ; ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN)
-    and         dword       [new+12],   -32844
+    and dword [new+12], -32844
     ; ~(CSIZE | PARENB)
-    and         dword       [new+8],    -305
+    and dword [new+8], -305
     ; set settings (with ioctl again)
-    mov         rax,        16          ; __NR_ioctl
-    mov         rdi,        0           ; fd: stdin
-    mov         rsi,        21506       ; cmd: TCSETS
-    mov         rdx,        new         ; arg: the buffer, new
+    mov rax, 16 ; __NR_ioctl
+    mov rdi, 0 ; fd: stdin
+    mov rsi, 21506 ; cmd: TCSETS
+    mov rdx, new ; arg: the buffer, new
     syscall
     ret
 
 sane_console:
     ; reset settings (with ioctl again)
-    mov         rax,        16          ; __NR_ioctl
-    mov         rdi,        0           ; fd: stdin
-    mov         rsi,        21506       ; cmd: TCSETS
-    mov         rdx,        orig        ; arg: the buffer, orig
+    mov rax, 16 ; __NR_ioctl
+    mov rdi, 0 ; fd: stdin
+    mov rsi, 21506 ; cmd: TCSETS
+    mov rdx, orig ; arg: the buffer, orig
     syscall
     ret
 
@@ -337,21 +337,21 @@ send_udp:
     ; sends a udp packet to the `socket`
     ; make sure to fist call open_socket
     mov rax, 0x414141 ; debug marker
-    mov         rax,        SYS_SENDTO
-    mov         rdi,        [socket]
-    mov         rsi,        MSG_CTRL_TOKEN
-    mov         rdx,        MSG_CTRL_TOKEN_LEN
-    xor         r10,        r10 ; flags
-    mov         r8,         ADDR_LOCALHOST
-    mov         r9,         16 ; sockaddr size
+    mov rax, SYS_SENDTO
+    mov rdi, [socket]
+    mov rsi, MSG_CTRL_TOKEN
+    mov rdx, MSG_CTRL_TOKEN_LEN
+    xor r10, r10 ; flags
+    mov r8, ADDR_LOCALHOST
+    mov r9, 16 ; sockaddr size
     syscall
     ret
 
 key_a:
-    mov         rsi,        s_a
-    mov         rax,        SYS_WRITE
-    mov         rdi,        1
-    mov         rdx,        l_a
+    mov rsi, s_a
+    mov rax, SYS_WRITE
+    mov rdi, 1
+    mov rdx, l_a
     syscall
     call send_udp
     call recv_udp
@@ -364,28 +364,28 @@ key_a:
     jmp keypress_end
 
 key_d:
-    mov         rsi,        s_d
-    mov         rax,        SYS_WRITE
-    mov         rdi,        1
-    mov         rdx,        l_d
+    mov rsi, s_d
+    mov rax, SYS_WRITE
+    mov rdi, 1
+    mov rdx, l_d
     syscall
-    jmp          keypress_end
+    jmp keypress_end
 
 keypresses:
-    call        insane_console
+    call insane_console
     ; read char
-    mov         rax,        SYS_READ    ; __NR_read
-    mov         rdi,        0           ; fd: stdin
-    mov         rsi,        char        ; buf: the temporary buffer, char
-    mov         rdx,        1           ; count: the length of the buffer, 1
+    mov rax, SYS_READ ; __NR_read
+    mov rdi, 0 ; fd: stdin
+    mov rsi, char ; buf: the temporary buffer, char
+    mov rdx, 1 ; count: the length of the buffer, 1
     syscall
-    call        sane_console
-    cmp         byte[char], KEY_A
-    jz          key_a
-    cmp         byte[char], KEY_D
-    jz          key_d
-    cmp         byte[char], KEY_ESC
-    jz          end
+    call sane_console
+    cmp byte[char], KEY_A
+    jz key_a
+    cmp byte[char], KEY_D
+    jz key_d
+    cmp byte[char], KEY_ESC
+    jz end
 keypress_end:
     ret
 
@@ -394,12 +394,12 @@ open_socket:
     ;
     ; opens a udp socket and stores it in
     ; the variable `socket`
-    mov         rax,        SYS_SOCKET
-    mov         rsi,        AF_INET
-    mov         rdi,        SOCK_DGRAM
-    mov         rdx,        0 ; flags
+    mov rax, SYS_SOCKET
+    mov rsi, AF_INET
+    mov rdi, SOCK_DGRAM
+    mov rdx, 0 ; flags
     syscall
-    mov         rdi,        rax ; socket file descriptor
+    mov rdi, rax ; socket file descriptor
 
     mov [socket], rax
     call print_dbg_fd
@@ -462,23 +462,23 @@ gametick:
     ; gametick
     ;
     ; main gameloop using recursion
-    call        keypresses
-    call        gametick
+    call keypresses
+    call gametick
     ret
 
 _start:
-    call        print_menu
-    call        open_socket
-    call        gametick
+    call print_menu
+    call open_socket
+    call gametick
 
 end:
-    call        sane_console
+    call sane_console
     ; print exit message
-    mov         rsi,        s_end
-    mov         rax,        SYS_WRITE
-    mov         rdi,        1
-    mov         rdx,        l_end
-    syscall     ; sys_write(1, s_end, l_end)
-    mov         rax,        SYS_EXIT
-    mov         rdi,        0
-    syscall     ; sys_exit(0)
+    mov rsi, s_end
+    mov rax, SYS_WRITE
+    mov rdi, 1
+    mov rdx, l_end
+    syscall ; sys_write(1, s_end, l_end)
+    mov rax, SYS_EXIT
+    mov rdi, 0
+    syscall ; sys_exit(0)
