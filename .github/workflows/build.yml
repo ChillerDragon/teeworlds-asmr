@@ -23,5 +23,5 @@ jobs:
     - name: Build
       run: make
 
-    - name: Build debug
-      run: make debug
+    - name: Clean and debug
+      run: make clean && make debug
