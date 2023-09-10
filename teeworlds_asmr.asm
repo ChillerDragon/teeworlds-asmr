@@ -237,9 +237,9 @@ print_dbg_fd:
     ret
 
 print_menu:
-    mov rsi, s_menu ; movabs
     mov eax, SYS_WRITE
     mov edi, STDOUT
+    mov rsi, s_menu ; movabs
     mov edx, l_menu ; mov edx, 0x33
     syscall ; sys_write(1, s_end, l_end)
     ret
