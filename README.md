@@ -51,6 +51,7 @@ After the last stepi just spam enter to "run" the program.
 I want to see how far I can get. Trying to build a teeworlds 0.7 client (without graphics).
 And planning to gain some asm skills along the way. Currently im looking at these resources and copy pasting from stack overflow.
 
+- [https://x64.syscall.sh/](https://x64.syscall.sh/)
 - [https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/](https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/)
 - [https://www.nasm.us/doc/nasmdoc3.html](https://www.nasm.us/doc/nasmdoc3.html)
 - [http://www.egr.unlv.edu/~ed/assembly64.pdf](http://www.egr.unlv.edu/~ed/assembly64.pdf)
