@@ -123,7 +123,8 @@ section .data
     orig        times       10000       db      0
     new         times       10000       db      0
     char        db          0,0,0,0,0
-    fmt_digit   db          "value of ebx is: %d", 10, 0
+    s_dbg_digit db          "[debug] value of rax is: ", 0
+    l_dbg_digit equ $ - s_dbg_digit
     s_got_file_desc db "got file descriptor: "
     l_got_file_desc equ $ - s_got_file_desc
     s_got_udp db "got udp: "
@@ -161,6 +162,34 @@ section .bss
 
     udp_read_len resb 4
 section .text
+
+dbg_print_uint32:
+    ; dbg_print_num [rax]
+    ;
+    ; prints given arg as uint32 turned into a string
+    ; to stdout
+    ; prefixed with a debug string message
+
+    push rax
+    push rdi
+    push rsi
+    push rdx
+
+    mov rsi, s_dbg_digit
+    mov eax, SYS_WRITE
+    mov edi, STDOUT
+    mov edx, l_dbg_digit
+    syscall
+
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
+
+    call print_uint32
+    call print_newline
+
+    ret
 
 print_uint32:
     ; print_uint32 [rax]
