@@ -7,9 +7,9 @@ all: teeworlds_asmr
 debug: LDFLAGS=
 debug: all
 
-build/teeworlds_asmr.o: teeworlds_asmr.asm
+build/teeworlds_asmr.o: src/teeworlds_asmr.asm src/logger.asm
 	mkdir -p build
-	$(ASM) -f elf64 teeworlds_asmr.asm -o build/teeworlds_asmr.o
+	$(ASM) -f elf64 src/teeworlds_asmr.asm -o build/teeworlds_asmr.o
 
 teeworlds_asmr: build/teeworlds_asmr.o
 	$(LD) $(LDFLAGS) -o teeworlds_asmr build/teeworlds_asmr.o

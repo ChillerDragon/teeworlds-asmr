@@ -163,6 +163,8 @@ section .bss
     udp_read_len resb 4
 section .text
 
+%include "src/logger.asm"
+
 dbg_print_uint32:
     ; dbg_print_num [rax]
     ;
@@ -234,24 +236,6 @@ print_uint32:
     pop rdx
     pop rcx
     pop rsi
-    pop rax
-    ret
-
-print_newline:
-    push rax
-    push rdi
-    push rsi
-    push rdx
-
-    mov rax, SYS_WRITE
-    mov rdi, STDOUT
-    mov rsi, NEWLINE
-    mov rdx, 1
-    syscall
-
-    pop rdx
-    pop rsi
-    pop rdi
     pop rax
     ret
 
