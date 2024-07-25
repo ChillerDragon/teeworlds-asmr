@@ -22,15 +22,18 @@ recv_udp:
     ; listens for udp packet on the
     ; `socket` and fills the `udp_recv_buf`
     mov rax, SYS_RECVFROM
-    xor rdx, rdx ; zero the whole rdx register
-    mov dl, [socket] ; then only set the lowest byte
-    mov rsi, udp_recv_buf
+    xor rdi, rdi ; zero the whole rdi register
+    movzx rdi, byte [socket] ; then only set the lowest byte
+    lea rsi, udp_recv_buf
     mov rdx, NET_MAX_PACKETSIZE
     xor r10, r10
-    lea r8, [udp_srv_addr]
-    lea r9, [SIZEOF_SOCKADDR]
+    lea r8, udp_srv_addr
+    lea r9, SIZEOF_SOCKADDR
     syscall
     mov [udp_read_len], rax
+
+    ; call dbg_print_uint32
+
     ret
 
 send_udp:
