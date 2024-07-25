@@ -79,14 +79,9 @@ global _start:
 
 section .data
     ; constants
-    SYS_READ     equ         0
-    SYS_WRITE    equ         1
-    SYS_OPEN     equ         2
-    SYS_CLOSE    equ         3
-    SYS_SOCKET   equ         41
-    SYS_SENDTO   equ         44
-    SYS_RECVFROM equ         45
-    SYS_EXIT     equ         60
+    %include "src/data/syscalls.asm"
+    %include "src/data/teeworlds.asm"
+
     STDOUT       equ         1
     KEY_A        equ         97
     KEY_D        equ         100
@@ -105,11 +100,6 @@ section .data
                 db 0x20, 0x6f ; port 8303
                 db 0x7f, 0x0, 0x0, 0x01 ; 127.0.0.1
                 db 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ; watafk is this?!
-
-    ; tw protocol
-    MSG_CTRL_TOKEN db 0x04, 0x00, 0x00, 0x0FF, 0xFF, 0xFF, 0xFF, 0x05, 0x51, 0x3B, 0x59, 0x46, 512 dup (0x00)
-    MSG_CTRL_TOKEN_LEN equ $ - MSG_CTRL_TOKEN
-    NET_MAX_PACKETSIZE equ 1400
 
     ; variables
     s_menu      db          "+--+ teeworlds_asmr (ESCAPE to quit the game) +--+",0x0a
@@ -164,80 +154,9 @@ section .bss
 section .text
 
 %include "src/logger.asm"
-
-dbg_print_uint32:
-    ; dbg_print_num [rax]
-    ;
-    ; prints given arg as uint32 turned into a string
-    ; to stdout
-    ; prefixed with a debug string message
-
-    push rax
-    push rdi
-    push rsi
-    push rdx
-
-    mov rsi, s_dbg_digit
-    mov eax, SYS_WRITE
-    mov edi, STDOUT
-    mov edx, l_dbg_digit
-    syscall
-
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rax
-
-    call print_uint32
-    call print_newline
-
-    ret
-
-print_uint32:
-    ; print_uint32 [rax]
-    ;
-    ; has a sub label toascii_digit
-    ; and prints the given value in rax
-    ; as a digit to stdout
-    ; https://stackoverflow.com/a/46301894/6287070
-    push rax
-    push rsi
-    push rcx
-    push rdx
-
-    mov ecx, 0xa ; base 10
-    push rcx ; ASCII newline '\n' = 0xa = base
-    mov rsi, rsp
-    sub rsp, 16 ; not needed on 64-bit Linux, the red-zone is big enough.  Change the LEA below if you remove this.
-
-;;; rsi is pointing at '\n' on the stack, with 16B of "allocated" space below that.
-.print_uint32_toascii_digit:                ; do {
-    xor edx, edx
-    div ecx ; edx=remainder = low digit = 0..9.  eax/=10
-                                 ;; DIV IS SLOW.  use a multiplicative inverse if performance is relevant.
-    add edx, '0'
-    dec rsi ; store digits in MSD-first printing order, working backwards from the end of the string
-    mov [rsi], dl
-
-    test eax,eax ; } while(x);
-    jnz  .print_uint32_toascii_digit
-;;; rsi points to the first digit
-
-
-    mov eax, SYS_WRITE
-    mov edi, STDOUT
-    ; pointer already in RSI    ; buf = last digit stored = most significant
-    lea edx, [rsp+16 + 1]    ; yes, it's safe to truncate pointers before subtracting to find length.
-    sub edx, esi             ; RDX = length = end-start, including the \n
-    syscall                     ; write(1, string /*RSI*/,  digits + 1)
-
-    add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
-
-    pop rdx
-    pop rcx
-    pop rsi
-    pop rax
-    ret
+%include "src/hex.asm"
+%include "src/terminal.asm"
+%include "src/udp.asm"
 
 print_dbg_fd:
     ; print_dbg_fd
@@ -270,62 +189,6 @@ print_menu:
     syscall ; sys_write(1, s_end, l_end)
     ret
 
-insane_console:
-    ; fetch the current terminal settings
-    mov eax, 0x10 ; __NR_ioctl
-    mov edi, 0x0 ; fd: stdin
-    mov esi, 0x5401 ; cmd: TCGETS
-    mov rdx, orig ; arg: the buffer, orig
-    syscall
-    ; agian, but this time for the 'new' buffer
-    mov rax, 0x10
-    mov rdi, 0x0
-    mov rsi, 0x5401
-    mov rdx, new
-    syscall
-    ; change settings
-    ; ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON)
-    and dword [new+0], 0xfffffa14 ; -1516
-    ; ~OPOST
-    and dword [new+4], 0xfffffffe ; -2
-    ; ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN)
-    and dword [new+12], 0xffff7fb4 ; -32844
-    ; ~(CSIZE | PARENB)
-    and dword [new+8], 0xfffffecf ; -305
-    ; set settings (with ioctl again)
-    mov rax, 0x10 ; __NR_ioctl
-    mov rdi, 0x0 ; fd: stdin
-    mov rsi, 0x5402 ; cmd: TCSETS
-    mov rdx, new ; arg: the buffer, new
-    syscall
-    ret
-
-sane_console:
-    ; reset settings (with ioctl again)
-    mov rax, 0x10 ; __NR_ioctl
-    mov rdi, 0x0 ; fd: stdin
-    mov rsi, 0x5402 ; cmd: TCSETS
-    mov rdx, orig ; arg: the buffer, orig
-    syscall
-    ret
-
-recv_udp:
-    ; recv_udp
-    ;
-    ; listens for udp packet on the
-    ; `socket` and fills the `udp_recv_buf`
-    mov rax, SYS_RECVFROM
-    xor rdx, rdx ; zero the whole rdx register
-    mov dl, [socket] ; then only set the lowest byte
-    mov rsi, udp_recv_buf
-    mov rdx, NET_MAX_PACKETSIZE
-    xor r10, r10
-    lea r8, [udp_srv_addr]
-    lea r9, [SIZEOF_SOCKADDR]
-    syscall
-    mov [udp_read_len], rax
-    ret
-
 print_udp:
     ; got udp:
     mov rax, SYS_WRITE
@@ -356,25 +219,6 @@ print_udp:
 
 on_udp_packet:
     call print_udp
-    ret
-
-send_udp:
-    ; send_udp
-    ;
-    ; sends a udp packet to the `socket`
-    ; make sure to fist call open_socket
-    mov rax, 0x414141 ; debug marker
-    mov eax, SYS_SENDTO ; 0x2c
-
-    xor rdi, rdi ; zero the whole rdi register
-    movzx rdi, byte [socket] ; then only set the lowest byte
-
-    mov rsi, MSG_CTRL_TOKEN
-    mov edx, MSG_CTRL_TOKEN_LEN ; 0x20c
-    xor r10, r10 ; flags
-    mov r8, ADDR_LOCALHOST
-    mov r9, 16 ; sockaddr size
-    syscall
     ret
 
 key_a:
@@ -417,75 +261,6 @@ keypresses:
     cmp byte[char], KEY_ESC
     jz end
 keypress_end:
-    ret
-
-open_socket:
-    ; open_socket
-    ;
-    ; opens a udp socket and stores it in
-    ; the variable `socket`
-    mov rax, SYS_SOCKET
-    mov rsi, AF_INET
-    mov rdi, SOCK_DGRAM
-    mov rdx, 0 ; flags
-    syscall
-    mov rdi, rax ; socket file descriptor
-
-    mov [socket], rax
-    call print_dbg_fd
-    mov rax, [socket]
-    call print_uint32
-    ret
-
-hex_to_char:
-    ; hex_to_char [rax]
-    ;
-    ; moves byte in `rax` as hex string into
-    ; the `hex_str` variable
-    ; https://stackoverflow.com/a/18879886/6287070
-    push rbx
-    push rax
-    mov rbx, HEX_TABLE
-
-    mov ah, al
-    shr al, 4
-    and ah, 0x0f
-    xlat
-    xchg ah, al
-    xlat
-
-    mov rbx, hex_str
-    xchg ah, al
-    mov [rbx], rax
-
-    pop rax
-    pop rbx
-    ret
-
-print_hex_byte:
-    ; print_hex [rax]
-    ;
-    ; prints given arg as hex string
-    ; to stdout
-    push rax
-    push rdi
-    push rsi
-    push rdx
-    push rcx
-
-    call hex_to_char
-
-    mov eax, SYS_WRITE
-    mov edi, STDOUT
-    mov rsi, hex_str ; movabs
-    mov edx, 0x2
-    syscall
-
-    pop rcx
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rax
     ret
 
 gametick:
