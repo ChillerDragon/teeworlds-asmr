@@ -172,6 +172,7 @@ print_uint32:
     push rax
     push rsi
     push rcx
+    push rdx
 
     mov ecx, 0xa ; base 10
     push rcx ; ASCII newline '\n' = 0xa = base
@@ -201,6 +202,7 @@ print_uint32:
 
     add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
 
+    pop rdx
     pop rcx
     pop rsi
     pop rax
@@ -228,13 +230,23 @@ print_dbg_fd:
     ; print_dbg_fd
     ;
     ; prints "got file descriptor: "
-    ; there is now new line and no
+    ; there is no new line and no
     ; actual file descriptor being printed
+    push rax
+    push rdi
+    push rsi
+    push rdx
+
     mov rsi, s_got_file_desc ; movabs
     mov eax, SYS_WRITE
     mov edi, STDOUT
     mov edx, l_got_file_desc ; mov edx, 0x15
     syscall
+
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
     ret
 
 print_menu:
