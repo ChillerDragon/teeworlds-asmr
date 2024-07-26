@@ -1,3 +1,31 @@
+print_hexdump:
+    ; print_hexdump [rax] [rdi]
+    ;   rax: pointer to data
+    ;   rdi: data size
+    push rsi
+    push rcx
+    push rbx
+    push rdx
+    push rdi
+    push r9
+
+    mov r9, rax ; r9 = data
+    mov rcx, 0
+.print_udp_loop_bytes:
+    mov rax, [r9+rcx*1] ; r9 = data
+    call print_hex_byte
+    inc rcx
+    cmp rcx, rdi
+    jb .print_udp_loop_bytes
+
+    pop r9
+    pop rdi
+    pop rdx
+    pop rbx
+    pop rcx
+    pop rsi
+    ret
+
 hex_to_char:
     ; hex_to_char [rax]
     ;
@@ -48,3 +76,4 @@ print_hex_byte:
     pop rdi
     pop rax
     ret
+

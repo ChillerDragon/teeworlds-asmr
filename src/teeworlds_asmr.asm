@@ -171,16 +171,11 @@ print_udp:
     mov rdx, l_got_udp
     syscall
     ; hexdump
-    mov rcx, 0
+    mov rax, udp_recv_buf
     mov rdi, [udp_read_len]
-.print_udp_loop_bytes:
-    mov rax, [udp_recv_buf+rcx*1]
-    call print_hex_byte
-    inc rcx
-    cmp rcx, [udp_read_len]
-    jb .print_udp_loop_bytes
+    call print_hexdump
     call print_newline
-    ; len=%d
+    ; [client]     len: %d
     mov rax, SYS_WRITE
     mov rdi, STDOUT
     mov rsi, s_len
