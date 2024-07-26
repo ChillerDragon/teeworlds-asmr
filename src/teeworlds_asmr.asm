@@ -132,10 +132,9 @@ section .data
     l_received_bytes equ $ - s_received_bytes
 
 section .bss
-    ; we only need 1 byte for the socket file descriptor
-    ; the value should be 3 at all times anyways
-    ; as long as we do not connect 1024 dummies we should be fine
-    socket resb 1
+    ; 4 byte matching C int
+    ; nobody ever uses a char/short to store a socket
+    socket resb 4
 
     ; this is too long
     ; for now we only store 2 character in here
