@@ -46,6 +46,8 @@ gdb ./teeworlds_asmr
 
 After the last stepi just spam enter to "run" the program.
 
+The gdb extension [peda](https://github.com/longld/peda) is quite helpful. It shows useful details while stepping.
+
 ## project goal
 
 I want to see how far I can get. Trying to build a teeworlds 0.7 client (without graphics).
