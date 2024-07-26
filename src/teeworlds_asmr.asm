@@ -95,7 +95,7 @@ section .data
     NEWLINE db 0x0a
 
     ; networking
-    SIZEOF_SOCKADDR dw 128 ; borderline non sense
+    SIZEOF_SOCKADDR dd 128 ; borderline non sense
     ADDR_LOCALHOST dw AF_INET ; 0x2 0x00
                 db 0x20, 0x6f ; port 8303
                 db 0x7f, 0x0, 0x0, 0x01 ; 127.0.0.1
