@@ -75,6 +75,11 @@
 ; /usr/include/x86_64-linux-gnu/asm/unistd_64.h
 ; https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/
 
+; db - 1 byte
+; dw - 2 byte
+; dd - 4 byte
+; dq - 8 byte
+
 global _start:
 
 section .data
