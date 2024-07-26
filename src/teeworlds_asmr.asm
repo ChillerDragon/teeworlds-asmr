@@ -238,8 +238,7 @@ gametick:
     ;
     ; main gameloop using recursion
     call keypresses
-    call gametick
-    ret
+    jmp gametick
 
 _start:
     call print_menu
