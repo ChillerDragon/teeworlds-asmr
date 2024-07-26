@@ -32,7 +32,11 @@ recv_udp:
     syscall
     mov [udp_read_len], rax
 
-    ; call dbg_print_uint32
+    ; debug print
+    call print_received_bytes
+    mov rax, [udp_read_len]
+    call print_uint32
+    call print_newline
 
     ret
 

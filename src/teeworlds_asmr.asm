@@ -117,12 +117,14 @@ section .data
     l_dbg_digit equ $ - s_dbg_digit
     s_got_file_desc db "got file descriptor: "
     l_got_file_desc equ $ - s_got_file_desc
-    s_got_udp db "got udp: "
+    s_got_udp db "[client] got udp: "
     l_got_udp equ $ - s_got_udp
-    s_len db "len="
+    s_len db     "[client]     len: "
     l_len equ $ - s_len
     s_blocking_read db "doing a blocking udp read ...", 0x0a
     l_blocking_read equ $ - s_blocking_read
+    s_received_bytes db "[udp] received bytes: "
+    l_received_bytes equ $ - s_received_bytes
 
 section .bss
     ; we only need 1 byte for the socket file descriptor
@@ -175,7 +177,7 @@ print_udp:
     mov rax, [udp_recv_buf+rcx*1]
     call print_hex_byte
     inc rcx
-    cmp rcx, 10
+    cmp rcx, [udp_read_len]
     jb .print_udp_loop_bytes
     call print_newline
     ; len=%d

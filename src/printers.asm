@@ -6,6 +6,24 @@ print_menu:
     syscall ; sys_write(1, s_end, l_end)
     ret
 
+print_received_bytes:
+    push rax
+    push rdi
+    push rsi
+    push rdx
+
+    mov eax, SYS_WRITE
+    mov edi, STDOUT
+    mov rsi, s_received_bytes
+    mov edx, l_received_bytes
+    syscall
+
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
+    ret
+
 print_blocking_read:
     push rax
     push rdi
