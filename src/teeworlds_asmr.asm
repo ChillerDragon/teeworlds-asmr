@@ -121,6 +121,8 @@ section .data
     l_got_udp equ $ - s_got_udp
     s_len db "len="
     l_len equ $ - s_len
+    s_blocking_read db "doing a blocking udp read ...", 0x0a
+    l_blocking_read equ $ - s_blocking_read
 
 section .bss
     ; we only need 1 byte for the socket file descriptor
@@ -157,37 +159,7 @@ section .text
 %include "src/hex.asm"
 %include "src/terminal.asm"
 %include "src/udp.asm"
-
-print_dbg_fd:
-    ; print_dbg_fd
-    ;
-    ; prints "got file descriptor: "
-    ; there is no new line and no
-    ; actual file descriptor being printed
-    push rax
-    push rdi
-    push rsi
-    push rdx
-
-    mov rsi, s_got_file_desc ; movabs
-    mov eax, SYS_WRITE
-    mov edi, STDOUT
-    mov edx, l_got_file_desc ; mov edx, 0x15
-    syscall
-
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rax
-    ret
-
-print_menu:
-    mov eax, SYS_WRITE
-    mov edi, STDOUT
-    mov rsi, s_menu ; movabs
-    mov edx, l_menu ; mov edx, 0x33
-    syscall ; sys_write(1, s_end, l_end)
-    ret
+%include "src/printers.asm"
 
 print_udp:
     ; got udp:
@@ -228,6 +200,7 @@ key_a:
     mov rdx, l_a
     syscall
     call send_udp
+    call print_blocking_read
     call recv_udp
     mov rax, [udp_read_len]
     test rax, rax
