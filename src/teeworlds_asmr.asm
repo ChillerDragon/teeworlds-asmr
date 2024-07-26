@@ -86,6 +86,7 @@ section .data
     ; constants
     %include "src/data/syscalls.asm"
     %include "src/data/teeworlds.asm"
+    %include "src/data/terminal.asm"
 
     STDOUT       equ         1
     KEY_A        equ         97
@@ -106,7 +107,7 @@ section .data
                 db 0x7f, 0x0, 0x0, 0x01 ; 127.0.0.1
                 db 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ; watafk is this?!
 
-    ; variables
+    ; strings
     s_menu      db          "+--+ teeworlds_asmr (ESCAPE to quit the game) +--+",0x0a
     l_menu      equ         $ - s_menu
     s_end       db          "quitting the game...",0x0a
@@ -115,9 +116,6 @@ section .data
     l_a         equ         $ - s_a
     s_d         db          "you pressed d",0x0a
     l_d         equ         $ - s_d
-    orig        times       10000       db      0
-    new         times       10000       db      0
-    char        db          0,0,0,0,0
     s_dbg_digit db          "[debug] value of rax is: ", 0
     l_dbg_digit equ $ - s_dbg_digit
     s_got_file_desc db "got file descriptor: "
@@ -224,15 +222,15 @@ keypresses:
     ; read char
     mov rax, SYS_READ ; __NR_read
     mov rdi, 0 ; fd: stdin
-    mov rsi, char ; buf: the temporary buffer, char
+    mov rsi, terminal_input_char; buf: the temporary buffer, char
     mov rdx, 1 ; count: the length of the buffer, 1
     syscall
     call sane_console
-    cmp byte[char], KEY_A
+    cmp byte[terminal_input_char], KEY_A
     jz key_a
-    cmp byte[char], KEY_D
+    cmp byte[terminal_input_char], KEY_D
     jz key_d
-    cmp byte[char], KEY_ESC
+    cmp byte[terminal_input_char], KEY_ESC
     jz end
 keypress_end:
     ret
