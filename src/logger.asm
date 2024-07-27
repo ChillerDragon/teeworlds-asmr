@@ -2,10 +2,7 @@
 ; vim: set expandtab:
 
 print_newline:
-    push rax
-    push rdi
-    push rsi
-    push rdx
+    push_registers
 
     mov rax, SYS_WRITE
     mov rdi, STDOUT
@@ -13,10 +10,7 @@ print_newline:
     mov rdx, 1
     syscall
 
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rax
+    pop_registers
     ret
 
 dbg_print_uint32:
@@ -25,11 +19,7 @@ dbg_print_uint32:
     ; prints given arg as uint32 turned into a string
     ; to stdout
     ; prefixed with a debug string message
-
-    push rax
-    push rdi
-    push rsi
-    push rdx
+    push_registers_keep_rax
 
     mov rsi, s_dbg_digit
     mov eax, SYS_WRITE
@@ -37,10 +27,8 @@ dbg_print_uint32:
     mov edx, l_dbg_digit
     syscall
 
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rax
+    ; pop of rax to pass it on to print_uint32
+    pop_registers_keep_rax
 
     call print_uint32
     call print_newline
@@ -54,10 +42,7 @@ print_uint32:
     ; and prints the given value in rax
     ; as a digit to stdout
     ; https://stackoverflow.com/a/46301894/6287070
-    push rax
-    push rsi
-    push rcx
-    push rdx
+    push_registers_keep_rax
 
     mov ecx, 0xa ; base 10
     push rcx ; ASCII newline '\n' = 0xa = base
@@ -87,9 +72,6 @@ print_uint32:
 
     add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
 
-    pop rdx
-    pop rcx
-    pop rsi
-    pop rax
+    pop_registers_keep_rax
     ret
 

@@ -159,6 +159,8 @@ section .bss
     udp_read_len resb 4
 section .text
 
+%include "src/macros.asm"
+
 %include "src/logger.asm"
 %include "src/hex.asm"
 %include "src/terminal.asm"
