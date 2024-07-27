@@ -21,11 +21,7 @@ dbg_print_uint32:
     ; prefixed with a debug string message
     push_registers_keep_rax
 
-    mov rsi, s_dbg_digit
-    mov eax, SYS_WRITE
-    mov edi, STDOUT
-    mov edx, l_dbg_digit
-    syscall
+    print s_dbg_digit
 
     ; pop of rax to pass it on to print_uint32
     pop_registers_keep_rax

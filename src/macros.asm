@@ -1,5 +1,6 @@
-; print [string] [length]
-%macro print 2
+; print [string]
+; string has a have a matching l_string length defintion
+%macro print 1
     push rax
     push rdi
     push rsi
@@ -8,7 +9,9 @@
     mov rax, SYS_WRITE
     mov rdi, STDOUT
     mov rsi, %1
-    mov rdx, %2
+    %idefine str_len l_%1
+    mov rdx, str_len
+    %undef str_len
     syscall
 
     pop rdx

@@ -108,26 +108,26 @@ section .data
                 db 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ; watafk is this?!
 
     ; strings
-    s_menu      db          "+--+ teeworlds_asmr (ESCAPE to quit the game) +--+",0x0a
-    l_menu      equ         $ - s_menu
-    s_end       db          "quitting the game...",0x0a
-    l_end       equ         $ - s_end
-    s_a         db          "you pressed a",0x0a
-    l_a         equ         $ - s_a
-    s_d         db          "you pressed d",0x0a
-    l_d         equ         $ - s_d
-    s_dbg_digit db          "[debug] value of rax is: ", 0
-    l_dbg_digit equ $ - s_dbg_digit
+    s_menu db "+--+ teeworlds_asmr (ESCAPE to quit the game) +--+",0x0a
+    l_s_menu equ $ - s_menu
+    s_end db "quitting the game...",0x0a
+    l_s_end equ $ - s_end
+    s_you_pressed_a db "you pressed a",0x0a
+    l_s_you_pressed_a equ $ - s_you_pressed_a
+    s_you_pressed_d db "you pressed d",0x0a
+    l_s_you_pressed_d equ $ - s_you_pressed_d
+    s_dbg_digit db "[debug] value of rax is: ", 0
+    l_s_dbg_digit equ $ - s_dbg_digit
     s_got_file_desc db "got file descriptor: "
-    l_got_file_desc equ $ - s_got_file_desc
+    l_s_got_file_desc equ $ - s_got_file_desc
     s_got_udp db "[client] got udp: "
-    l_got_udp equ $ - s_got_udp
-    s_len db     "[client]     len: "
-    l_len equ $ - s_len
+    l_s_got_udp equ $ - s_got_udp
+    s_len db "[client]     len: "
+    l_s_len equ $ - s_len
     s_blocking_read db "doing a blocking udp read ...", 0x0a
-    l_blocking_read equ $ - s_blocking_read
+    l_s_blocking_read equ $ - s_blocking_read
     s_received_bytes db "[udp] received bytes: "
-    l_received_bytes equ $ - s_received_bytes
+    l_s_received_bytes equ $ - s_received_bytes
 
 section .bss
     ; 4 byte matching C int
@@ -165,26 +165,16 @@ section .text
 %include "src/hex.asm"
 %include "src/terminal.asm"
 %include "src/udp.asm"
-%include "src/printers.asm"
 
 print_udp:
-    ; got udp:
-    mov rax, SYS_WRITE
-    mov rdi, STDOUT
-    mov rsi, s_got_udp
-    mov rdx, l_got_udp
-    syscall
+    print s_got_udp
     ; hexdump
     mov rax, udp_recv_buf
     mov rdi, [udp_read_len]
     call print_hexdump
     call print_newline
     ; [client]     len: %d
-    mov rax, SYS_WRITE
-    mov rdi, STDOUT
-    mov rsi, s_len
-    mov rdx, l_len
-    syscall
+    print s_len
     mov rax, [udp_read_len]
     call print_uint32
     call print_newline
@@ -195,9 +185,9 @@ on_udp_packet:
     ret
 
 key_a:
-    print s_a, l_a
+    print s_you_pressed_a
     call send_udp
-    call print_blocking_read
+    print s_blocking_read
     call recv_udp
     mov rax, [udp_read_len]
     test rax, rax
@@ -208,7 +198,7 @@ key_a:
     jmp keypress_end
 
 key_d:
-    print s_d, l_d
+    print s_you_pressed_d
     jmp keypress_end
 
 keypresses:
@@ -237,18 +227,13 @@ gametick:
     jmp gametick
 
 _start:
-    call print_menu
+    print s_menu
     call open_socket
     call gametick
 
 end:
     call sane_console
-    ; print exit message
-    mov rsi, s_end
-    mov rax, SYS_WRITE
-    mov rdi, 1
-    mov rdx, l_end
-    syscall ; sys_write(1, s_end, l_end)
+    print s_end
     mov rax, SYS_EXIT
     mov rdi, 0
     syscall ; sys_exit(0)

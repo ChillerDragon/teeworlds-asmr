@@ -11,7 +11,7 @@ open_socket:
     mov rdi, rax ; socket file descriptor
 
     mov [socket], rax
-    call print_dbg_fd
+    print s_got_file_desc
     mov rax, [socket]
     call print_uint32
     ret
@@ -33,7 +33,7 @@ recv_udp:
     mov [udp_read_len], rax
 
     ; debug print
-    call print_received_bytes
+    print s_received_bytes
     mov rax, [udp_read_len]
     call print_uint32
     call print_newline
