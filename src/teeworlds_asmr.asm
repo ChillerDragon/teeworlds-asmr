@@ -195,11 +195,7 @@ on_udp_packet:
     ret
 
 key_a:
-    mov rsi, s_a
-    mov rax, SYS_WRITE
-    mov rdi, 1
-    mov rdx, l_a
-    syscall
+    print s_a, l_a
     call send_udp
     call print_blocking_read
     call recv_udp
@@ -212,11 +208,7 @@ key_a:
     jmp keypress_end
 
 key_d:
-    mov rsi, s_d
-    mov rax, SYS_WRITE
-    mov rdi, 1
-    mov rdx, l_d
-    syscall
+    print s_d, l_d
     jmp keypress_end
 
 keypresses:

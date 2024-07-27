@@ -1,3 +1,22 @@
+; print [string] [length]
+%macro print 2
+    push rax
+    push rdi
+    push rsi
+    push rdx
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, %1
+    mov rdx, %2
+    syscall
+
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
+%endmacro
+
 ; take one arg
 
 %macro push_registers_keep_rax 0
