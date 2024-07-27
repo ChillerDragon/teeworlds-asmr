@@ -45,7 +45,6 @@ send_udp:
     ;
     ; sends a udp packet to the `socket`
     ; make sure to fist call open_socket
-    mov rax, 0x414141 ; debug marker
     mov eax, SYS_SENDTO ; 0x2c
 
     xor rdi, rdi ; zero the whole rdi register
