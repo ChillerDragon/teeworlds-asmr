@@ -41,19 +41,38 @@ recv_udp:
     ret
 
 send_udp:
-    ; send_udp
+    ; send_udp [rax] [rdi]
+    ;  rax = pointer to payload
+    ;  rdi = payload length
     ;
     ; sends a udp packet to the `socket`
     ; make sure to fist call open_socket
-    mov eax, SYS_SENDTO ; 0x2c
+    push_registers
 
+    ; buffer to send
+    mov rsi, rax
+
+    ; buffer size
+    mov rdx, rdi
+
+    ; syscall
+    mov rax, SYS_SENDTO
+
+    ; socket file descriptor
     xor rdi, rdi ; zero the whole rdi register
     movzx rdi, byte [socket] ; then only set the lowest byte
 
-    mov rsi, PACKET_CTRL_TOKEN
-    mov edx, PACKET_CTRL_TOKEN_LEN ; 0x20c
-    xor r10, r10 ; flags
+    ; flags
+    xor r10, r10
+
+    ; target socket address
     mov r8, sockaddr_localhost_8303
-    mov r9, 16 ; sockaddr size
+
+    ; target socket address size
+    mov r9, 16
+
     syscall
+
+    pop_registers
     ret
+

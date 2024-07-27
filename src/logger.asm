@@ -33,7 +33,7 @@ dbg_print_uint32:
     ; prefixed with a debug string message
     push_registers
 
-    print s_dbg_digit
+    print s_dbg_rax_digit
 
     ; pop of rax to pass it on to print_uint32
     pop_registers

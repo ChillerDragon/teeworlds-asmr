@@ -20,6 +20,15 @@
     pop rax
 %endmacro
 
+%macro dbg_print_reg 1
+    push_registers
+    print s_dbg_reg_digit
+    mov rax, %1
+    call print_uint32
+    call print_newline
+    pop_registers
+%endmacro
+
 %macro push_registers 0
     push rax
     push rbx

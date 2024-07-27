@@ -117,8 +117,10 @@ section .data
     l_s_you_pressed_a equ $ - s_you_pressed_a
     s_you_pressed_d db "you pressed d",0x0a
     l_s_you_pressed_d equ $ - s_you_pressed_d
-    s_dbg_digit db "[debug] value of rax is: ", 0
-    l_s_dbg_digit equ $ - s_dbg_digit
+    s_dbg_rax_digit db "[debug] value of rax is: ", 0
+    l_s_dbg_rax_digit equ $ - s_dbg_rax_digit
+    s_dbg_reg_digit db "[debug] value of register is: ", 0
+    l_s_dbg_reg_digit equ $ - s_dbg_reg_digit
     s_got_file_desc db "got file descriptor: "
     l_s_got_file_desc equ $ - s_got_file_desc
     s_got_udp db "[client] got udp: "
@@ -129,6 +131,10 @@ section .data
     l_s_blocking_read equ $ - s_blocking_read
     s_received_bytes db "[udp] received bytes: "
     l_s_received_bytes equ $ - s_received_bytes
+
+    ; teeworlds strings
+    s_got_peer_token db "[client] got peer token: "
+    l_s_got_peer_token equ $ - s_got_peer_token
 
 section .bss
     ; 4 byte matching C int
@@ -142,6 +148,15 @@ section .bss
     ; NET_MAX_PACKETSIZE 1400
     ; tw codebase also calls recvfrom with it
     udp_recv_buf resb 1400
+
+    ; NET_MAX_PACKETSIZE 1400
+    ; tw codebase also calls recvfrom with it
+    udp_send_buf resb 1400
+
+    ; integer holding offset into payload of `udp_send_buf`
+    ; meaning `udp_payload_index 0` is the 7th byte in `udp_send_buf`
+    ; and `udp_payload_index 1` is the 8th byte in `udp_send_buf`
+    udp_payload_index resb 4
 
     ; i was too lazy to verify the size of
     ; the sockaddr struct
@@ -167,6 +182,164 @@ section .text
 %include "src/terminal.asm"
 %include "src/udp.asm"
 
+push_packet_payload_byte:
+    ; push_packet_payload_byte [rax]
+    ;  rax = (or al) is the byte as value to be pushed into the `udp_send_buf`
+    push rcx
+    push rdx
+
+    mov dword edx, [udp_payload_index]
+
+    lea rcx, [udp_send_buf + PACKET_HEADER_LEN + edx]
+    mov byte [rcx], al
+
+    mov rcx, [udp_payload_index]
+    inc rcx
+    mov [udp_payload_index], rcx
+
+    pop rdx
+    pop rcx
+    ret
+
+set_packet_header:
+    push_registers
+
+    ; flags and size
+    mov byte [udp_send_buf], 0x04
+    mov byte [udp_send_buf + 1], 0x00
+    mov byte [udp_send_buf + 2], 0x00
+
+    ; peer token
+    mov al, byte [peer_token]
+    mov [udp_send_buf + 3], al
+    mov al, byte [peer_token + 1]
+    mov [udp_send_buf + 4], al
+    mov al, byte [peer_token + 2]
+    mov [udp_send_buf + 5], al
+    mov al, byte [peer_token + 3]
+    mov [udp_send_buf + 6], al
+
+    pop_registers
+    ret
+
+mem_copy:
+    ; mem_copy [rax] [rdi] [rsi]
+    ;   rax = destination buffer pointer
+    ;   rdi = source buffer pointer
+    ;   rsi = size
+
+    ; this is slow af and going byte by byte
+    ; there has to be some blazingly fast way to copy
+    ; copying more data with less instructions
+    push_registers
+
+    mov rcx, 0
+    xor r9, r9
+.mem_copy_byte_loop:
+    mov r9b, byte [rdi+rcx]
+    mov byte [rax+rcx], r9b
+    inc rcx
+    cmp rcx, rsi
+    jb .mem_copy_byte_loop
+
+    pop_registers
+    ret
+
+send_packet:
+    ; send_packet [rax]
+    ;  rax = payload size
+    ;
+    ;  if you want to pass in a payload use
+    ;  send_packet_with_payload
+    ;  otherwise you have to make sure to fill
+    ;  `udp_send_buf` starting at offset `PACKET_HEADER_LEN`
+    ;  before calling send_packet
+    ;
+    ;  example:
+    ;
+    ; lea rax, [udp_send_buf + PACKET_HEADER_LEN]
+    ; mov byte [rax], 0xFF
+    ; lea rax, [udp_send_buf + PACKET_HEADER_LEN + 1]
+    ; mov byte [rax], 0xFF
+    ; mov rax, 2
+    ; call send_packet
+    ;
+    call set_packet_header
+
+    mov rax, udp_send_buf
+    add rdi, PACKET_HEADER_LEN
+    call send_udp
+    ret
+
+send_packet_with_payload:
+    ; send_packet_with_payload [rax] [rdi]
+    ;  rax = pointer to payload buffer
+    ;  rdi = payload buffer size
+    call set_packet_header
+
+    ; push rdi
+    ; mov rdi, 6
+    ; call print_hexdump
+    ; pop rdi
+
+    push rax
+    push rdi
+    push rsi
+
+    mov rsi, rdi ; copy size
+    mov rdi, rax ; copy source
+    lea rax, [udp_send_buf + PACKET_HEADER_LEN] ; copy destination
+    call mem_copy
+
+    pop rsi
+    pop rdi
+    pop rax
+
+    mov rax, udp_send_buf
+    add rdi, PACKET_HEADER_LEN
+    call send_udp
+    ret
+
+send_ctrl_msg_connect:
+    mov dword [udp_payload_index], 0
+
+    mov rax, 0xFF
+    call push_packet_payload_byte
+    mov rax, 0xDD
+    call push_packet_payload_byte
+    mov rax, 0xDD
+    call push_packet_payload_byte
+    mov rax, 0xDD
+    call push_packet_payload_byte
+    mov rax, 0xDD
+    call push_packet_payload_byte
+    mov rax, 0xFF
+    call push_packet_payload_byte
+    call send_packet
+    ret
+
+on_ctrl_msg_token:
+    mov rax, [udp_recv_buf + 8]
+    mov [peer_token], rax
+
+    print s_got_peer_token
+    mov rax, peer_token
+    mov rdi, 4
+    call print_hexdump
+    call print_newline
+
+    call send_ctrl_msg_connect
+
+    ret
+
+on_ctrl_message:
+    call on_ctrl_msg_token
+    ret
+
+on_packet:
+    call on_ctrl_message
+    ret
+
 print_udp:
     print s_got_udp
     ; hexdump
@@ -179,15 +352,26 @@ print_udp:
     mov rax, [udp_read_len]
     call print_uint32
     call print_newline
+
+    call on_packet
     ret
 
 on_udp_packet:
     call print_udp
     ret
 
+connect:
+    mov dword [peer_token], 0xFFFFFFFF
+
+    mov rax, PAYLOAD_CTRL_TOKEN
+    mov rdi, PAYLOAD_CTRL_TOKEN_LEN
+    call send_packet_with_payload
+
+    ret
+
 key_a:
     print s_you_pressed_a
-    call send_udp
+    call connect
     print s_blocking_read
     call recv_udp
     mov rax, [udp_read_len]
