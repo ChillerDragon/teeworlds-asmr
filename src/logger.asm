@@ -31,12 +31,12 @@ dbg_print_uint32:
     ; prints given arg as uint32 turned into a string
     ; to stdout
     ; prefixed with a debug string message
-    push_registers_keep_rax
+    push_registers
 
     print s_dbg_digit
 
     ; pop of rax to pass it on to print_uint32
-    pop_registers_keep_rax
+    pop_registers
 
     call print_uint32
     call print_newline
@@ -50,7 +50,7 @@ print_uint32:
     ; and prints the given value in rax
     ; as a digit to stdout
     ; https://stackoverflow.com/a/46301894/6287070
-    push_registers_keep_rax
+    push_registers
 
     mov ecx, 0xa ; base 10
     push rcx ; ASCII newline '\n' = 0xa = base
@@ -80,6 +80,6 @@ print_uint32:
 
     add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
 
-    pop_registers_keep_rax
+    pop_registers
     ret
 
