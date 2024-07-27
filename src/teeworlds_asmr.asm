@@ -98,7 +98,8 @@ section .data
 
     ; application constants
     HEX_TABLE   db "0123456789ABCDEF", 0
-    newline     db 0x0a
+    char_newline     db 0x0a
+    char_space       db 0x20
 
     ; networking
     max_sockaddr_read_size dd 128

@@ -6,7 +6,19 @@ print_newline:
 
     mov rax, SYS_WRITE
     mov rdi, STDOUT
-    mov rsi, newline
+    mov rsi, char_newline
+    mov rdx, 1
+    syscall
+
+    pop_registers
+    ret
+
+print_space:
+    push_registers
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, char_space
     mov rdx, 1
     syscall
 

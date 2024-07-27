@@ -50,8 +50,8 @@ send_udp:
     xor rdi, rdi ; zero the whole rdi register
     movzx rdi, byte [socket] ; then only set the lowest byte
 
-    mov rsi, MSG_CTRL_TOKEN
-    mov edx, MSG_CTRL_TOKEN_LEN ; 0x20c
+    mov rsi, PACKET_CTRL_TOKEN
+    mov edx, PACKET_CTRL_TOKEN_LEN ; 0x20c
     xor r10, r10 ; flags
     mov r8, sockaddr_localhost_8303
     mov r9, 16 ; sockaddr size
