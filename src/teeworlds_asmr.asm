@@ -98,11 +98,11 @@ section .data
 
     ; application constants
     HEX_TABLE   db "0123456789ABCDEF", 0
-    NEWLINE db 0x0a
+    newline     db 0x0a
 
     ; networking
-    SIZEOF_SOCKADDR dd 128 ; borderline non sense
-    ADDR_LOCALHOST dw AF_INET ; 0x2 0x00
+    max_sockaddr_read_size dd 128
+    sockaddr_localhost_8303 dw AF_INET ; 0x2 0x00
                 db 0x20, 0x6f ; port 8303
                 db 0x7f, 0x0, 0x0, 0x01 ; 127.0.0.1
                 db 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ; watafk is this?!

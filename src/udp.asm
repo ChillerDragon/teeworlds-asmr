@@ -28,7 +28,7 @@ recv_udp:
     mov rdx, NET_MAX_PACKETSIZE
     xor r10, r10
     lea r8, udp_srv_addr
-    lea r9, SIZEOF_SOCKADDR
+    lea r9, max_sockaddr_read_size
     syscall
     mov [udp_read_len], rax
 
@@ -54,7 +54,7 @@ send_udp:
     mov rsi, MSG_CTRL_TOKEN
     mov edx, MSG_CTRL_TOKEN_LEN ; 0x20c
     xor r10, r10 ; flags
-    mov r8, ADDR_LOCALHOST
+    mov r8, sockaddr_localhost_8303
     mov r9, 16 ; sockaddr size
     syscall
     ret

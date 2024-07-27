@@ -9,7 +9,7 @@ print_newline:
 
     mov rax, SYS_WRITE
     mov rdi, STDOUT
-    mov rsi, NEWLINE
+    mov rsi, newline
     mov rdx, 1
     syscall
 
