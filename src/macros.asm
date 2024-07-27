@@ -34,10 +34,10 @@
 %endmacro
 
 %macro pop_registers 0
-    pop r8
-    pop r9
-    pop r10
     pop r11
+    pop r10
+    pop r9
+    pop r8
     pop rdi
     pop rsi
     pop rdx

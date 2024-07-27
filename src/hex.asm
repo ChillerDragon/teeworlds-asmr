@@ -56,11 +56,7 @@ print_hex_byte:
     ;
     ; prints given arg as hex string
     ; to stdout
-    push rax
-    push rdi
-    push rsi
-    push rdx
-    push rcx
+    push_registers
 
     call hex_to_char
 
@@ -70,10 +66,6 @@ print_hex_byte:
     mov edx, 0x2
     syscall
 
-    pop rcx
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rax
+    pop_registers
     ret
 
