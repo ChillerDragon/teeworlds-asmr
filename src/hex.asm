@@ -66,6 +66,8 @@ print_hex_byte:
     mov edx, 0x2
     syscall
 
+    call print_space
+
     pop_registers
     ret
 
