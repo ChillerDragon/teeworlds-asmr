@@ -190,6 +190,7 @@ section .text
 %include "src/send_control.asm"
 %include "src/receive_control.asm"
 %include "src/system.asm"
+%include "src/packet_header.asm"
 
 set_packet_header:
     push_registers
@@ -292,13 +293,15 @@ on_system_or_game_messages:
 
 on_packet:
     push rax
+    mov rax, udp_recv_buf
+    call unpack_packet_header
+    pop rax
 
-    mov al, [udp_recv_buf]
+    mov al, [packet_header_flags]
     cmp al, 0x04
     je on_ctrl_message
 
 on_packet_end:
-    pop rax
     ret
 
 print_udp:
