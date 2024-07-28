@@ -61,7 +61,7 @@
 ; rsi - register source index (source for data copies)
 ; rdi - register destination index (destination for data copies)
 
-; calling convetion for this code base is matching the one
+; calling convention for this code base is matching the one
 ; of linux sys calls
 ; so function arguments have to be filled in those registers
 ; in the following order:
@@ -75,10 +75,10 @@
 ; /usr/include/x86_64-linux-gnu/asm/unistd_64.h
 ; https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/
 
-; db - 1 byte
-; dw - 2 byte
-; dd - 4 byte
-; dq - 8 byte
+; byte   db - 1 byte
+; word   dw - 2 byte
+; dword  dd - 4 byte
+; qword  dq - 8 byte
 
 global _start:
 
@@ -131,6 +131,8 @@ section .data
     l_s_blocking_read equ $ - s_blocking_read
     s_received_bytes db "[udp] received bytes: "
     l_s_received_bytes equ $ - s_received_bytes
+    s_packer_size db "[packer] amount of bytes packed: "
+    l_s_packer_size equ $ - s_packer_size
 
     ; teeworlds strings
     s_got_peer_token db "[client] got peer token: "
@@ -181,25 +183,7 @@ section .text
 %include "src/hex.asm"
 %include "src/terminal.asm"
 %include "src/udp.asm"
-
-push_packet_payload_byte:
-    ; push_packet_payload_byte [rax]
-    ;  rax = (or al) is the byte as value to be pushed into the `udp_send_buf`
-    push rcx
-    push rdx
-
-    mov dword edx, [udp_payload_index]
-
-    lea rcx, [udp_send_buf + PACKET_HEADER_LEN + edx]
-    mov byte [rcx], al
-
-    mov rcx, [udp_payload_index]
-    inc rcx
-    mov [udp_payload_index], rcx
-
-    pop rdx
-    pop rcx
-    ret
+%include "src/packer.asm"
 
 set_packet_header:
     push_registers
@@ -246,8 +230,8 @@ mem_copy:
     ret
 
 send_packet:
-    ; send_packet [rax]
-    ;  rax = payload size
+    ; send_packet
+    ;  the size will be the PACKET_HEADER_LEN + udp_payload_index
     ;
     ;  if you want to pass in a payload use
     ;  send_packet_with_payload
@@ -261,14 +245,33 @@ send_packet:
     ; mov byte [rax], 0xFF
     ; lea rax, [udp_send_buf + PACKET_HEADER_LEN + 1]
     ; mov byte [rax], 0xFF
-    ; mov rax, 2
     ; call send_packet
     ;
+    ;  or use one of the helpers:
+    ;
+    ; packer_reset
+    ; pack_byte 0xFF
+    ; pack_byte 0xFF
+    ; call send_packet
+    ;
+    push rax
+    push rdi
+
     call set_packet_header
 
+    ; buf
     mov rax, udp_send_buf
+
+    ; size
+    xor rdi, rdi
+    ; TODO: not sure about the whole 4 byte buffer vs 8 byte register thing
+    mov edi, [udp_payload_index]
     add rdi, PACKET_HEADER_LEN
+
     call send_udp
+
+    pop rdi
+    pop rax
     ret
 
 send_packet_with_payload:
@@ -301,21 +304,33 @@ send_packet_with_payload:
     ret
 
 send_ctrl_msg_connect:
-    mov dword [udp_payload_index], 0
+    push rax
 
-    mov rax, 0xFF
-    call push_packet_payload_byte
-    mov rax, 0xDD
-    call push_packet_payload_byte
-    mov rax, 0xDD
-    call push_packet_payload_byte
-    mov rax, 0xDD
-    call push_packet_payload_byte
-    mov rax, 0xDD
-    call push_packet_payload_byte
-    mov rax, 0xFF
-    call push_packet_payload_byte
+    packer_reset
+    pack_byte MSG_CTRL_CONNECT
+    pack_raw token, 4
+
+    ; hack to send a bunch of bytes to pass the
+    ; anti reflection attack check
+    ; those bytes are not set here so their last used values will be sent
+    ; this should for the first connection be all zeros
+    ; which is exactly what we want
+    ;
+    ; for later connections it might leak contents of packets we sent before that
+    ; the server does not need null bytes it just cares about the size
+    ; but we as a client might leak information sent to one server to another
+    ;
+    ; imagine the following scenario
+    ; we send a rcon auth on server a filling the udp_send_buf with our rcon password
+    ; and then we connect to another server
+    ; where we send 512 bytes of the udp_send_buf which still holds the rcon password
+    mov dword [udp_payload_index], 512
+
+    packer_print_size
+
     call send_packet
+
+    pop rax
     ret
 
 on_ctrl_msg_token:
