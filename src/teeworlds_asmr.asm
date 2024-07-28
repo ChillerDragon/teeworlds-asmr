@@ -148,6 +148,8 @@ section .data
     ; teeworlds strings
     s_got_peer_token db "[client] got peer token: "
     l_s_got_peer_token equ $ - s_got_peer_token
+    s_got_accept db "[client] got accept", 0x0a
+    l_s_got_accept equ $ - s_got_accept
     s_got_ctrl_msg db "[client] got ctrl msg: "
     l_s_got_ctrl_msg equ $ - s_got_ctrl_msg
     s_unknown_ctrl_msg db "[client] unknown ctrl msg: "
