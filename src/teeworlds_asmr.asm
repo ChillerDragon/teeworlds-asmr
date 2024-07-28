@@ -84,31 +84,18 @@ global _start:
 
 section .data
     ; constants
+    %include "src/data/posix.asm"
     %include "src/data/syscalls.asm"
     %include "src/data/teeworlds.asm"
     %include "src/data/terminal.asm"
+    %include "src/data/logger.asm"
+    %include "src/data/hex.asm"
 
     KEY_A       equ 0x61
     KEY_D       equ 0x64
     KEY_Q       equ 0x71
     KEY_ESC     equ 0x5B
     KEY_RETURN  equ 0x0D ; '\r' (carriage ret)
-
-    STDIN  equ 0
-    STDOUT equ 1
-
-    AF_INET      equ 0x2
-    SOCK_DGRAM   equ 0x2
-    MSG_DONTWAIT equ 64
-    O_NONBLOCK   equ 2048
-    F_SETFL      equ 4
-    EWOULDBLOCK  equ 11
-    EAGAIN       equ 11
-
-    ; application constants
-    HEX_TABLE    db "0123456789ABCDEF", 0
-    char_newline db 0x0a
-    char_space   db 0x20
 
     ; networking
     max_sockaddr_read_size dd 128
@@ -126,8 +113,6 @@ section .data
     l_s_you_pressed_a equ $ - s_you_pressed_a
     s_you_pressed_d db "you pressed d",0x0a
     l_s_you_pressed_d equ $ - s_you_pressed_d
-    s_dbg_rax_digit db "[debug] value of rax is: ", 0
-    l_s_dbg_rax_digit equ $ - s_dbg_rax_digit
     s_dbg_reg_digit db "[debug] value of register is: ", 0
     l_s_dbg_reg_digit equ $ - s_dbg_reg_digit
     s_got_file_desc db "got file descriptor: "
@@ -156,13 +141,11 @@ section .data
     l_s_unknown_ctrl_msg equ $ - s_unknown_ctrl_msg
 
 section .bss
+    %include "src/bss/hex.asm"
+
     ; 4 byte matching C int
     ; nobody ever uses a char/short to store a socket
     socket resb 4
-
-    ; this is too long
-    ; for now we only store 2 character in here
-    hex_str resb 512
 
     ; NET_MAX_PACKETSIZE 1400
     ; tw codebase also calls recvfrom with it
@@ -195,7 +178,7 @@ section .bss
 section .text
 
 %include "src/macros.asm"
-
+%include "src/syscalls.asm"
 %include "src/logger.asm"
 %include "src/hex.asm"
 %include "src/terminal.asm"
@@ -428,6 +411,5 @@ _start:
 end:
     call sane_console
     print s_end
-    mov rax, SYS_EXIT
-    mov rdi, 0
-    syscall ; sys_exit(0)
+    exit 0
+

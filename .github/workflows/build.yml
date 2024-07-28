@@ -25,3 +25,6 @@ jobs:
 
     - name: Clean and debug
       run: make clean && make debug
+
+    - name: Clean and test
+      run: make clean && make test

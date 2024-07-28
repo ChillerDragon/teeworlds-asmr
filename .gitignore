@@ -1,6 +1,8 @@
 *.o
 *.txt
+build/
 teeworlds_asmr
 tags
 .gdb_history
-
+tests/*
+!tests/*.asm
