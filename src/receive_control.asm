@@ -29,7 +29,6 @@ on_ctrl_message:
 
     print s_got_ctrl_msg
 
-    xor rax, rax
     mov al, [udp_recv_buf + PACKET_HEADER_LEN]
     call print_uint32
 

@@ -22,7 +22,6 @@ recv_udp:
     ; listens for udp packet on the
     ; `socket` and fills the `udp_recv_buf`
     mov rax, SYS_RECVFROM
-    xor rdi, rdi ; zero the whole rdi register
     movzx rdi, byte [socket] ; then only set the lowest byte
     lea rsi, udp_recv_buf
     mov rdx, NET_MAX_PACKETSIZE
@@ -75,7 +74,6 @@ send_udp:
     mov rax, SYS_SENDTO
 
     ; socket file descriptor
-    xor rdi, rdi ; zero the whole rdi register
     movzx rdi, byte [socket] ; then only set the lowest byte
 
     ; flags

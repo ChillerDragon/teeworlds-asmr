@@ -28,7 +28,6 @@ push_packet_payload_byte:
 
     print s_packer_size
 
-    xor rax, rax
     mov eax, [udp_payload_index]
     call print_uint32
     call print_newline
