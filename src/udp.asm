@@ -45,11 +45,15 @@ recv_udp:
     mov rax, [udp_read_len]
     call print_uint32
     call print_newline
-
-    ret
+    jmp .recv_udp_end
 .recv_udp_error:
+    neg rax
+    cmp rax, EWOULDBLOCK
+    jz .recv_udp_end
     print s_udp_error
+    call print_uint32
     call print_newline
+.recv_udp_end:
     ret
 
 send_udp:

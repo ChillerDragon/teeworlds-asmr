@@ -88,25 +88,27 @@ section .data
     %include "src/data/teeworlds.asm"
     %include "src/data/terminal.asm"
 
-    KEY_A       equ         0x61
-    KEY_D       equ         0x64
-    KEY_Q       equ         0x71
-    KEY_ESC     equ         0x5B
-    KEY_RETURN  equ         0x0D ; '\r' (carriage ret)
+    KEY_A       equ 0x61
+    KEY_D       equ 0x64
+    KEY_Q       equ 0x71
+    KEY_ESC     equ 0x5B
+    KEY_RETURN  equ 0x0D ; '\r' (carriage ret)
 
-    STDIN        equ         0
-    STDOUT       equ         1
+    STDIN  equ 0
+    STDOUT equ 1
 
-    AF_INET      equ        0x2
-    SOCK_DGRAM   equ        0x2
-    MSG_DONTWAIT equ        64
-    O_NONBLOCK  equ         2048
-    F_SETFL     equ         4
+    AF_INET      equ 0x2
+    SOCK_DGRAM   equ 0x2
+    MSG_DONTWAIT equ 64
+    O_NONBLOCK   equ 2048
+    F_SETFL      equ 4
+    EWOULDBLOCK  equ 11
+    EAGAIN       equ 11
 
     ; application constants
-    HEX_TABLE   db "0123456789ABCDEF", 0
-    char_newline     db 0x0a
-    char_space       db 0x20
+    HEX_TABLE    db "0123456789ABCDEF", 0
+    char_newline db 0x0a
+    char_space   db 0x20
 
     ; networking
     max_sockaddr_read_size dd 128
@@ -134,8 +136,8 @@ section .data
     l_s_got_udp equ $ - s_got_udp
     s_len db "[client]     len: "
     l_s_len equ $ - s_len
-    s_blocking_read db "doing a blocking udp read ...", 0x0a
-    l_s_blocking_read equ $ - s_blocking_read
+    s_non_blocking_read db "doing a non blocking udp read ...", 0x0a
+    l_s_non_blocking_read equ $ - s_non_blocking_read
     s_received_bytes db "[udp] received bytes: "
     l_s_received_bytes equ $ - s_received_bytes
     s_udp_error db "[udp] error: "
@@ -406,7 +408,7 @@ connect:
     ret
 
 pump_network:
-    print s_blocking_read
+    ; print s_non_blocking_read
     call recv_udp
     mov rax, [udp_read_len]
     test rax, rax
