@@ -5,7 +5,7 @@ insane_console:
     mov esi, 0x5401 ; cmd: TCGETS
     mov rdx, tty_orig ; arg: the buffer, orig
     syscall
-    ; agian, but this time for the 'new' buffer
+    ; again, but this time for the 'new' buffer
     mov rax, 0x10
     mov rdi, 0x0
     mov rsi, 0x5401
@@ -29,10 +29,14 @@ insane_console:
     ret
 
 sane_console:
+    push rax
+
     ; reset settings (with ioctl again)
     mov rax, 0x10 ; __NR_ioctl
     mov rdi, 0x0 ; fd: stdin
     mov rsi, 0x5402 ; cmd: TCSETS
     mov rdx, tty_orig ; arg: the buffer, orig
     syscall
+
+    pop rax
     ret

@@ -6,4 +6,5 @@ SYS_SOCKET   equ         41
 SYS_SENDTO   equ         44
 SYS_RECVFROM equ         45
 SYS_EXIT     equ         60
+SYS_FCNTL    equ         72
 

@@ -88,14 +88,20 @@ section .data
     %include "src/data/teeworlds.asm"
     %include "src/data/terminal.asm"
 
+    KEY_A       equ         0x61
+    KEY_D       equ         0x64
+    KEY_Q       equ         0x71
+    KEY_ESC     equ         0x5B
+    KEY_RETURN  equ         0x0D ; '\r' (carriage ret)
+
+    STDIN        equ         0
     STDOUT       equ         1
-    KEY_A        equ         97
-    KEY_D        equ         100
-    KEY_ESC      equ         27
-    KEY_RETURN   equ         13
-    AF_INET      equ         0x2
-    SOCK_DGRAM   equ         0x2
-    MSG_DONTWAIT equ         64
+
+    AF_INET      equ        0x2
+    SOCK_DGRAM   equ        0x2
+    MSG_DONTWAIT equ        64
+    O_NONBLOCK  equ         2048
+    F_SETFL     equ         4
 
     ; application constants
     HEX_TABLE   db "0123456789ABCDEF", 0
@@ -408,7 +414,7 @@ pump_network:
     ; we do not process the udp payload
     js .pump_network_no_data
     call on_udp_packet
-.pump_network_no_data
+.pump_network_no_data:
     ret
 
 key_a:
@@ -430,10 +436,18 @@ keypresses:
     mov rdx, 1 ; count: the length of the buffer, 1
     syscall
     call sane_console
+
+    test rax, rax
+    ; if read returned negative
+    ; we do not process the read value as key press
+    js keypress_end
+
     cmp byte[terminal_input_char], KEY_A
     jz key_a
     cmp byte[terminal_input_char], KEY_D
     jz key_d
+    cmp byte[terminal_input_char], KEY_Q
+    jz end
     cmp byte[terminal_input_char], KEY_ESC
     jz end
 keypress_end:
@@ -447,8 +461,17 @@ gametick:
     call keypresses
     jmp gametick
 
+non_blocking_keypresses:
+    mov rax, SYS_FCNTL
+    mov rdi, STDIN       ; fd: stdin
+    mov rsi, F_SETFL     ; cmd: F_SETFL
+    mov rdx, O_NONBLOCK  ; arg: the flag
+    syscall
+    ret
+
 _start:
     print s_menu
+    call non_blocking_keypresses
     call open_socket
     call gametick
 
