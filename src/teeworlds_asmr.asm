@@ -396,17 +396,22 @@ connect:
 
     ret
 
-key_a:
-    print s_you_pressed_a
-    call connect
+pump_network:
     print s_blocking_read
     call recv_udp
     mov rax, [udp_read_len]
     test rax, rax
     ; if recvfrom returned negative
     ; we do not process the udp payload
-    js keypress_end
+    js .pump_network_no_data
     call on_udp_packet
+.pump_network_no_data
+    ret
+
+key_a:
+    print s_you_pressed_a
+    call connect
+    call pump_network
     jmp keypress_end
 
 key_d:
