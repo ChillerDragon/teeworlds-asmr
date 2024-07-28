@@ -29,7 +29,7 @@ recv_udp:
     xor r10, r10
     mov r10, MSG_DONTWAIT
     lea r8, udp_srv_addr
-    lea r9, max_sockaddr_read_size
+    lea r9, sizeof_sockaddr_struct
     syscall
     mov [udp_read_len], rax
 

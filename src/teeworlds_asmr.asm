@@ -98,7 +98,7 @@ section .data
     KEY_RETURN  equ 0x0D ; '\r' (carriage ret)
 
     ; networking
-    max_sockaddr_read_size dd 128
+    sizeof_sockaddr_struct dd 16
     sockaddr_localhost_8303 dw AF_INET ; 0x2 0x00
                 db 0x20, 0x6f ; port 8303
                 db 0x7f, 0x0, 0x0, 0x01 ; 127.0.0.1
