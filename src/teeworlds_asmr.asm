@@ -141,6 +141,8 @@ section .data
     l_s_unknown_ctrl_msg equ $ - s_unknown_ctrl_msg
     s_got_packet_with_chunks db "[client] got packet with chunks: "
     l_s_got_packet_with_chunks equ $ - s_got_packet_with_chunks
+    s_unhandled_packet db "[client] UNHANDLED PACKET!!"
+    l_s_unhandled_packet equ $ - s_unhandled_packet
 
 section .bss
     %include "src/bss/hex.asm"
@@ -297,9 +299,13 @@ on_packet:
     call unpack_packet_header
     pop rax
 
+    ; no idea if this "if statement" is correct
     mov al, [packet_header_flags]
-    cmp al, 0x04
-    je on_ctrl_message
+    and al, PACKETFLAG_CONTROL
+    cmp al, 0
+    jnz on_ctrl_message
+
+    print s_unhandled_packet
 
 on_packet_end:
     ret
