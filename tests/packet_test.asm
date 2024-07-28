@@ -16,7 +16,7 @@ _start:
     mov rax, assert_input_buf
     call unpack_packet_header
 
-    ; asserts flags
+    ; assert flags
     mov al, [packet_header_flags]
     assert_al_eq 0x04
 
