@@ -199,6 +199,8 @@ section .text
 %include "src/terminal.asm"
 %include "src/udp.asm"
 %include "src/packer.asm"
+%include "src/send_control.asm"
+%include "src/receive_control.asm"
 
 set_packet_header:
     push_registers
@@ -316,69 +318,6 @@ send_packet_with_payload:
     mov rax, udp_send_buf
     add rdi, PACKET_HEADER_LEN
     call send_udp
-    ret
-
-send_ctrl_msg_connect:
-    push rax
-
-    packer_reset
-    pack_byte MSG_CTRL_CONNECT
-    pack_raw token, 4
-
-    ; hack to send a bunch of bytes to pass the
-    ; anti reflection attack check
-    ; those bytes are not set here so their last used values will be sent
-    ; this should for the first connection be all zeros
-    ; which is exactly what we want
-    ;
-    ; for later connections it might leak contents of packets we sent before that
-    ; the server does not need null bytes it just cares about the size
-    ; but we as a client might leak information sent to one server to another
-    ;
-    ; imagine the following scenario
-    ; we send a rcon auth on server a filling the udp_send_buf with our rcon password
-    ; and then we connect to another server
-    ; where we send 512 bytes of the udp_send_buf which still holds the rcon password
-    mov dword [udp_payload_index], 512
-
-    packer_print_size
-
-    call send_packet
-
-    pop rax
-    ret
-
-on_ctrl_msg_token:
-    mov rax, [udp_recv_buf + 8]
-    mov [peer_token], rax
-
-    print s_got_peer_token
-    mov rax, peer_token
-    mov rdi, 4
-    call print_hexdump
-    call print_newline
-
-    call send_ctrl_msg_connect
-
-    jmp on_ctrl_message_end
-
-on_ctrl_message:
-    push rax
-
-    print s_got_ctrl_msg
-
-    xor rax, rax
-    mov al, [udp_recv_buf + PACKET_HEADER_LEN]
-    call print_uint32
-
-    cmp al, MSG_CTRL_TOKEN
-    jz on_ctrl_msg_token
-
-    print s_unknown_ctrl_msg
-    call print_uint32
-
-on_ctrl_message_end:
-    pop rax
     ret
 
 on_packet:
