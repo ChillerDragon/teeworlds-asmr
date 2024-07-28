@@ -197,10 +197,15 @@ section .text
 set_packet_header:
     push_registers
 
-    ; flags and size
-    mov byte [udp_send_buf], 0x04
-    mov byte [udp_send_buf + 1], 0x00
-    mov byte [udp_send_buf + 2], 0x00
+    ; flags
+    mov al, byte [packet_header_flags]
+    mov byte [udp_send_buf], al
+    ; sequence
+    mov al, byte [connection_sequence]
+    mov byte [udp_send_buf + 1], al
+    ; num chunks
+    mov al, byte [packet_header_num_chunks]
+    mov byte [udp_send_buf + 2], al
 
     ; peer token
     mov al, byte [peer_token]
@@ -331,9 +336,7 @@ on_udp_packet:
 connect:
     mov dword [peer_token], 0xFFFFFFFF
 
-    mov rax, PAYLOAD_CTRL_TOKEN
-    mov rdi, PAYLOAD_CTRL_TOKEN_LEN
-    call send_packet_with_payload
+    call send_ctrl_msg_token
 
     ret
 

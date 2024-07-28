@@ -24,3 +24,12 @@ PACKETFLAG_CONNLESS equ 0b00_1000_00
 token db 0xDD, 0xDD, 0xCC, 0xCC
 peer_token db 0xFF, 0xFF, 0xFF, 0xFF
 
+; the amount of vital chunks sent
+connection_sequence db 0, 0, 0, 0
+
+; the amount of vital chunks received
+connection_ack db 0, 0, 0, 0
+
+; the amount of vital chunks acknowledged by the peer
+connection_peerack db 0, 0, 0, 0
+

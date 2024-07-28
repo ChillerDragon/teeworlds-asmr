@@ -18,9 +18,12 @@ on_ctrl_msg_accept:
 
     print s_got_accept
 
-    ; TODO: here we still send the hardcodet packet header
-    ;       we have to get rid of the control flag and set
-    ;       num chunks to 1
+    ; mov eax, [connection_sequence]
+    ; inc eax
+    ; mov [connection_sequence], eax
+
+    mov byte [packet_header_flags], 0x00
+    mov byte [packet_header_num_chunks], 0x01
     mov rax, PAYLOAD_SEND_INFO
     mov rdi, PAYLOAD_SEND_INFO_LEN
     call send_packet_with_payload

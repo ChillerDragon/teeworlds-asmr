@@ -1,3 +1,17 @@
+send_ctrl_msg_token:
+    push rax
+    push rdi
+
+    mov byte [packet_header_flags], PACKETFLAG_CONTROL
+    mov byte [packet_header_num_chunks], 0
+    mov rax, PAYLOAD_CTRL_TOKEN
+    mov rdi, PAYLOAD_CTRL_TOKEN_LEN
+    call send_packet_with_payload
+
+    pop rdi
+    pop rax
+    ret
+
 send_ctrl_msg_connect:
     push rax
 
@@ -23,6 +37,8 @@ send_ctrl_msg_connect:
 
     packer_print_size
 
+    mov byte [packet_header_flags], PACKETFLAG_CONTROL
+    mov byte [packet_header_num_chunks], 0
     call send_packet
 
     pop rax
