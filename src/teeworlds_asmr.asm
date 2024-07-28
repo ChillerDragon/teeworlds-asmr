@@ -300,9 +300,7 @@ on_packet:
     pop rax
 
     ; no idea if this "if statement" is correct
-    mov al, [packet_header_flags]
-    and al, PACKETFLAG_CONTROL
-    cmp al, 0
+    is_packet_flag PACKETFLAG_CONTROL
     jnz on_ctrl_message
 
     print s_unhandled_packet

@@ -1,3 +1,18 @@
+%macro is_packet_flag 1
+    ; is_packet_flag [rax]
+    ;  rax = flag
+    ;
+    ; example:
+    ;
+    ;  is_packet_flag PACKETFLAG_CONTROL
+    ;  jnz on_ctrl_message
+    ;
+    ; no idea if this "if statement" is correct
+    mov al, [packet_header_flags]
+    and al, %1
+    cmp al, 0
+%endmacro
+
 unpack_packet_header:
     ; unpack_packet_header [rax]
     ;  rax = buffer to unpack
