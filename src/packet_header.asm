@@ -8,9 +8,11 @@
     ;  jnz on_ctrl_message
     ;
     ; no idea if this "if statement" is correct
+    push rax
     mov al, [packet_header_flags]
     and al, %1
     cmp al, 0
+    pop rax
 %endmacro
 
 unpack_packet_header:
