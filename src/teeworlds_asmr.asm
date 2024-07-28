@@ -137,6 +137,8 @@ section .data
     ; teeworlds strings
     s_got_peer_token db "[client] got peer token: "
     l_s_got_peer_token equ $ - s_got_peer_token
+    s_got_ctrl_msg db "[client] got ctrl msg: "
+    l_s_got_ctrl_msg equ $ - s_got_ctrl_msg
 
 section .bss
     ; 4 byte matching C int
@@ -348,7 +350,17 @@ on_ctrl_msg_token:
     ret
 
 on_ctrl_message:
+    push rax
+
     call on_ctrl_msg_token
+
+    print s_got_ctrl_msg
+
+    xor rax, rax
+    mov al, [udp_recv_buf + PACKET_HEADER_LEN]
+    call print_uint32
+
+    pop rax
     ret
 
 on_packet:
@@ -391,7 +403,7 @@ key_a:
     call recv_udp
     mov rax, [udp_read_len]
     test rax, rax
-    ; if recvfrom returned negativ
+    ; if recvfrom returned negative
     ; we do not process the udp payload
     js keypress_end
     call on_udp_packet
