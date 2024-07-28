@@ -139,9 +139,12 @@ section .data
     l_s_got_ctrl_msg equ $ - s_got_ctrl_msg
     s_unknown_ctrl_msg db "[client] unknown ctrl msg: "
     l_s_unknown_ctrl_msg equ $ - s_unknown_ctrl_msg
+    s_got_packet_with_chunks db "[client] got packet with chunks: "
+    l_s_got_packet_with_chunks equ $ - s_got_packet_with_chunks
 
 section .bss
     %include "src/bss/hex.asm"
+    %include "src/bss/teeworlds.asm"
 
     ; 4 byte matching C int
     ; nobody ever uses a char/short to store a socket
@@ -186,6 +189,7 @@ section .text
 %include "src/packer.asm"
 %include "src/send_control.asm"
 %include "src/receive_control.asm"
+%include "src/system.asm"
 
 set_packet_header:
     push_registers
@@ -204,29 +208,6 @@ set_packet_header:
     mov [udp_send_buf + 5], al
     mov al, byte [peer_token + 3]
     mov [udp_send_buf + 6], al
-
-    pop_registers
-    ret
-
-mem_copy:
-    ; mem_copy [rax] [rdi] [rsi]
-    ;   rax = destination buffer pointer
-    ;   rdi = source buffer pointer
-    ;   rsi = size
-
-    ; this is slow af and going byte by byte
-    ; there has to be some blazingly fast way to copy
-    ; copying more data with less instructions
-    push_registers
-
-    mov rcx, 0
-    xor r9, r9
-.mem_copy_byte_loop:
-    mov r9b, byte [rdi+rcx]
-    mov byte [rax+rcx], r9b
-    inc rcx
-    cmp rcx, rsi
-    jb .mem_copy_byte_loop
 
     pop_registers
     ret
@@ -305,8 +286,19 @@ send_packet_with_payload:
     call send_udp
     ret
 
+on_system_or_game_messages:
+    print s_got_packet_with_chunks
+    jmp on_packet_end
+
 on_packet:
-    call on_ctrl_message
+    push rax
+
+    mov al, [udp_recv_buf]
+    cmp al, 0x04
+    je on_ctrl_message
+
+on_packet_end:
+    pop rax
     ret
 
 print_udp:

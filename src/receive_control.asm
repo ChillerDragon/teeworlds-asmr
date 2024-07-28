@@ -1,6 +1,6 @@
 on_ctrl_msg_token:
     mov rax, [udp_recv_buf + 8]
-    mov [peer_token], rax
+    mov [peer_token], eax
 
     print s_got_peer_token
     mov rax, peer_token
@@ -18,6 +18,9 @@ on_ctrl_msg_accept:
 
     print s_got_accept
 
+    ; TODO: here we still send the hardcodet packet header
+    ;       we have to get rid of the control flag and set
+    ;       num chunks to 1
     mov rax, PAYLOAD_SEND_INFO
     mov rdi, PAYLOAD_SEND_INFO_LEN
     call send_packet_with_payload
@@ -42,5 +45,5 @@ on_ctrl_message:
 
 on_ctrl_message_end:
     pop_registers ; pushed in on_ctrl_message
-    ret
+    jmp on_packet_end
 
