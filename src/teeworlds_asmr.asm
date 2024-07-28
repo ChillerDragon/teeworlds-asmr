@@ -95,6 +95,7 @@ section .data
     KEY_RETURN   equ         13
     AF_INET      equ         0x2
     SOCK_DGRAM   equ         0x2
+    MSG_DONTWAIT equ         64
 
     ; application constants
     HEX_TABLE   db "0123456789ABCDEF", 0
@@ -131,6 +132,8 @@ section .data
     l_s_blocking_read equ $ - s_blocking_read
     s_received_bytes db "[udp] received bytes: "
     l_s_received_bytes equ $ - s_received_bytes
+    s_udp_error db "[udp] error: "
+    l_s_udp_error equ $ - s_udp_error
     s_packer_size db "[packer] amount of bytes packed: "
     l_s_packer_size equ $ - s_packer_size
 
@@ -440,6 +443,7 @@ gametick:
     ; gametick
     ;
     ; main gameloop using recursion
+    call pump_network
     call keypresses
     jmp gametick
 

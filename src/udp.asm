@@ -26,11 +26,19 @@ recv_udp:
     movzx rdi, byte [socket] ; then only set the lowest byte
     lea rsi, udp_recv_buf
     mov rdx, NET_MAX_PACKETSIZE
+    ; flags
     xor r10, r10
+    mov r10, MSG_DONTWAIT
     lea r8, udp_srv_addr
     lea r9, max_sockaddr_read_size
     syscall
     mov [udp_read_len], rax
+
+    ; error checking
+    test rax, rax
+    ; if recvfrom returned negative
+    ; we do not process the udp payload
+    js .recv_udp_error
 
     ; debug print
     print s_received_bytes
@@ -38,6 +46,10 @@ recv_udp:
     call print_uint32
     call print_newline
 
+    ret
+.recv_udp_error:
+    print s_udp_error
+    call print_newline
     ret
 
 send_udp:
