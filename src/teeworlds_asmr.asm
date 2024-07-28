@@ -150,6 +150,8 @@ section .data
     l_s_got_peer_token equ $ - s_got_peer_token
     s_got_ctrl_msg db "[client] got ctrl msg: "
     l_s_got_ctrl_msg equ $ - s_got_ctrl_msg
+    s_unknown_ctrl_msg db "[client] unknown ctrl msg: "
+    l_s_unknown_ctrl_msg equ $ - s_unknown_ctrl_msg
 
 section .bss
     ; 4 byte matching C int
@@ -358,12 +360,10 @@ on_ctrl_msg_token:
 
     call send_ctrl_msg_connect
 
-    ret
+    jmp on_ctrl_message_end
 
 on_ctrl_message:
     push rax
-
-    call on_ctrl_msg_token
 
     print s_got_ctrl_msg
 
@@ -371,6 +371,13 @@ on_ctrl_message:
     mov al, [udp_recv_buf + PACKET_HEADER_LEN]
     call print_uint32
 
+    cmp al, MSG_CTRL_TOKEN
+    jz on_ctrl_msg_token
+
+    print s_unknown_ctrl_msg
+    call print_uint32
+
+on_ctrl_message_end:
     pop rax
     ret
 
