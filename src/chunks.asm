@@ -19,8 +19,8 @@ pack_chunk_header:
     jg .pack_chunk_header_error_size
 
     push rax
-    mov dword rax, [connection_sequence]
-    cmp rax, 255
+    mov eax, [connection_sequence]
+    cmp eax, 255
     jg .pack_chunk_header_error_seq
     pop rax
 
