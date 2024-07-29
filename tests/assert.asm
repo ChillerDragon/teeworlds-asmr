@@ -31,6 +31,7 @@ section .text
 %include "src/logger.asm"
 %include "src/hex.asm"
 %include "src/system.asm"
+%include "src/packer.asm"
 
 %macro assert_input_buf_reset 0
     mov dword [assert_input_buf_index], 0
