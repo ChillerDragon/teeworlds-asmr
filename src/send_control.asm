@@ -15,7 +15,6 @@ send_ctrl_msg_token:
 send_ctrl_msg_connect:
     push rax
 
-    packer_reset
     pack_byte MSG_CTRL_CONNECT
     pack_raw token, 4
 

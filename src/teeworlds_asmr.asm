@@ -261,6 +261,10 @@ send_packet:
 
     call send_udp
 
+    ; this is for convince so we can just queue new chunks
+    ; and never have to worry about which chunk is the first
+    packer_reset
+
     pop rdi
     pop rax
     ret
@@ -292,6 +296,11 @@ send_packet_with_payload:
     mov rax, udp_send_buf
     add rdi, PACKET_HEADER_LEN
     call send_udp
+
+    ; this is for convince so we can just queue new chunks
+    ; and never have to worry about which chunk is the first
+    packer_reset
+
     ret
 
 on_system_or_game_messages:
@@ -334,6 +343,7 @@ on_udp_packet:
     ret
 
 connect:
+    packer_reset
     mov dword [peer_token], 0xFFFFFFFF
 
     call send_ctrl_msg_token
