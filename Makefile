@@ -22,7 +22,7 @@ all_tests := $(shell find tests -name "*_test.asm" | rev | cut -c 5- | rev)
 test: LDFLAGS=
 test: $(all_tests) run_tests
 
-tests/%_test.o : tests/%_test.asm
+tests/%_test.o : tests/%_test.asm $(shell find -name "*.asm")
 	nasm -f elf64 -gstabs $<
 
 tests/%_test : tests/%_test.o
