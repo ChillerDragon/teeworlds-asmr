@@ -62,7 +62,7 @@ pack_chunk_header:
     ret
 
 queue_chunk:
-    ; queue_chunk [rax] [rdi] [rsi] [rdx]
+    ; queue_chunk [rax] [rdi] [rsi]
     ;  rax = system (1=system 0=game)
     ;  rdi = payload
     ;  rsi = payload size
