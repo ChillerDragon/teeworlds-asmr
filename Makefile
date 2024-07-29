@@ -31,7 +31,8 @@ tests/%_test : tests/%_test.o
 .PHONY: run_tests
 
 run_tests:
-	find tests -name '*_test' -type f -executable -exec {} \;
+	# find tests -name '*_test' -type f -executable -exec {} \;
+	bash tests/run.sh
 
 .PHONY: clean
 
