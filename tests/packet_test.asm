@@ -6,7 +6,7 @@ _start:
     assert_input_buf_reset
     assert_input_buf_push_byte 0x04
     assert_input_buf_push_byte 0x00
-    assert_input_buf_push_byte 0x00
+    assert_input_buf_push_byte 0x02
     assert_input_buf_push_byte 0xCC
     assert_input_buf_push_byte 0xFF
     assert_input_buf_push_byte 0xFF
@@ -19,6 +19,10 @@ _start:
     ; assert flags
     mov al, [packet_header_flags]
     assert_al_eq 0x04
+
+    ; assert flags
+    mov al, [packet_header_num_chunks]
+    assert_al_eq 0x02
 
     ; assert token
     mov rax, [packet_header_token]

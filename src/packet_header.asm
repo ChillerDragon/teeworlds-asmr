@@ -26,6 +26,11 @@ unpack_packet_header:
     mov byte [packet_header_flags], cl
 
     ; dereference pointer
+    mov rcx, [rax + 2]
+    ; move 1 byte at offset 2
+    mov byte [packet_header_num_chunks], cl
+
+    ; dereference pointer
     mov rcx, [rax + 3]
     ; move 4 bytes at offset 3
     mov [packet_header_token], ecx

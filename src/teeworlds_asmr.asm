@@ -257,6 +257,10 @@ send_packet_with_payload:
 
 on_system_or_game_messages:
     print s_got_packet_with_chunks
+
+    mov al, [packet_header_num_chunks]
+    call print_uint32
+
     jmp on_packet_end
 
 on_packet:
@@ -269,7 +273,7 @@ on_packet:
     is_packet_flag PACKETFLAG_CONTROL
     jnz on_ctrl_message
 
-    print s_unhandled_packet
+    jmp on_system_or_game_messages
 
 on_packet_end:
     ret
