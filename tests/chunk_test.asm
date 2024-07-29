@@ -72,16 +72,31 @@ test_pack_queue_chunk:
     mov al, [udp_send_buf + PACKET_HEADER_LEN + 2]
     assert_al_eq 0x0A
 
-    ; ; call again to verify sequence incrementing
+    ; call again to verify sequence incrementing
+    packer_reset
 
-    ; ; rax: flags
-    ; mov rax, 0
-    ; set_rax_flag CHUNKFLAG_VITAL
+    ; rax: flags
+    mov rax, 0
+    set_rax_flag CHUNKFLAG_VITAL
 
-    ; call queue_chunk
+    call queue_chunk
 
-    ; ; asserts
-    ; mov al, [udp_send_buf + PACKET_HEADER_LEN + 2]
-    ; assert_al_eq 0x0B
+    ; asserts
+    mov al, [udp_send_buf + PACKET_HEADER_LEN + 2]
+    assert_al_eq 0x0B
+
+
+    ; call again to verify sequence incrementing even more
+    packer_reset
+
+    ; rax: flags
+    mov rax, 0
+    set_rax_flag CHUNKFLAG_VITAL
+
+    call queue_chunk
+
+    ; asserts
+    mov al, [udp_send_buf + PACKET_HEADER_LEN + 2]
+    assert_al_eq 0x0C
 
     exit 0
