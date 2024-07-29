@@ -269,9 +269,8 @@ on_packet:
     call unpack_packet_header
     pop rax
 
-    ; no idea if this "if statement" is correct
     is_packet_flag PACKETFLAG_CONTROL
-    jnz on_ctrl_message
+    je on_ctrl_message
 
     jmp on_system_or_game_messages
 
@@ -344,13 +343,13 @@ keypresses:
     js keypress_end
 
     cmp byte[terminal_input_char], KEY_A
-    jz key_a
+    je key_a
     cmp byte[terminal_input_char], KEY_D
-    jz key_d
+    je key_d
     cmp byte[terminal_input_char], KEY_Q
-    jz end
+    je end
     cmp byte[terminal_input_char], KEY_ESC
-    jz end
+    je end
 keypress_end:
     ret
 

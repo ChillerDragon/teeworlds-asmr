@@ -48,7 +48,7 @@ recv_udp:
 .recv_udp_error:
     neg rax
     cmp rax, EWOULDBLOCK
-    jz .recv_udp_end
+    je .recv_udp_end
     print s_udp_error
     call print_uint32
     call print_newline

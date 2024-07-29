@@ -3,6 +3,10 @@ packet_header_num_chunks resb 1
 packet_header_flags resb 1
 packet_header_token resb 4
 
+chunk_header_flags resb 1
+chunk_header_size resb 4
+chunk_header_sequence resb 4
+
 ; 4 byte matching C int
 ; nobody ever uses a char/short to store a socket
 socket resb 4

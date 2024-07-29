@@ -6,3 +6,4 @@ tags
 .gdb_history
 tests/*
 !tests/*.asm
+!tests/*.sh

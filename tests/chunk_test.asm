@@ -1,5 +1,5 @@
 %include "tests/assert.asm"
-%include "src/chunks.asm"
+%include "src/chunk_packer.asm"
 
 _start:
 test_pack_chunk_header:

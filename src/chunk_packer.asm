@@ -46,7 +46,7 @@ pack_chunk_header:
 
     ; sequence only included if it is a vital chunk
     is_rax_flag CHUNKFLAG_VITAL
-    jz .pack_chunk_header_end
+    jne .pack_chunk_header_end
 
     ; sequence (only in the 3rd byte for now)
     mov byte al, [connection_sequence]
@@ -88,7 +88,7 @@ queue_chunk:
 
     ; only if vital increment sequence
     is_rax_flag CHUNKFLAG_VITAL
-    jz .queue_chunk_pack_header
+    jne .queue_chunk_pack_header
 
 .queue_chunk_increment_seq: ; not jumped to only here for debugger readability
     push rax

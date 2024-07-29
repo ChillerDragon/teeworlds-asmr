@@ -16,6 +16,10 @@ section .data
     l_s_assert_expected equ $ - s_assert_expected
     s_assert_actual db "[assert]     actual: "
     l_s_assert_actual equ $ - s_assert_actual
+    s_assert_true_error db "[assert] assertion error: assert_is_true failed (expected cmp to match and zero flag to be set)", 0x0a
+    l_s_assert_true_error  equ $ - s_assert_true_error
+    s_assert_false_error db "[assert] assertion error: assert_is_false failed (expected cmp to not match and zero flag to be unset)", 0x0a
+    l_s_assert_false_error  equ $ - s_assert_false_error
 
 section .bss
     %include "src/bss/hex.asm"
@@ -72,7 +76,7 @@ section .text
 ;
 %macro assert_eax_eq 1
     cmp eax, %1
-    jz %%assert_ok
+    je %%assert_ok
     print s_assert_error
 
     push rax
@@ -96,9 +100,37 @@ section .text
     print s_assert_ok
 %endmacro
 
+; assert_is_true
+; checks if the equal or zero flag is set
+; do a `cmp` and then call assert_is_true
+; if they match the assert will pass
+%macro assert_is_true 0
+    je %%assert_ok
+
+    print s_assert_true_error
+    exit 1
+
+    %%assert_ok:
+    print s_assert_ok
+%endmacro
+
+; assert_is_false
+; checks if the equal or zero flag is set
+; do a `cmp` and then call assert_is_true
+; if they match the assert will pass
+%macro assert_is_false 0
+    jne %%assert_ok
+
+    print s_assert_false_error
+    exit 1
+
+    %%assert_ok:
+    print s_assert_ok
+%endmacro
+
 %macro assert_al_eq 1
     cmp al, %1
-    jz %%assert_ok
+    je %%assert_ok
     print s_assert_error
 
     push rax

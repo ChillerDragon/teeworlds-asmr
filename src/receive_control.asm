@@ -39,9 +39,9 @@ on_ctrl_message:
     call print_uint32
 
     cmp al, MSG_CTRL_TOKEN
-    jz on_ctrl_msg_token
+    je on_ctrl_msg_token
     cmp al, MSG_CTRL_ACCEPT
-    jz on_ctrl_msg_accept
+    je on_ctrl_msg_accept
 
     print s_unknown_ctrl_msg
     call print_uint32

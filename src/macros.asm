@@ -1,5 +1,5 @@
 ; print [string]
-; string has a have a matching l_string length defintion
+; string has a have a matching l_string length definition
 %macro print 1
     push rax
     push rdi
@@ -36,12 +36,36 @@
     ;
     ;  mov rax, [udp_recv_buf]
     ;  is_rax_flag PACKETFLAG_CONTROL
-    ;  jnz on_ctrl_message
+    ;  je on_ctrl_message
     ;
-    ; no idea if this "if statement" is correct
     push rax
     and al, %1
     cmp al, 0
+
+    ; ugly hack to flip the zero flag
+    ; we have to compare to zero after the end
+    ; to verify if the flag is set
+    ; but if it matches to zero it means it is not set
+    ; so to have a nicer api from the outside
+    ; we flip the zero flag in the end
+    ; which could be done with pushf and shaf but i decided to
+    ; hardcode another cmp for simplicity
+    ;
+    ; now callee of the macro can use `je` as a check if the flag is set
+    ; instead of `jne` meaning the flag is set
+
+    jne %%match
+
+    %%no_match:
+    mov al, 0
+    cmp al, 1
+    jmp %%is_rax_flag_end
+
+    %%match:
+    mov al, 0
+    cmp al, 0
+
+    %%is_rax_flag_end:
     pop rax
 %endmacro
 
