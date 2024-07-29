@@ -132,39 +132,6 @@ section .data
 section .bss
     %include "src/bss/hex.asm"
     %include "src/bss/teeworlds.asm"
-
-    ; 4 byte matching C int
-    ; nobody ever uses a char/short to store a socket
-    socket resb 4
-
-    ; NET_MAX_PACKETSIZE 1400
-    ; tw codebase also calls recvfrom with it
-    udp_recv_buf resb 1400
-
-    ; NET_MAX_PACKETSIZE 1400
-    ; tw codebase also calls recvfrom with it
-    udp_send_buf resb 1400
-
-    ; integer holding offset into payload of `udp_send_buf`
-    ; meaning `udp_payload_index 0` is the 7th byte in `udp_send_buf`
-    ; and `udp_payload_index 1` is the 8th byte in `udp_send_buf`
-    udp_payload_index resb 4
-
-    ; i was too lazy to verify the size of
-    ; the sockaddr struct
-    ; but the tw code also uses 128 bytes :shrug:
-    ;
-    ; ok nvm i tested it
-    ;
-    ; #include <sys/socket.h>
-    ; printf("%d\n", sizeof(sockaddr));
-    ; => 16
-    ;
-    ; idk is tw using way too much space?
-    ; whatever ram is free these days
-    udp_srv_addr resb 128
-
-    udp_read_len resb 4
 section .text
 
 %include "src/macros.asm"
