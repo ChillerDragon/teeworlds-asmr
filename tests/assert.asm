@@ -5,6 +5,8 @@ section .data
     %include "src/data/syscalls.asm"
     %include "src/data/logger.asm"
     %include "src/data/hex.asm"
+    %include "src/data/teeworlds.asm"
+    %include "src/data/teeworlds_strings.asm"
 
     s_assert_ok db "[assert] OK", 0x0a
     l_s_assert_ok equ $ - s_assert_ok

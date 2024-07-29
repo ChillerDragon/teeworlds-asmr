@@ -29,6 +29,40 @@
     pop_registers
 %endmacro
 
+%macro is_rax_flag 1
+    ; is_rax_flag [teeworlds bit flag constant]
+    ;
+    ; example:
+    ;
+    ;  mov rax, [udp_recv_buf]
+    ;  is_rax_flag PACKETFLAG_CONTROL
+    ;  jnz on_ctrl_message
+    ;
+    ; no idea if this "if statement" is correct
+    push rax
+    and al, %1
+    cmp al, 0
+    pop rax
+%endmacro
+
+%macro set_rax_flag 1
+    ; set_rax_flag [teeworlds bit flag constant]
+    ;
+    ; sets a bit flag
+    ;
+    ; example:
+    ;
+    ;  mov rax, 0
+    ;  set_rax_flag CHUNKFLAG_VITAL
+    ;
+    push rcx
+
+    mov cl, %1
+    or al, cl
+
+    pop rcx
+%endmacro
+
 %macro push_registers 0
     push rax
     push rbx

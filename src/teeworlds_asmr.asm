@@ -87,6 +87,7 @@ section .data
     %include "src/data/posix.asm"
     %include "src/data/syscalls.asm"
     %include "src/data/teeworlds.asm"
+    %include "src/data/teeworlds_strings.asm"
     %include "src/data/terminal.asm"
     %include "src/data/logger.asm"
     %include "src/data/hex.asm"
@@ -113,8 +114,6 @@ section .data
     l_s_you_pressed_a equ $ - s_you_pressed_a
     s_you_pressed_d db "you pressed d",0x0a
     l_s_you_pressed_d equ $ - s_you_pressed_d
-    s_dbg_reg_digit db "[debug] value of register is: ", 0
-    l_s_dbg_reg_digit equ $ - s_dbg_reg_digit
     s_got_file_desc db "got file descriptor: "
     l_s_got_file_desc equ $ - s_got_file_desc
     s_got_udp db "[client] got udp: "
@@ -129,20 +128,6 @@ section .data
     l_s_udp_error equ $ - s_udp_error
     s_packer_size db "[packer] amount of bytes packed: "
     l_s_packer_size equ $ - s_packer_size
-
-    ; teeworlds strings
-    s_got_peer_token db "[client] got peer token: "
-    l_s_got_peer_token equ $ - s_got_peer_token
-    s_got_accept db "[client] got accept", 0x0a
-    l_s_got_accept equ $ - s_got_accept
-    s_got_ctrl_msg db "[client] got ctrl msg: "
-    l_s_got_ctrl_msg equ $ - s_got_ctrl_msg
-    s_unknown_ctrl_msg db "[client] unknown ctrl msg: "
-    l_s_unknown_ctrl_msg equ $ - s_unknown_ctrl_msg
-    s_got_packet_with_chunks db "[client] got packet with chunks: "
-    l_s_got_packet_with_chunks equ $ - s_got_packet_with_chunks
-    s_unhandled_packet db "[client] UNHANDLED PACKET!!"
-    l_s_unhandled_packet equ $ - s_unhandled_packet
 
 section .bss
     %include "src/bss/hex.asm"
