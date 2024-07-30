@@ -209,7 +209,6 @@ send_packet:
 
     ; size
     xor rdi, rdi
-    ; TODO: not sure about the whole 4 byte buffer vs 8 byte register thing
     mov edi, [udp_payload_index]
     add rdi, PACKET_HEADER_LEN
 
@@ -266,6 +265,11 @@ on_system_or_game_messages:
     lea rax, [udp_recv_buf + PACKET_HEADER_LEN]
     call unpack_chunk_header
     call print_chunk_header
+
+    ; TODO: int unpacker first before looking at chunk splitting
+    ;       we need to read the correct amount of bytes when unpacking the msg id
+    ;       it might be more than one byte
+    ;       hacking one byte would be a super annoying refactor later
 
     jmp on_packet_end
 
@@ -361,7 +365,7 @@ keypress_end:
 gametick:
     ; gametick
     ;
-    ; main gameloop using recursion
+    ; main gameloop
     nanosleep 100
     call pump_network
     call keypresses
