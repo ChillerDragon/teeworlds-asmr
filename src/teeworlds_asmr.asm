@@ -133,6 +133,7 @@ section .text
 %include "src/on_system.asm"
 %include "src/on_game.asm"
 %include "src/packet_packer.asm"
+%include "src/pack_int.asm"
 
 print_udp:
     print s_got_udp

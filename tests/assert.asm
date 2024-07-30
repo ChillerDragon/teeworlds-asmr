@@ -49,6 +49,7 @@ section .text
 %include "src/udp.asm"
 %include "src/on_system.asm"
 %include "src/on_game.asm"
+%include "src/pack_int.asm"
 
 %macro assert_input_buf_reset 0
     mov dword [assert_input_buf_index], 0
