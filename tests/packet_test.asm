@@ -1,5 +1,4 @@
 %include "tests/assert.asm"
-%include "src/packet_header.asm"
 
 _start:
     ; prepare

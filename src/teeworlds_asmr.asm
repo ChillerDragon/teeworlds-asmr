@@ -91,19 +91,13 @@ section .data
     %include "src/data/terminal.asm"
     %include "src/data/logger.asm"
     %include "src/data/hex.asm"
+    %include "src/data/udp.asm"
 
     KEY_A       equ 0x61
     KEY_D       equ 0x64
     KEY_Q       equ 0x71
     KEY_ESC     equ 0x5B
     KEY_RETURN  equ 0x0D ; '\r' (carriage ret)
-
-    ; networking
-    sizeof_sockaddr_struct dd 16
-    sockaddr_localhost_8303 dw AF_INET ; 0x2 0x00
-                db 0x20, 0x6f ; port 8303
-                db 0x7f, 0x0, 0x0, 0x01 ; 127.0.0.1
-                db 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ; watafk is this?!
 
     ; strings
     s_menu db "+--+ teeworlds_asmr (ESCAPE to quit the game) +--+",0x0a
@@ -114,20 +108,8 @@ section .data
     l_s_you_pressed_a equ $ - s_you_pressed_a
     s_you_pressed_d db "you pressed d",0x0a
     l_s_you_pressed_d equ $ - s_you_pressed_d
-    s_got_file_desc db "got file descriptor: "
-    l_s_got_file_desc equ $ - s_got_file_desc
-    s_got_udp db "[client] got udp: "
-    l_s_got_udp equ $ - s_got_udp
     s_len db "[client]     len: "
     l_s_len equ $ - s_len
-    s_non_blocking_read db "doing a non blocking udp read ...", 0x0a
-    l_s_non_blocking_read equ $ - s_non_blocking_read
-    s_received_bytes db "[udp] received bytes: "
-    l_s_received_bytes equ $ - s_received_bytes
-    s_udp_error db "[udp] error: "
-    l_s_udp_error equ $ - s_udp_error
-    s_packer_size db "[packer] amount of bytes packed: "
-    l_s_packer_size equ $ - s_packer_size
 
 section .bss
     %include "src/bss/hex.asm"
@@ -147,150 +129,8 @@ section .text
 %include "src/system.asm"
 %include "src/packet_header.asm"
 %include "src/chunk_unpacker.asm"
-
-set_packet_header:
-    push_registers
-
-    ; flags
-    mov al, byte [packet_header_flags]
-    mov byte [udp_send_buf], al
-    ; sequence
-    mov al, byte [connection_sequence]
-    mov byte [udp_send_buf + 1], al
-    ; num chunks
-    mov al, byte [packet_header_num_chunks]
-    mov byte [udp_send_buf + 2], al
-
-    ; peer token
-    mov al, byte [peer_token]
-    mov [udp_send_buf + 3], al
-    mov al, byte [peer_token + 1]
-    mov [udp_send_buf + 4], al
-    mov al, byte [peer_token + 2]
-    mov [udp_send_buf + 5], al
-    mov al, byte [peer_token + 3]
-    mov [udp_send_buf + 6], al
-
-    pop_registers
-    ret
-
-send_packet:
-    ; send_packet
-    ;  the size will be the PACKET_HEADER_LEN + udp_payload_index
-    ;
-    ;  if you want to pass in a payload use
-    ;  send_packet_with_payload
-    ;  otherwise you have to make sure to fill
-    ;  `udp_send_buf` starting at offset `PACKET_HEADER_LEN`
-    ;  before calling send_packet
-    ;
-    ;  example:
-    ;
-    ; lea rax, [udp_send_buf + PACKET_HEADER_LEN]
-    ; mov byte [rax], 0xFF
-    ; lea rax, [udp_send_buf + PACKET_HEADER_LEN + 1]
-    ; mov byte [rax], 0xFF
-    ; call send_packet
-    ;
-    ;  or use one of the helpers:
-    ;
-    ; packer_reset
-    ; pack_byte 0xFF
-    ; pack_byte 0xFF
-    ; call send_packet
-    ;
-    push rax
-    push rdi
-
-    call set_packet_header
-
-    ; buf
-    mov rax, udp_send_buf
-
-    ; size
-    xor rdi, rdi
-    mov edi, [udp_payload_index]
-    add rdi, PACKET_HEADER_LEN
-
-    call send_udp
-
-    ; this is for convince so we can just queue new chunks
-    ; and never have to worry about which chunk is the first
-    packer_reset
-
-    pop rdi
-    pop rax
-    ret
-
-send_packet_with_payload:
-    ; send_packet_with_payload [rax] [rdi]
-    ;  rax = pointer to payload buffer
-    ;  rdi = payload buffer size
-    call set_packet_header
-
-    ; push rdi
-    ; mov rdi, 6
-    ; call print_hexdump
-    ; pop rdi
-
-    push rax
-    push rdi
-    push rsi
-
-    mov rsi, rdi ; copy size
-    mov rdi, rax ; copy source
-    lea rax, [udp_send_buf + PACKET_HEADER_LEN] ; copy destination
-    call mem_copy
-
-    pop rsi
-    pop rdi
-    pop rax
-
-    mov rax, udp_send_buf
-    add rdi, PACKET_HEADER_LEN
-    call send_udp
-
-    ; this is for convince so we can just queue new chunks
-    ; and never have to worry about which chunk is the first
-    packer_reset
-
-    ret
-
-on_system_or_game_messages:
-    print s_got_packet_with_chunks
-
-    mov al, [packet_header_num_chunks]
-    call print_uint32
-
-    lea rax, [udp_recv_buf + PACKET_HEADER_LEN]
-    call unpack_chunk_header
-    call print_chunk_header
-
-    ; TODO: int unpacker first before looking at chunk splitting
-    ;       we need to read the correct amount of bytes when unpacking the msg id
-    ;       it might be more than one byte
-    ;       hacking one byte would be a super annoying refactor later
-
-    ; no this is wrong lol
-    ; the chunk header size includes the message id
-    ; so we can correctly skip over all chunks without a int unpacker
-    ; https://chillerdragon.github.io/teeworlds-protocol/07/packet_layout.html#chunk_header_size
-
-    jmp on_packet_end
-
-on_packet:
-    push rax
-    mov rax, udp_recv_buf
-    call unpack_packet_header
-    pop rax
-
-    is_packet_flag PACKETFLAG_CONTROL
-    je on_ctrl_message
-
-    jmp on_system_or_game_messages
-
-on_packet_end:
-    ret
+%include "src/on_packet.asm"
+%include "src/packet_packer.asm"
 
 print_udp:
     print s_got_udp

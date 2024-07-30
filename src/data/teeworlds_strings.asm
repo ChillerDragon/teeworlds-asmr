@@ -1,3 +1,6 @@
+s_packer_size db "[packer] amount of bytes packed: "
+l_s_packer_size equ $ - s_packer_size
+
 s_got_peer_token db "[client] got peer token: "
 l_s_got_peer_token equ $ - s_got_peer_token
 s_got_accept db "[client] got accept", 0x0a
@@ -32,3 +35,7 @@ s_got_disconnect db "[client] got disconnect from server.", 0x0a
 l_s_got_disconnect  equ $ - s_got_disconnect
 s_got_disconnect_with_reason db "[client] got disconnect from server. reason: "
 l_s_got_disconnect_with_reason  equ $ - s_got_disconnect_with_reason
+s_got_game_msg_with_id db "[client] got game message with id: "
+l_s_got_game_msg_with_id equ $ - s_got_game_msg_with_id
+s_got_system_msg_with_id db "[client] got system message with id: "
+l_s_got_system_msg_with_id equ $ - s_got_system_msg_with_id

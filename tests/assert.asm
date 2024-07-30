@@ -7,6 +7,7 @@ section .data
     %include "src/data/hex.asm"
     %include "src/data/teeworlds.asm"
     %include "src/data/teeworlds_strings.asm"
+    %include "src/data/udp.asm"
 
     s_assert_ok db "[assert] OK", 0x0a
     l_s_assert_ok equ $ - s_assert_ok
@@ -29,6 +30,7 @@ section .bss
     assert_actual_buf resb 2048
     assert_input_buf resb 2048
     assert_input_buf_index resb 4
+    assert_counter resb 4
 section .text
 
 %include "src/macros.asm"
@@ -37,6 +39,14 @@ section .text
 %include "src/hex.asm"
 %include "src/system.asm"
 %include "src/packer.asm"
+%include "src/chunk_unpacker.asm"
+%include "src/chunk_packer.asm"
+%include "src/packet_header.asm"
+%include "src/on_packet.asm"
+%include "src/receive_control.asm"
+%include "src/send_control.asm"
+%include "src/packet_packer.asm"
+%include "src/udp.asm"
 
 %macro assert_input_buf_reset 0
     mov dword [assert_input_buf_index], 0

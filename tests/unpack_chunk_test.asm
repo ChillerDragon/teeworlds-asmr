@@ -1,5 +1,4 @@
 %include "tests/assert.asm"
-%include "src/chunk_unpacker.asm"
 
 _start:
 test_vital_low_seq_and_size:
