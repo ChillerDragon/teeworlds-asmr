@@ -1,7 +1,8 @@
 on_system_or_game_messages:
-    ; on_system_or_game_messages [rax] [rdi]
+    ; on_system_or_game_messages [rax] [rdi] [rsi]
     ;  rax = payload buffer
-    ;  rdi = chunk callback
+    ;  rdi = payload size in bytes
+    ;  rsi = chunk callback
     ;
     ; this method takes the entire packet payload as argument
     ; and reads all the chunk headers
@@ -11,28 +12,73 @@ on_system_or_game_messages:
     ; payload buffer
     mov r9, rax
 
-    ; chunk callback
+    ; payload size
     mov r10, rdi
 
-    print s_got_packet_with_chunks
+    ; chunk callback
+    mov r11, rsi
 
+    ; print num chunks
+    print s_got_packet_with_chunks
     mov rax, 0
     mov al, [packet_header_num_chunks]
     call print_uint32
 
-    lea rax, [r9+0]
+    ; rcx is the offset in bytes pointer
+    mov rcx, 0
+
+    ; rbx amount of chunks found
+    mov rbx, 0
+
+.on_system_or_game_messages_chunk_split_loop:
+    lea rax, [r9+rcx]
     call unpack_chunk_header
     call print_chunk_header
 
-    ; TODO: int unpacker first before looking at chunk splitting
-    ;       we need to read the correct amount of bytes when unpacking the msg id
-    ;       it might be more than one byte
-    ;       hacking one byte would be a super annoying refactor later
+    inc rbx
 
-    ; no this is wrong lol
-    ; the chunk header size includes the message id
-    ; so we can correctly skip over all chunks without a int unpacker
-    ; https://chillerdragon.github.io/teeworlds-protocol/07/packet_layout.html#chunk_header_size
+    ; todo: add chunk size and header size
+    inc rcx
+
+    ; break checks
+
+    ; check got all expected chunks
+    mov rax, 0
+    mov byte al, [packet_header_num_chunks]
+    cmp eax, ebx
+    je .on_system_or_game_messages_loop_end
+
+    ; check no space left
+    ; bytes red (eax)
+    mov rax, rcx
+    add rax, 2 ; minimum length of next chunk
+    ; bytes available (edx)
+    mov rdx, r10
+    ; eax (offset red) > r10d (packet len)
+    cmp eax, r10d
+    jg .on_system_or_game_messages_loop_error_end_of_data
+
+
+    jmp .on_system_or_game_messages_chunk_split_loop
+
+.on_system_or_game_messages_loop_error_end_of_data:
+    ; rax is offset
+    print s_parser_bytes_red
+    call print_uint32
+
+    ; r10 is payload size
+    print s_received_bytes
+    mov rax, r10
+    call print_uint32
+
+    print s_got_end_of_packet_with_chunks_left
+    mov rax, 0
+    mov byte al, [packet_header_num_chunks]
+    sub al, bl
+    call print_uint32
+    exit 1
+
+.on_system_or_game_messages_loop_end:
 
     pop_registers
     ret
@@ -90,7 +136,9 @@ on_packet:
     je on_ctrl_message
 
     mov rax, packet_payload
-    mov rdi, on_message
+    mov rdi, [udp_read_len]
+    sub rdi, PACKET_HEADER_LEN
+    mov rsi, on_message
     call on_system_or_game_messages
 
 on_packet_end:

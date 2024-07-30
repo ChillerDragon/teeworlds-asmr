@@ -39,3 +39,7 @@ s_got_game_msg_with_id db "[client] got game message with id: "
 l_s_got_game_msg_with_id equ $ - s_got_game_msg_with_id
 s_got_system_msg_with_id db "[client] got system message with id: "
 l_s_got_system_msg_with_id equ $ - s_got_system_msg_with_id
+s_got_end_of_packet_with_chunks_left db "[client] got end of packet with chunks left: "
+l_s_got_end_of_packet_with_chunks_left equ $ - s_got_end_of_packet_with_chunks_left
+s_parser_bytes_red db "[client] parser bytes red: "
+l_s_parser_bytes_red equ $ - s_parser_bytes_red
