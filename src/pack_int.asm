@@ -1,8 +1,11 @@
-pack_int:
-    ; pack_int [rax] [rdi]
+_pack_int:
+    ; _pack_int [rax] [rdi]
     ;  rax = integer
     ;  rdi = buffer to write to
     ; returns offsetted pointer in rax
+    ;
+    ; you probably want to use the pack_int macro instead
+    ;
     push_registers_keep_rax
 
     mov byte [rdi], 0

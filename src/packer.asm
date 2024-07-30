@@ -66,3 +66,22 @@ push_packet_payload_byte:
     pop rax
 %endmacro
 
+%macro pack_int 1
+    push rax
+    push rdi
+    push rdx
+
+    mov rax, %1
+    mov dword edx, [udp_payload_index]
+    lea rdi, [udp_send_buf + PACKET_HEADER_LEN + edx]
+    call _pack_int
+
+    ; increment payload index by bytes packed
+    sub rax, rdi
+    add edx, eax
+    mov [udp_payload_index], edx
+
+    pop rdx
+    pop rdi
+    pop rax
+%endmacro
