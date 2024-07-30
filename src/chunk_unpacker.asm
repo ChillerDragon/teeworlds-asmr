@@ -12,6 +12,35 @@
     pop rax
 %endmacro
 
+print_chunk_header:
+    print s_got_chunk_header
+    print s_size
+    mov rax, [chunk_header_size]
+    call print_uint32
+
+    print s_sequence
+    mov rax, [chunk_header_sequence]
+    call print_uint32
+
+    is_chunk_flag CHUNKFLAG_VITAL
+    je .print_chunk_header_vital
+.print_chunk_header_non_vital:
+    print s_vital_no
+    jmp .print_chunk_header_resend
+.print_chunk_header_vital:
+    print s_vital_yes
+
+    is_chunk_flag CHUNKFLAG_RESEND
+    je .print_chunk_header_resend
+.print_chunk_header_no_resend:
+    print s_resend_no
+    jmp .print_chunk_header_end
+.print_chunk_header_resend:
+    print s_resend_yes
+
+.print_chunk_header_end:
+    ret
+
 unpack_chunk_header:
     ; unpack_chunk_header [rax]
     ;   rax = buffer

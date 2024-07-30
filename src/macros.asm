@@ -25,7 +25,6 @@
     print s_dbg_reg_digit
     mov rax, %1
     call print_uint32
-    call print_newline
     pop_registers
 %endmacro
 

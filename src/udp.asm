@@ -43,7 +43,6 @@ recv_udp:
     print s_received_bytes
     mov rax, [udp_read_len]
     call print_uint32
-    call print_newline
     jmp .recv_udp_end
 .recv_udp_error:
     neg rax
@@ -51,7 +50,6 @@ recv_udp:
     je .recv_udp_end
     print s_udp_error
     call print_uint32
-    call print_newline
 .recv_udp_end:
     ret
 

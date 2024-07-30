@@ -145,6 +145,7 @@ section .text
 %include "src/receive_control.asm"
 %include "src/system.asm"
 %include "src/packet_header.asm"
+%include "src/chunk_unpacker.asm"
 
 set_packet_header:
     push_registers
@@ -261,6 +262,10 @@ on_system_or_game_messages:
     mov al, [packet_header_num_chunks]
     call print_uint32
 
+    lea rax, [udp_recv_buf + PACKET_HEADER_LEN]
+    call unpack_chunk_header
+    call print_chunk_header
+
     jmp on_packet_end
 
 on_packet:
@@ -288,7 +293,6 @@ print_udp:
     print s_len
     mov rax, [udp_read_len]
     call print_uint32
-    call print_newline
 
     call on_packet
     ret
@@ -372,6 +376,7 @@ non_blocking_keypresses:
 _start:
     print s_menu
     call non_blocking_keypresses
+    call print_newline
     call open_socket
     call gametick
 
