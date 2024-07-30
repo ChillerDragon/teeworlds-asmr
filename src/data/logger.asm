@@ -6,3 +6,6 @@ l_s_dbg_rax_digit equ $ - s_dbg_rax_digit
 
 s_dbg_reg_digit db "[debug] value of register is: ", 0
 l_s_dbg_reg_digit equ $ - s_dbg_reg_digit
+
+s_dbg_hexdump_register db "[debug] hexdumping register: "
+l_s_dbg_hexdump_register equ $ - s_dbg_hexdump_register

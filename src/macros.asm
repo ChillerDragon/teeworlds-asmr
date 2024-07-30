@@ -20,6 +20,23 @@
     pop rax
 %endmacro
 
+%macro dbg_hexdump_reg 1
+    ; dbg_hexdump_reg [register]
+    push_registers
+
+    print s_dbg_hexdump_register
+    push %1
+
+    mov rax, rsp
+    mov rdi, 8
+    call print_hexdump
+    call print_newline
+
+    pop %1
+
+    pop_registers
+%endmacro
+
 %macro dbg_print_reg 1
     push_registers
     print s_dbg_reg_digit
