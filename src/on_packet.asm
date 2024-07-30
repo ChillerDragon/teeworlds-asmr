@@ -3,6 +3,8 @@ on_system_or_game_messages:
     ;  rax = payload buffer
     ;  rdi = payload size in bytes
     ;  rsi = chunk callback
+    ;         rax = chunk data buffer
+    ;         for all other details check the chunk_header_* labels
     ;
     ; this method takes the entire packet payload as argument
     ; and reads all the chunk headers
@@ -35,10 +37,24 @@ on_system_or_game_messages:
     call unpack_chunk_header
     call print_chunk_header
 
+    ; count num chunks
     inc rbx
 
-    ; todo: add chunk size and header size
+    ; base header size 2 bytes
+    add rcx, 2
+    ; plus big header size if vital
+    is_chunk_flag CHUNKFLAG_VITAL
+    jne .on_system_or_game_messages_chunk_non_vital_skip
     inc rcx
+.on_system_or_game_messages_chunk_non_vital_skip:
+
+    ; user callback
+    lea rax, [r9+rcx]
+    call r11
+
+    ; plus payload size
+    mov eax, [chunk_header_size]
+    add ecx, eax
 
     ; break checks
 

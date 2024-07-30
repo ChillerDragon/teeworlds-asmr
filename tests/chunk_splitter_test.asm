@@ -41,6 +41,6 @@ _start:
     call on_system_or_game_messages
 
     mov rax, [assert_counter]
-    ; assert_eax_eq 2
+    assert_eax_eq 2
 
     exit 0
