@@ -7,6 +7,8 @@
 
 ; nanosleep [nanoseconds]
 %macro nanosleep 1
+    push_registers
+
     ; struct timespec {
     ;     time_t tv_sec;        /* seconds */
     ;     long   tv_nsec;       /* nanoseconds */
@@ -28,5 +30,7 @@
     mov rdi, generic_buffer_512
     mov rsi, generic_buffer_512
     syscall
+
+    pop_registers
 %endmacro
 

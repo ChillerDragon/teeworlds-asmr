@@ -17,12 +17,7 @@
 ; printn [string] [length]
 ; print length amount of characters in given buffer
 %macro printn 2
-    push rax
-    push rdi
-    push rsi
-    push rdx
-    push r9
-    push r10
+    push_registers
 
     mov r9, %1
     mov r10, %2
@@ -33,12 +28,7 @@
     mov rdx, r10
     syscall
 
-    pop r10
-    pop r9
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rax
+    pop_registers
 %endmacro
 
 ; print_c_str [string]

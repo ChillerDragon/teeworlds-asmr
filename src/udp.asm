@@ -3,6 +3,8 @@ open_socket:
     ;
     ; opens a udp socket and stores it in
     ; the variable `socket`
+    push_registers
+
     mov rax, SYS_SOCKET
     mov rsi, AF_INET
     mov rdi, SOCK_DGRAM
@@ -14,6 +16,8 @@ open_socket:
     print s_got_file_desc
     mov rax, [socket]
     call print_uint32
+
+    pop_registers
     ret
 
 recv_udp:
@@ -21,6 +25,7 @@ recv_udp:
     ;
     ; listens for udp packet on the
     ; `socket` and fills the `udp_recv_buf`
+    push_registers
     mov rax, SYS_RECVFROM
     movzx rdi, byte [socket] ; then only set the lowest byte
     lea rsi, udp_recv_buf
@@ -51,6 +56,7 @@ recv_udp:
     print s_udp_error
     call print_uint32
 .recv_udp_end:
+    pop_registers
     ret
 
 send_udp:
