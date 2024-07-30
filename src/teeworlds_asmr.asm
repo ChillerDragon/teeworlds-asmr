@@ -376,10 +376,15 @@ non_blocking_keypresses:
     ret
 
 _start:
+    ; welcome message
     print s_menu
-    call non_blocking_keypresses
     call print_newline
+
+    ; setup state
+    call non_blocking_keypresses
     call open_socket
+
+    ; run game
     call gametick
 
 end:

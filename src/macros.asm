@@ -20,6 +20,49 @@
     pop rax
 %endmacro
 
+; printn [string] [length]
+; print length amount of characters in given buffer
+%macro printn 2
+    push rax
+    push rdi
+    push rsi
+    push rdx
+    push r9
+    push r10
+
+    mov r9, %1
+    mov r10, %2
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, r9
+    mov rdx, r10
+    syscall
+
+    pop r10
+    pop r9
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
+%endmacro
+
+; print_c_str [string]
+; print null terminated string
+%macro print_c_str 1
+    push rax
+    push r9
+
+    mov r9, %1
+
+    mov rax, r9
+    call str_length
+    printn r9, rax
+
+    pop r9
+    pop rax
+%endmacro
+
 %macro dbg_hexdump_reg 1
     ; dbg_hexdump_reg [register]
     push_registers

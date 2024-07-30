@@ -13,7 +13,11 @@ socket resb 4
 
 ; NET_MAX_PACKETSIZE 1400
 ; tw codebase also calls recvfrom with it
-udp_recv_buf resb 1400
+; the udp_recv_buf overflows into the packet payload label
+; this is a hack to be able to access the payload without offsetting
+; from the udp_recv_buf
+udp_recv_buf resb 7
+packet_payload resb 1400
 
 ; NET_MAX_PACKETSIZE 1400
 ; tw codebase also calls recvfrom with it

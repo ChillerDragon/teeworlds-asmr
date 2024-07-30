@@ -28,3 +28,7 @@ s_resend_yes db "[client]  resend: YES", 0x0a
 l_s_resend_yes  equ $ - s_resend_yes
 s_resend_no db "[client]  resend: NO", 0x0a
 l_s_resend_no  equ $ - s_resend_no
+s_got_disconnect db "[client] got disconnect from server.", 0x0a
+l_s_got_disconnect  equ $ - s_got_disconnect
+s_got_disconnect_with_reason db "[client] got disconnect from server. reason: "
+l_s_got_disconnect_with_reason  equ $ - s_got_disconnect_with_reason

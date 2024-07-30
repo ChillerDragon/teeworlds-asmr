@@ -30,6 +30,28 @@ on_ctrl_msg_accept:
 
     jmp on_ctrl_message_end
 
+on_ctrl_msg_close:
+    push rax
+
+    mov rax, [packet_payload + 1]
+    cmp rax, 0
+    je .on_ctrl_msg_close_no_reason
+
+.on_ctrl_msg_close_reason:
+    print s_got_disconnect_with_reason
+    lea rax, [packet_payload + 1]
+    print_c_str rax
+    call print_newline
+    jmp .on_ctrl_msg_close_end
+
+.on_ctrl_msg_close_no_reason:
+    print s_got_disconnect
+
+.on_ctrl_msg_close_end:
+    exit 0
+    pop rax
+    jmp on_ctrl_message_end
+
 on_ctrl_message:
     push_registers ; popped in on_ctrl_message_end
 
@@ -42,6 +64,8 @@ on_ctrl_message:
     je on_ctrl_msg_token
     cmp al, MSG_CTRL_ACCEPT
     je on_ctrl_msg_accept
+    cmp al, MSG_CTRL_CLOSE
+    je on_ctrl_msg_close
 
     print s_unknown_ctrl_msg
     call print_uint32
