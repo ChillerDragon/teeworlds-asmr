@@ -1,10 +1,7 @@
 ; print [string]
 ; string has a have a matching l_string length definition
 %macro print 1
-    push rax
-    push rdi
-    push rsi
-    push rdx
+    push_registers
 
     mov rax, SYS_WRITE
     mov rdi, STDOUT
@@ -14,10 +11,7 @@
     %undef str_len
     syscall
 
-    pop rdx
-    pop rsi
-    pop rdi
-    pop rax
+    pop_registers
 %endmacro
 
 ; printn [string] [length]
