@@ -88,6 +88,6 @@ test_vital_maxed_all_set_size_4095_seq_1023:
     assert_eax_eq 4095
 
     mov eax, [chunk_header_sequence]
-    ; assert_eax_eq 1023
+    assert_eax_eq 1023
 
     exit 0

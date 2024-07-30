@@ -47,16 +47,19 @@ unpack_chunk_header:
     push_registers
 
     ; flags
+    mov rdx, 0
     mov dl, [rax]
     and dl, 0b1100_0000
     mov [chunk_header_flags], dl
 
     ; size
     ; extract bits from first byte
+    mov rdx, 0
     mov dl, [rax]
     and edx, 0b0011_1111
     shl edx, 6
     ; extract bits from second byte
+    mov rbx, 0
     mov bl, [rax+1]
     and ebx, 0b0011_1111
     ; merge them together to one 2 byte integer
@@ -73,13 +76,15 @@ unpack_chunk_header:
     jne .unpack_chunk_header_end
 
     ; first sequence byte
+    mov rdx, 0
     mov dl, [rax+1]
-    and dl, 0b1100_0000
-    shl dl, 2
+    and edx, 0b1100_0000
+    shl edx, 2
     ; 2nd sequence byte
+    mov rbx, 0
     mov bl, [rax+2]
     ; merge
-    xor ebx, edx
+    or ebx, edx
     mov [chunk_header_sequence], ebx
 
 .unpack_chunk_header_end:
