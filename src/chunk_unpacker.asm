@@ -54,11 +54,11 @@ unpack_chunk_header:
     ; size
     ; extract bits from first byte
     mov dl, [rax]
-    and dl, 0b0011_1111
-    shl dl, 6
+    and edx, 0b0011_1111
+    shl edx, 6
     ; extract bits from second byte
     mov bl, [rax+1]
-    and bl, 0b0011_1111
+    and ebx, 0b0011_1111
     ; merge them together to one 2 byte integer
     or ebx, edx
     mov [chunk_header_size], ebx
