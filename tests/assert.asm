@@ -24,6 +24,7 @@ section .data
 section .bss
     %include "src/bss/hex.asm"
     %include "src/bss/teeworlds.asm"
+    %include "src/bss/buffers.asm"
     assert_expect_buf resb 2048
     assert_actual_buf resb 2048
     assert_input_buf resb 2048

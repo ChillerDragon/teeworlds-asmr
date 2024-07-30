@@ -132,6 +132,7 @@ section .data
 section .bss
     %include "src/bss/hex.asm"
     %include "src/bss/teeworlds.asm"
+    %include "src/bss/buffers.asm"
 section .text
 
 %include "src/macros.asm"
@@ -361,6 +362,7 @@ gametick:
     ; gametick
     ;
     ; main gameloop using recursion
+    nanosleep 100
     call pump_network
     call keypresses
     jmp gametick
