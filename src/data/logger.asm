@@ -1,5 +1,6 @@
 char_newline db 0x0a
 char_space   db 0x20
+char_dot     db '.'
 
 s_dbg_rax_digit db "[debug] value of rax is: "
 l_s_dbg_rax_digit equ $ - s_dbg_rax_digit

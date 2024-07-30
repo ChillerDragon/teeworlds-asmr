@@ -51,6 +51,18 @@ section .text
 %include "src/on_game.asm"
 %include "src/pack_int.asm"
 
+assert_ok:
+    push_registers
+
+    ; verbose
+    ; print s_assert_ok
+
+    ; non verbose
+    printn char_dot, 1
+
+    pop_registers
+    ret
+
 %macro assert_input_buf_reset 0
     mov dword [assert_input_buf_index], 0
 %endmacro
@@ -111,7 +123,7 @@ section .text
 
     exit 1
     %%assert_ok:
-    print s_assert_ok
+    call assert_ok
 %endmacro
 
 ; assert_is_true
@@ -125,7 +137,7 @@ section .text
     exit 1
 
     %%assert_ok:
-    print s_assert_ok
+    call assert_ok
 %endmacro
 
 ; assert_is_false
@@ -139,7 +151,7 @@ section .text
     exit 1
 
     %%assert_ok:
-    print s_assert_ok
+    call assert_ok
 %endmacro
 
 %macro assert_al_eq 1
@@ -165,7 +177,7 @@ section .text
 
     exit 1
     %%assert_ok:
-    print s_assert_ok
+    call assert_ok
 %endmacro
 
 assert_entry:
