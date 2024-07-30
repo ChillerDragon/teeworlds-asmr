@@ -11,6 +11,7 @@ test_message_callback:
     ret
 
 _start:
+test_madeup_chunks_with_one_byte_payload:
     ; prepare
     assert_input_buf_reset
 
@@ -20,15 +21,17 @@ _start:
     mov byte [packet_header_num_chunks], 2
 
     ; chunk 1
-    assert_input_buf_push_byte 0x40
-    assert_input_buf_push_byte 0x01
-    assert_input_buf_push_byte 0x01
-    assert_input_buf_push_byte 0xFF
+    assert_input_buf_push_byte 0x40 ; flags (vitaL)
+    assert_input_buf_push_byte 0x02 ; size
+    assert_input_buf_push_byte 0x01 ; seq
+    assert_input_buf_push_byte 0x06 ; msg id
+    assert_input_buf_push_byte 0xFF ; payload
     ; chunk 2
-    assert_input_buf_push_byte 0x40
-    assert_input_buf_push_byte 0x01
-    assert_input_buf_push_byte 0x01
-    assert_input_buf_push_byte 0xFF
+    assert_input_buf_push_byte 0x40 ; flags (vitaL)
+    assert_input_buf_push_byte 0x02 ; size
+    assert_input_buf_push_byte 0x01 ; seq
+    assert_input_buf_push_byte 0x07 ; msg id
+    assert_input_buf_push_byte 0xFF ; payload
 
     mov dword [assert_counter], 0
 

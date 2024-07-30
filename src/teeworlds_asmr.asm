@@ -130,6 +130,8 @@ section .text
 %include "src/packet_header.asm"
 %include "src/chunk_unpacker.asm"
 %include "src/on_packet.asm"
+%include "src/on_system.asm"
+%include "src/on_game.asm"
 %include "src/packet_packer.asm"
 
 print_udp:

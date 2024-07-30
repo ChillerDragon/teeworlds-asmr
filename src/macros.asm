@@ -112,6 +112,15 @@
     pop rax
 %endmacro
 
+%macro is_rcx_flag 1
+    push rax
+
+    mov rax, rcx
+    is_rax_flag %1
+
+    pop rax
+%endmacro
+
 %macro set_rax_flag 1
     ; set_rax_flag [teeworlds bit flag constant]
     ;

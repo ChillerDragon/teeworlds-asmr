@@ -9,6 +9,10 @@ s_got_ctrl_msg db "[client] got ctrl msg: "
 l_s_got_ctrl_msg equ $ - s_got_ctrl_msg
 s_unknown_ctrl_msg db "[client] unknown ctrl msg: "
 l_s_unknown_ctrl_msg equ $ - s_unknown_ctrl_msg
+s_unknown_game_msg db "[client] unknown game msg: "
+l_s_unknown_game_msg equ $ - s_unknown_game_msg
+s_unknown_system_msg db "[client] unknown system msg: "
+l_s_unknown_system_msg equ $ - s_unknown_system_msg
 s_got_packet_with_chunks db "[client] got packet with chunks: "
 l_s_got_packet_with_chunks equ $ - s_got_packet_with_chunks
 s_unhandled_packet db "[client] UNHANDLED PACKET!!"
@@ -43,3 +47,8 @@ s_got_end_of_packet_with_chunks_left db "[client] got end of packet with chunks 
 l_s_got_end_of_packet_with_chunks_left equ $ - s_got_end_of_packet_with_chunks_left
 s_parser_bytes_red db "[client] parser bytes red: "
 l_s_parser_bytes_red equ $ - s_parser_bytes_red
+s_map_change db "[client] got map change. new map: "
+l_s_map_change equ $ - s_map_change
+s_motd db "[motd] "
+l_s_motd equ $ - s_motd
+

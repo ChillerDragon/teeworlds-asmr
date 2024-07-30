@@ -47,6 +47,8 @@ section .text
 %include "src/send_control.asm"
 %include "src/packet_packer.asm"
 %include "src/udp.asm"
+%include "src/on_system.asm"
+%include "src/on_game.asm"
 
 %macro assert_input_buf_reset 0
     mov dword [assert_input_buf_index], 0

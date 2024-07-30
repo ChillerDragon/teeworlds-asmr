@@ -3,7 +3,7 @@ on_system_or_game_messages:
     ;  rax = payload buffer
     ;  rdi = payload size in bytes
     ;  rsi = chunk callback
-    ;         rax = chunk data buffer
+    ;         rax = chunk data buffer including message id
     ;         for all other details check the chunk_header_* labels
     ;
     ; this method takes the entire packet payload as argument
@@ -99,34 +99,29 @@ on_system_or_game_messages:
     pop_registers
     ret
 
-on_game_message:
-    ; on_game_message [rax] [rdi]
-    ;  rax = message id
-    ;  rdi = message payload
-    print s_got_system_msg_with_id
-    call print_uint32
-    call print_newline
-    ret
-
-on_system_message:
-    ; on_system_message [rax] [rdi]
-    ;  rax = message id
-    ;  rdi = message payload
-    print s_got_game_msg_with_id
-    call print_uint32
-    call print_newline
-    ret
-
 on_message:
-    ; on_message [rax] [rdi]
-    ;  rax = message id
-    ;  rdi = system (CHUNK_SYSTEM or CHUNK_GAME)
-    ;  rsi = message payload
+    ; on_message [rax]
+    ;  rax = message payload including message id
     ;
     ; for size and flags check the chunk_header_* labels
     push_registers
 
-    cmp edi, CHUNK_SYSTEM
+    ; payload pointer (todo: should not be at offset one but use int unpacker)
+    mov rdi, rax
+
+    ; backup first byte in rcx
+    ; to be later checked for system flag
+    mov rcx, [rax]
+
+    ; extract message id
+    ; todo: this should be int unpacker not reading only one byte
+    mov rbx, 0
+    mov byte bl, [rax]
+    shr ebx, 1
+    mov rax, 0
+    mov eax, ebx
+
+    is_rcx_flag CHUNK_SYSTEM
     je .on_message_system
 
     jmp .on_message_game
