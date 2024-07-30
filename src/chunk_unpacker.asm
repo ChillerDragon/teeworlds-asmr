@@ -52,8 +52,8 @@ unpack_chunk_header:
     mov [chunk_header_flags], dl
 
     ; size
-    ; dl still holds the first byte
     ; extract bits from first byte
+    mov dl, [rax]
     and dl, 0b0011_1111
     shl dl, 6
     ; extract bits from second byte
