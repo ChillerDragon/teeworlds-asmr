@@ -2,6 +2,10 @@ on_system_or_game_messages:
     ; on_system_or_game_messages [rax] [rdi]
     ;  rax = payload buffer
     ;  rdi = chunk callback
+    ;
+    ; this method takes the entire packet payload as argument
+    ; and reads all the chunk headers
+    ; calling the given callback for all the found chunks (messages)
     push_registers
 
     ; payload buffer
@@ -12,6 +16,7 @@ on_system_or_game_messages:
 
     print s_got_packet_with_chunks
 
+    mov rax, 0
     mov al, [packet_header_num_chunks]
     call print_uint32
 

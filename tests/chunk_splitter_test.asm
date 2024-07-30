@@ -13,12 +13,19 @@ test_message_callback:
 _start:
     ; prepare
     assert_input_buf_reset
+
+    ; two hand crafted artificial vital chunks
+    ; with only one byte payload
+
+    ; chunk 1
     assert_input_buf_push_byte 0x04
-    assert_input_buf_push_byte 0x00
-    assert_input_buf_push_byte 0x02
-    assert_input_buf_push_byte 0xCC
+    assert_input_buf_push_byte 0x01
+    assert_input_buf_push_byte 0x01
     assert_input_buf_push_byte 0xFF
-    assert_input_buf_push_byte 0xFF
+    ; chunk 2
+    assert_input_buf_push_byte 0x04
+    assert_input_buf_push_byte 0x01
+    assert_input_buf_push_byte 0x01
     assert_input_buf_push_byte 0xFF
 
 
