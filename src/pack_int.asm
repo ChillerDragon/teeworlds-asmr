@@ -7,7 +7,15 @@ pack_int:
 
     mov byte [rdi], 0
 
-    ; todo: negative
+    ; if input number is negative
+    cmp eax, 0
+    jl .pack_int_negative
+    jmp .pack_int_skip_negative
+.pack_int_negative:
+    mov byte [rdi], 0x40
+    not eax
+
+.pack_int_skip_negative:
 
     ; pack 6 bit into dst
     mov rcx, 0
