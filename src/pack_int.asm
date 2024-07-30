@@ -3,7 +3,7 @@ pack_int:
     ;  rax = integer
     ;  rdi = buffer to write to
     ; returns offsetted pointer in rax
-    push_registers
+    push_registers_keep_rax
 
     mov byte [rdi], 0
 
@@ -53,7 +53,8 @@ pack_int:
 
     ; increment pointer
     inc rdi
+    mov rax, rdi
 
-    pop_registers
+    pop_registers_keep_rax
     ret
 
