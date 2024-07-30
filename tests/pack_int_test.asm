@@ -50,14 +50,14 @@ test_pack_int_double_negative:
     mov rax, -65
     mov rdi, assert_input_buf
     call pack_int
-    mov al, [assert_input_buf]
-    assert_al_eq 0x01_C0 ; 0xC0 0x01 is the sane people endianness
+    mov eax, [assert_input_buf]
+    assert_eax_eq 0x01_C0; 0xC0 0x01 is the sane people endianness
 
     mov rax, -66
     mov rdi, assert_input_buf
     call pack_int
-    mov al, [assert_input_buf]
-    assert_al_eq 0x01_C1 ; 0xC1 0x01 is the sane people endianness
+    mov eax, [assert_input_buf]
+    assert_eax_eq 0x01_C1 ; 0xC1 0x01 is the sane people endianness
 
     exit 0
 
