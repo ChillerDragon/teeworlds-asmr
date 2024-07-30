@@ -271,6 +271,11 @@ on_system_or_game_messages:
     ;       it might be more than one byte
     ;       hacking one byte would be a super annoying refactor later
 
+    ; no this is wrong lol
+    ; the chunk header size includes the message id
+    ; so we can correctly skip over all chunks without a int unpacker
+    ; https://chillerdragon.github.io/teeworlds-protocol/07/packet_layout.html#chunk_header_size
+
     jmp on_packet_end
 
 on_packet:
