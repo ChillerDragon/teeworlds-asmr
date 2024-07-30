@@ -17,10 +17,10 @@ _start:
     is_rax_flag CHUNKFLAG_VITAL
     assert_is_true
 
-    ; mov eax, [chunk_header_size]
-    ; assert_al_eq 0x02
+    mov eax, [chunk_header_size]
+    assert_al_eq 0x02
 
-    ; mov eax, [chunk_header_sequence]
-    ; assert_al_eq 0x05
+    mov eax, [chunk_header_sequence]
+    assert_al_eq 0x05
 
     exit 0

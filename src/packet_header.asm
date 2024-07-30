@@ -1,6 +1,5 @@
 %macro is_packet_flag 1
-    ; is_packet_flag [rax]
-    ;  rax = flag
+    ; is_packet_flag [PACKETFLAG_CONSTANT]
     ;
     ; example:
     ;
