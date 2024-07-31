@@ -19,6 +19,11 @@ socket resb 4
 udp_recv_buf resb 7
 packet_payload resb 1400
 
+packer_buf resb 2048
+packer_size resb 4
+unpacker_buf resb 2048
+unpacker_size resb 4
+
 ; NET_MAX_PACKETSIZE 1400
 ; tw codebase also calls recvfrom with it
 udp_send_buf resb 1400

@@ -64,9 +64,9 @@ send_packet:
 
     call send_udp
 
-    ; this is for convince so we can just queue new chunks
+    ; this is for convenience so we can just queue new chunks
     ; and never have to worry about which chunk is the first
-    packer_reset
+    packet_packer_reset
 
     pop rdi
     pop rax
@@ -100,8 +100,8 @@ send_packet_with_payload:
     add rdi, PACKET_HEADER_LEN
     call send_udp
 
-    ; this is for convince so we can just queue new chunks
+    ; this is for convenience so we can just queue new chunks
     ; and never have to worry about which chunk is the first
-    packer_reset
+    packet_packer_reset
 
     ret

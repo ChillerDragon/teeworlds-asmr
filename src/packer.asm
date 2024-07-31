@@ -1,24 +1,9 @@
-push_packet_payload_byte:
-    ; push_packet_payload_byte [rax]
-    ;  rax = (or al) is the byte as value to be pushed into the `udp_send_buf`
-    push rcx
-    push rdx
-
-    mov dword edx, [udp_payload_index]
-
-    lea rcx, [udp_send_buf + PACKET_HEADER_LEN + edx]
-    mov byte [rcx], al
-
-    mov rcx, [udp_payload_index]
-    inc rcx
-    mov [udp_payload_index], rcx
-
-    pop rdx
-    pop rcx
-    ret
+; push bytes into a packer buffer
+; you can also push bytes directly into
+; the udp buffer see packet.asm for that
 
 %macro packer_reset 0
-    mov dword [udp_payload_index], 0
+    mov dword [packer_size], 0
 %endmacro
 
 ; prints something like this
@@ -28,7 +13,7 @@ push_packet_payload_byte:
 
     print s_packer_size
 
-    mov eax, [udp_payload_index]
+    mov eax, [packer_size]
     call print_uint32
     call print_newline
 
@@ -43,15 +28,15 @@ push_packet_payload_byte:
     push rsi
 
     ; copy dest
-    mov dword edx, [udp_payload_index]
-    lea rax, [udp_send_buf + PACKET_HEADER_LEN + edx]
+    mov dword edx, [packer_size]
+    lea rax, [packer_buf + edx]
     ; copy source
     mov rdi, %1
     ; copy size
     mov rsi, %2
     call mem_copy
 
-    add dword [udp_payload_index], %2
+    add dword [packer_size], %2
 
     pop rsi
     pop rdi
@@ -72,14 +57,14 @@ push_packet_payload_byte:
     push rdx
 
     mov rax, %1
-    mov dword edx, [udp_payload_index]
-    lea rdi, [udp_send_buf + PACKET_HEADER_LEN + edx]
+    mov dword edx, [packer_size]
+    lea rdi, [packer_buf + edx]
     call _pack_int
 
     ; increment payload index by bytes packed
     sub rax, rdi
     add edx, eax
-    mov [udp_payload_index], edx
+    mov [packer_size], edx
 
     pop rdx
     pop rdi

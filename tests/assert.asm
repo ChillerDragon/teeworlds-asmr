@@ -39,6 +39,7 @@ section .text
 %include "src/hex.asm"
 %include "src/system.asm"
 %include "src/packer.asm"
+%include "src/packet.asm"
 %include "src/chunk_unpacker.asm"
 %include "src/chunk_packer.asm"
 %include "src/packet_header.asm"

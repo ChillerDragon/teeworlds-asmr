@@ -124,6 +124,7 @@ section .text
 %include "src/terminal.asm"
 %include "src/udp.asm"
 %include "src/packer.asm"
+%include "src/packet.asm"
 %include "src/send_control.asm"
 %include "src/receive_control.asm"
 %include "src/system.asm"
@@ -155,7 +156,7 @@ on_udp_packet:
     ret
 
 connect:
-    packer_reset
+    packet_packer_reset
     mov dword [peer_token], 0xFFFFFFFF
 
     call send_ctrl_msg_token

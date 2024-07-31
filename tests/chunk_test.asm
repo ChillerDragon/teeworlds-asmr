@@ -30,7 +30,7 @@ test_pack_chunk_header:
     assert_al_eq 0x09
 
 test_pack_queue_chunk:
-    packer_reset
+    packet_packer_reset
 
     ; queue_chunk [rax] [rdi] [rsi] [rdx] [r10]
     ;  rax = flags (vital & resend)
@@ -72,11 +72,13 @@ test_pack_queue_chunk:
     assert_al_eq 0x0A
 
     ; call again to verify sequence incrementing
-    packer_reset
+    packet_packer_reset
 
     ; rax: flags
     mov rax, 0
     set_rax_flag CHUNKFLAG_VITAL
+
+    mov rdi, assert_input_buf
 
     call queue_chunk
 
@@ -86,7 +88,7 @@ test_pack_queue_chunk:
 
 
     ; call again to verify sequence incrementing even more
-    packer_reset
+    packet_packer_reset
 
     ; rax: flags
     mov rax, 0
