@@ -23,7 +23,7 @@ on_system_or_game_messages:
     ; print num chunks
     print s_got_packet_with_chunks
     mov rax, 0
-    mov al, [packet_header_num_chunks]
+    mov al, [in_packet_header_num_chunks]
     call print_uint32
 
     ; rcx is the offset in bytes pointer
@@ -60,7 +60,7 @@ on_system_or_game_messages:
 
     ; check got all expected chunks
     mov rax, 0
-    mov byte al, [packet_header_num_chunks]
+    mov byte al, [in_packet_header_num_chunks]
     cmp eax, ebx
     je .on_system_or_game_messages_loop_end
 
@@ -89,7 +89,7 @@ on_system_or_game_messages:
 
     print s_got_end_of_packet_with_chunks_left
     mov rax, 0
-    mov byte al, [packet_header_num_chunks]
+    mov byte al, [in_packet_header_num_chunks]
     sub al, bl
     call print_uint32
     exit 1
@@ -143,7 +143,7 @@ on_packet:
     call unpack_packet_header
     pop rax
 
-    is_packet_flag PACKETFLAG_CONTROL
+    is_packet_in_flag PACKETFLAG_CONTROL
     je on_ctrl_message
 
     mov rax, packet_payload

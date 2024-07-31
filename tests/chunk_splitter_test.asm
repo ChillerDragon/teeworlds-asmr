@@ -18,7 +18,7 @@ test_madeup_chunks_with_one_byte_payload:
     ; two hand crafted artificial vital chunks
     ; with only one byte payload
 
-    mov byte [packet_header_num_chunks], 2
+    mov byte [in_packet_header_num_chunks], 2
 
     ; chunk 1
     assert_input_buf_push_byte 0x40 ; flags (vitaL)

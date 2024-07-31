@@ -17,16 +17,7 @@ on_ctrl_msg_accept:
     mov [peer_token], rax
 
     print s_got_accept
-
-    ; mov eax, [connection_sequence]
-    ; inc eax
-    ; mov [connection_sequence], eax
-
-    mov byte [packet_header_flags], 0x00
-    mov byte [packet_header_num_chunks], 0x01
-    mov rax, PAYLOAD_SEND_INFO
-    mov rdi, PAYLOAD_SEND_INFO_LEN
-    call send_packet_with_payload
+    call send_msg_info
 
     jmp on_ctrl_message_end
 

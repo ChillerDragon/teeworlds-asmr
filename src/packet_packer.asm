@@ -2,13 +2,13 @@ set_packet_header:
     push_registers
 
     ; flags
-    mov al, byte [packet_header_flags]
+    mov al, byte [out_packet_header_flags]
     mov byte [udp_send_buf], al
-    ; sequence
-    mov al, byte [connection_sequence]
+    ; the highest sequence number we acknowledged
+    mov al, byte [connection_ack]
     mov byte [udp_send_buf + 1], al
     ; num chunks
-    mov al, byte [packet_header_num_chunks]
+    mov al, byte [out_packet_header_num_chunks]
     mov byte [udp_send_buf + 2], al
 
     ; peer token
@@ -61,6 +61,14 @@ send_packet:
     xor rdi, rdi
     mov edi, [udp_payload_index]
     add rdi, PACKET_HEADER_LEN
+
+    ; dbg print
+    push rax
+    print s_sending_packet_with_size
+    mov rax, rdi
+    call print_uint32
+    pop rax
+
 
     call send_udp
 

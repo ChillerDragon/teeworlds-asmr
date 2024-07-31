@@ -86,6 +86,13 @@ queue_chunk:
 
     push_registers
 
+    ; increment num chunks
+    push rax
+    mov byte al, [out_packet_header_num_chunks]
+    inc al
+    mov byte [out_packet_header_num_chunks], al
+    pop rax
+
     ; only if vital increment sequence
     is_rax_flag CHUNKFLAG_VITAL
     jne .queue_chunk_pack_header
@@ -120,13 +127,20 @@ queue_chunk:
 
 .queue_chunk_pack_msg_id:
 
-    ; TODO: implement dont hardcode ff xd
-    mov rax, 0xff
-    call push_packet_payload_byte
+    ; message id and system flag
+    push rax
+    mov rax, 0
+    ;  rdx = msg id
+    mov eax, edx
+    ;  r10 = system (CHUNK_SYSTEM or CHUNK_GAME)
+    or eax, r10d
+    packet_packer_pack_int eax
+    pop rax
 
 .queue_chunk_pack_payload:
 
     ; destination buffer
+    mov r11, 0
     mov dword r11d, [udp_payload_index]
     lea rax, [udp_send_buf + PACKET_HEADER_LEN + r11d]
 
@@ -135,8 +149,8 @@ queue_chunk:
     call mem_copy
 
     ; r11d is still the udp_payload_index
-    ; edi is the payload size
-    add r11d, edi
+    ; esi is the payload size
+    add r11d, esi
     mov dword [udp_payload_index], r11d
 
     pop_registers

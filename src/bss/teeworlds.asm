@@ -1,7 +1,10 @@
-; shared buffer for incoming and outgoing packet headers
-packet_header_num_chunks resb 1
-packet_header_flags resb 1
-packet_header_token resb 4
+in_packet_header_num_chunks resb 1
+in_packet_header_flags resb 1
+in_packet_header_token resb 4
+
+out_packet_header_num_chunks resb 1
+out_packet_header_flags resb 1
+out_packet_header_token resb 4
 
 chunk_header_flags resb 1
 chunk_header_size resb 4

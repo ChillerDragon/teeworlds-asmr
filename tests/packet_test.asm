@@ -16,15 +16,15 @@ _start:
     call unpack_packet_header
 
     ; assert flags
-    mov al, [packet_header_flags]
+    mov al, [in_packet_header_flags]
     assert_al_eq 0x04
 
     ; assert flags
-    mov al, [packet_header_num_chunks]
+    mov al, [in_packet_header_num_chunks]
     assert_al_eq 0x02
 
     ; assert token
-    mov rax, [packet_header_token]
+    mov rax, [in_packet_header_token]
     assert_eax_eq 0xFFFFFFCC
 
     exit 0

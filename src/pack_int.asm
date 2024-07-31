@@ -4,7 +4,10 @@ _pack_int:
     ;  rdi = buffer to write to
     ; returns offsetted pointer in rax
     ;
-    ; you probably want to use the pack_int macro instead
+    ; you probably want to use one of those macros:
+    ;
+    ;   pack_int                 - pack into buffer
+    ;   packet_packer_pack_int   - pack directly into packet payload
     ;
     push_registers_keep_rax
 

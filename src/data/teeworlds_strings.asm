@@ -52,3 +52,7 @@ l_s_map_change equ $ - s_map_change
 s_motd db "[motd] "
 l_s_motd equ $ - s_motd
 
+
+s_sending_packet_with_size db "[client] sending packet with size: "
+l_s_sending_packet_with_size equ $ - s_sending_packet_with_size
+
