@@ -84,12 +84,6 @@ push_packet_payload_byte:
     mov dword edx, [udp_payload_index]
     lea rdi, [udp_send_buf + PACKET_HEADER_LEN + edx]
 
-    mov rax, 0
-    ;  rdx = msg id
-    mov eax, edx
-    ;  r10 = system (CHUNK_SYSTEM or CHUNK_GAME)
-    or eax, r10d
-
     ; _pack_int [rax] [rdi]
     ;  rax = integer
     ;  rdi = buffer to write to
