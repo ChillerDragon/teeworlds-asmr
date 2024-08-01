@@ -27,6 +27,21 @@ push_packet_payload_byte:
     mov byte [out_packet_header_num_chunks], 0
 %endmacro
 
+%macro hexdump_outgoing_packet 0
+    push rax
+    push rdi
+
+    print s_current_outgoing_packet_bytes
+    mov rax, udp_send_buf
+    mov dword edi, [udp_payload_index]
+    add edi, PACKET_HEADER_LEN
+    call print_hexdump
+    call print_newline
+
+    pop rdi
+    pop rax
+%endmacro
+
 ; packet_pack_raw [buffer] [buffer size]
 %macro packet_pack_raw 2
     push rax

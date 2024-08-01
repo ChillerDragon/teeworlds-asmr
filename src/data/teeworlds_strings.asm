@@ -56,3 +56,5 @@ l_s_motd equ $ - s_motd
 s_sending_packet_with_size db "[client] sending packet with size: "
 l_s_sending_packet_with_size equ $ - s_sending_packet_with_size
 
+s_current_outgoing_packet_bytes db "[client] current outgoing packet bytes: "
+l_s_current_outgoing_packet_bytes equ $ - s_current_outgoing_packet_bytes

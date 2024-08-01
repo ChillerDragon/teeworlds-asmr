@@ -186,6 +186,8 @@ queue_chunk:
     packet_packer_pack_int eax
     pop rax
 
+    hexdump_outgoing_packet
+
 .queue_chunk_pack_payload:
 
     ; destination buffer
