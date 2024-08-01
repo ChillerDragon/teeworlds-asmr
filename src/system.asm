@@ -17,6 +17,61 @@ str_length:
     pop_registers_keep_rax
     ret
 
+str_comp:
+    ; str_comp [rax] [rdi]
+    ;   rax = string to compare
+    ;   rdi = other string to compare
+    ; The strings are treated as zero-terminated strings.
+    ;
+    ; example:
+    ;
+    ;  mov rax, str_label_a
+    ;  mov rdi, str_label_b
+    ;  str_comp
+    ;  je strings_match
+    ;
+    push_registers
+
+    ; r9b is rax string char
+    ; r10b is rdi string char
+    mov r9, 0
+    mov r10, 0
+
+    mov rcx, 0
+.mem_copy_byte_loop:
+    mov r9b, byte [rax+rcx]
+    mov r10b, byte [rdi+rcx]
+    inc rcx
+
+    ; check match
+    cmp r9b, r10b
+    jne .str_comp_no_match
+
+    ; check end of strings
+    cmp r9b, 0
+    je .str_comp_match
+    cmp r10b, 0
+    je .str_comp_match
+
+    jmp .mem_copy_byte_loop
+
+.str_comp_match:
+    ; ugly hack to flip the zero flag like in is_rax_flag
+    ; set EQUAL FLAG
+    mov al, 0
+    cmp al, 0
+    jmp .str_comp_end
+
+.str_comp_no_match:
+    ; ugly hack to flip the zero flag like in is_rax_flag
+    ; set NOT EQUAL FLAG
+    mov al, 0
+    cmp al, 1
+
+.str_comp_end:
+    pop_registers
+    ret
+
 mem_copy:
     ; mem_copy [rax] [rdi] [rsi]
     ;   rax = destination buffer pointer
