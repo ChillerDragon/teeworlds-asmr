@@ -145,6 +145,20 @@ queue_chunk:
     ; chunk size
     mov rdi, rsi
 
+    ; hack to solve chicken and egg problem
+    ; message ids higher than 31 need 2 bytes to be packed
+    ; https://chillerdragon.github.io/teeworlds-protocol/07/packet_layout.html#message_with_header_and_payload
+    ; ideally the message id packing would tell us how many bytes were packed
+    ; but the header is packed before the message id
+    cmp edx, 31
+    jng .queue_chunk_pack_header_add_msg_id_to_size
+
+    ; increment size one more time for message ids that take 2 bytes
+    add rdi, 1
+
+.queue_chunk_pack_header_add_msg_id_to_size:
+    add rdi, 1
+
     ; set output buffer
     mov dword r11d, [udp_payload_index]
     lea rsi, [udp_send_buf + PACKET_HEADER_LEN + r11d]
