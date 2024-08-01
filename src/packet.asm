@@ -36,7 +36,7 @@ push_packet_payload_byte:
 
     ; copy dest
     mov dword edx, [udp_payload_index]
-    lea rax, [udp_payload_index + PACKET_HEADER_LEN + edx]
+    lea rax, [udp_send_buf + PACKET_HEADER_LEN + edx]
     ; copy source
     mov rdi, %1
     ; copy size
