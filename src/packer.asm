@@ -15,7 +15,6 @@
 
     mov eax, [packer_size]
     call print_uint32
-    call print_newline
 
     pop rax
 %endmacro

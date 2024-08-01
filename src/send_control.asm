@@ -15,9 +15,8 @@ send_ctrl_msg_token:
 send_ctrl_msg_connect:
     push rax
 
-    mov rax, MSG_CTRL_CONNECT
-    call push_packet_payload_byte
-    pack_raw token, 4
+    packet_pack_byte MSG_CTRL_CONNECT
+    packet_pack_raw token, 4
 
     ; hack to send a bunch of bytes to pass the
     ; anti reflection attack check
@@ -34,8 +33,6 @@ send_ctrl_msg_connect:
     ; and then we connect to another server
     ; where we send 512 bytes of the udp_send_buf which still holds the rcon password
     mov dword [udp_payload_index], 512
-
-    packer_print_size
 
     mov byte [out_packet_header_flags], PACKETFLAG_CONTROL
     mov byte [out_packet_header_num_chunks], 0
