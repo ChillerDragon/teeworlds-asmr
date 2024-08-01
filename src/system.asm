@@ -130,6 +130,10 @@ mem_copy:
     ; copying more data with less instructions
     push_registers
 
+    ; copy 0 bytes if the size is zero
+    cmp rsi, 0
+    je .mem_copy_end
+
     mov rcx, 0
     xor r9, r9
 .mem_copy_byte_loop:
@@ -139,6 +143,7 @@ mem_copy:
     cmp rcx, rsi
     jb .mem_copy_byte_loop
 
+.mem_copy_end:
     pop_registers
     ret
 
