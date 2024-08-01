@@ -2,7 +2,6 @@ send_ready:
     push_registers
 
     packer_reset
-    ; mov dword [packer_size], 1
     send_msg MSG_SYSTEM_READY, CHUNKFLAG_VITAL, CHUNK_SYSTEM
 
     call send_packet

@@ -67,7 +67,7 @@ test_pack_queue_chunk:
     mov al, [udp_send_buf + PACKET_HEADER_LEN]
     assert_al_eq 0x40
     mov al, [udp_send_buf + PACKET_HEADER_LEN + 1]
-    assert_al_eq 0x02
+    assert_al_eq 0x03 ; payload size 2 plus 1 byte message id
     mov al, [udp_send_buf + PACKET_HEADER_LEN + 2]
     assert_al_eq 0x0A
 
