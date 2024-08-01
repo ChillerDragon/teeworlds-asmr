@@ -230,6 +230,18 @@ non_blocking_keypresses:
     syscall
     ret
 
+print_stack_str_sample:
+    push rbp
+    mov rbp, rsp
+    sub rsp, 20
+    mov dword [rbp-20], 'aaaa'
+    mov dword [rbp-16], 'bbbb'
+    mov byte [rbp-12], 0
+    lea rax, [rbp-20]
+    print_c_str rax
+    mov rsp, rbp
+    pop rbp
+
 _start:
     ; welcome message
     print s_menu
