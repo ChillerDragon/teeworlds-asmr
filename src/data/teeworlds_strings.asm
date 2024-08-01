@@ -58,3 +58,7 @@ l_s_sending_packet_with_size equ $ - s_sending_packet_with_size
 
 s_current_outgoing_packet_bytes db "[client] current outgoing packet bytes: "
 l_s_current_outgoing_packet_bytes equ $ - s_current_outgoing_packet_bytes
+
+s_got_compressed_packet db "[client] got huffman compressed packed. that is not supported yet. panic!", 0x0a
+l_s_got_compressed_packet equ $ - s_got_compressed_packet
+

@@ -145,6 +145,13 @@ on_packet:
 
     is_packet_in_flag PACKETFLAG_CONTROL
     je on_ctrl_message
+    is_packet_in_flag PACKETFLAG_COMPRESSION
+    jne .on_packet_game_or_sys
+
+    print s_got_compressed_packet
+    exit 1
+
+.on_packet_game_or_sys:
 
     mov rax, packet_payload
     mov rdi, [udp_read_len]
