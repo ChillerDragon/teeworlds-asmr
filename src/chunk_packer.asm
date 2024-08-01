@@ -180,6 +180,7 @@ queue_chunk:
     mov rax, 0
     ;  rdx = msg id
     mov eax, edx
+    shl rax, 1
     ;  r10 = system (CHUNK_SYSTEM or CHUNK_GAME)
     or eax, r10d
     packet_packer_pack_int eax
