@@ -93,8 +93,10 @@ push_packet_payload_byte:
     ; and pushes it into the packet payload to be sent
     push_registers
 
+    mov r9d, %1
+
     mov rax, 0
-    mov eax, %1
+    mov eax, r9d
 
     mov dword edx, [udp_payload_index]
     lea rdi, [udp_send_buf + PACKET_HEADER_LEN + edx]

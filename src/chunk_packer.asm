@@ -184,9 +184,8 @@ queue_chunk:
     ;  r10 = system (CHUNK_SYSTEM or CHUNK_GAME)
     or eax, r10d
     packet_packer_pack_int eax
-    pop rax
 
-    hexdump_outgoing_packet
+    pop rax
 
 .queue_chunk_pack_payload:
 
