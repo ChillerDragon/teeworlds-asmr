@@ -1,0 +1,35 @@
+HUFFMAN_EOF_SYMBOL equ 256
+HUFFMAN_MAX_SYMBOLS equ HUFFMAN_EOF_SYMBOL + 1
+HUFFMAN_MAX_NODES equ HUFFMAN_MAX_SYMBOLS * 2 - 1
+
+HUFFMAN_LUTBIS equ 10
+HUFFMAN_LUTSIZE equ 1024
+HUFFMAN_LUTMASK equ HUFFMAN_LUTSIZE - 1
+
+; struct CNode
+; {
+; 	unsigned m_Bits;
+; 	unsigned m_NumBits;
+;
+; 	unsigned short m_aLeafs[2];
+;
+; 	unsigned char m_Symbol;
+; }
+
+HUFF_CNODE_BITS_OFFSET equ 0
+HUFF_CNODE_NUM_BITS_OFFSET equ 4
+HUFF_CNODE_LEAF_0_OFFSET equ 8
+HUFF_CNODE_LEAF_1_OFFSET equ 10
+HUFF_CNODE_SYMBOL_OFFSET equ 12
+HUFF_CNODE_SIZE equ 13
+
+; struct CHuffmanConstructNode
+; {
+; 	unsigned short m_NodeId;
+; 	int m_Frequency;
+; }
+
+HUFF_CCONSTRUCTION_NODE_NODE_ID_OFFSET equ 0
+HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET equ 2
+HUFF_CCONSTRUCTION_NODE_SIZE equ 6
+

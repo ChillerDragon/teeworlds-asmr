@@ -92,6 +92,7 @@ section .data
     %include "src/data/logger.asm"
     %include "src/data/hex.asm"
     %include "src/data/udp.asm"
+    %include "src/data/huffman.asm"
 
     KEY_A       equ 0x61
     KEY_D       equ 0x64
@@ -115,6 +116,7 @@ section .bss
     %include "src/bss/hex.asm"
     %include "src/bss/teeworlds.asm"
     %include "src/bss/buffers.asm"
+    %include "src/bss/huffman.asm"
 section .text
 
 %include "src/macros.asm"
@@ -137,6 +139,7 @@ section .text
 %include "src/on_game.asm"
 %include "src/packet_packer.asm"
 %include "src/pack_int.asm"
+%include "src/huffman_decompress.asm"
 
 print_udp:
     print s_got_udp

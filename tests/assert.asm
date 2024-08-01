@@ -8,6 +8,7 @@ section .data
     %include "src/data/teeworlds.asm"
     %include "src/data/teeworlds_strings.asm"
     %include "src/data/udp.asm"
+    %include "src/data/huffman.asm"
 
     s_assert_ok db "[assert] OK", 0x0a
     l_s_assert_ok equ $ - s_assert_ok
@@ -26,6 +27,7 @@ section .bss
     %include "src/bss/hex.asm"
     %include "src/bss/teeworlds.asm"
     %include "src/bss/buffers.asm"
+    %include "src/bss/huffman.asm"
 
     ; used in assert eq macros
     ; but can also be used as argument to user code
@@ -59,6 +61,7 @@ section .text
 %include "src/on_game.asm"
 %include "src/packet_packer.asm"
 %include "src/pack_int.asm"
+%include "src/huffman_decompress.asm"
 
 assert_ok:
     push_registers
