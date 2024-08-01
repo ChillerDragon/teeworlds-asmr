@@ -35,4 +35,6 @@ on_system_msg_map_change:
     print_c_str rax
     call print_newline
 
+    call send_ready
+
     jmp on_system_message_end

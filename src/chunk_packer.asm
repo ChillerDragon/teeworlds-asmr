@@ -1,3 +1,37 @@
+%macro send_msg 3
+    ; send_msg [MSG_ID] [CHUNKFLAG_VITAL] [CHUNK_SYSTEM]
+    ; queues a chunk and also sends a udp packet
+    ; the chunk header will be build automatically
+    ; the chunk payload will be filled based on the current packer
+    ;
+    ; example:
+    ;
+    ;  packer_reset
+    ;  pack_str GAME_NETVERSION
+    ;  pack_str password
+    ;  pack_int CLIENT_VERSION
+    ;  send_msg MSG_SYSTEM_INFO, CHUNKFLAG_VITAL, CHUNK_SYSTEM
+
+    ;  rax = flags (vital & resend)
+    mov rax, %2
+
+    ;  rdi = payload
+    mov rdi, packer_buf
+
+    ;  rsi = payload size
+    mov rsi, 0
+    mov esi, [packer_size]
+
+    ;  rdx = msg id
+    mov rdx, %1
+
+    ;  r10 = system (CHUNK_SYSTEM or CHUNK_GAME)
+    mov r10, %3
+
+    call queue_chunk
+%endmacro
+
+
 pack_chunk_header:
     ; pack_chunk_header [rax] [rdi] [rsi]
     ;   rax = flags
