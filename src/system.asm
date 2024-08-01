@@ -63,12 +63,55 @@ str_comp:
     jmp .str_comp_end
 
 .str_comp_no_match:
+    ; debug print non matching strings:
+
+    ; print s_strings_do_not_match
+    ; print s_string1
+    ; print_c_str rax
+    ; call print_single_quote
+    ; call print_newline
+    ; print s_string2
+    ; print_c_str rdi
+    ; call print_single_quote
+    ; call print_newline
+
     ; ugly hack to flip the zero flag like in is_rax_flag
     ; set NOT EQUAL FLAG
     mov al, 0
     cmp al, 1
 
 .str_comp_end:
+    pop_registers
+    ret
+
+str_copy:
+    ; str_copy [rax] [rdi] [rsi]
+    ;   rax = destination buffer pointer
+    ;   rdi = source buffer pointer
+    ;   rsi = truncation len (max size)
+    push_registers
+
+    mov rcx, 0
+    xor r9, r9
+.mem_copy_byte_loop:
+    mov r9b, byte [rdi+rcx]
+    mov byte [rax+rcx], r9b
+
+    ; source end (null byte)
+    cmp r9, 0
+    je .mem_copy_loop_end
+
+    inc rcx
+
+    ; max size
+    cmp rcx, rsi
+    jb .mem_copy_byte_loop
+
+.mem_copy_loop_end:
+
+    ; ensure null termination
+    mov byte [rax+rcx], 0
+
     pop_registers
     ret
 

@@ -26,10 +26,17 @@ section .bss
     %include "src/bss/hex.asm"
     %include "src/bss/teeworlds.asm"
     %include "src/bss/buffers.asm"
+
+    ; used in assert eq macros
+    ; but can also be used as argument to user code
     assert_expect_buf resb 2048
+    assert_expect_buf_index resb 4
+
     assert_actual_buf resb 2048
+
     assert_input_buf resb 2048
     assert_input_buf_index resb 4
+
     assert_counter resb 4
 section .text
 
@@ -85,6 +92,32 @@ assert_ok:
     mov rcx, [assert_input_buf_index]
     inc rcx
     mov [assert_input_buf_index], rcx
+
+    pop rdx
+    pop rcx
+
+    pop rax
+%endmacro
+
+%macro assert_expect_buf_reset 0
+    mov dword [assert_expect_buf_index], 0
+%endmacro
+
+%macro assert_expect_buf_push_byte 1
+    push rax
+    mov rax, %1
+
+    push rcx
+    push rdx
+
+    mov dword edx, [assert_expect_buf_index]
+
+    lea rcx, [assert_expect_buf + edx]
+    mov byte [rcx], al
+
+    mov rcx, [assert_expect_buf_index]
+    inc rcx
+    mov [assert_expect_buf_index], rcx
 
     pop rdx
     pop rcx

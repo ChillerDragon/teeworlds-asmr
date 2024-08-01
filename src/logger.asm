@@ -13,6 +13,30 @@ print_newline:
     pop_registers
     ret
 
+print_single_quote:
+    push_registers
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, char_single_quote
+    mov rdx, 1
+    syscall
+
+    pop_registers
+    ret
+
+print_double_quote:
+    push_registers
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, char_double_quote
+    mov rdx, 1
+    syscall
+
+    pop_registers
+    ret
+
 print_space:
     push_registers
 
