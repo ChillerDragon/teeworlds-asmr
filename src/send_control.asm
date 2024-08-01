@@ -15,7 +15,8 @@ send_ctrl_msg_token:
 send_ctrl_msg_connect:
     push rax
 
-    pack_byte MSG_CTRL_CONNECT
+    mov rax, MSG_CTRL_CONNECT
+    call push_packet_payload_byte
     pack_raw token, 4
 
     ; hack to send a bunch of bytes to pass the

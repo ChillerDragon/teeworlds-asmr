@@ -89,7 +89,8 @@ str_copy:
     ;   rax = destination buffer pointer
     ;   rdi = source buffer pointer
     ;   rsi = truncation len (max size)
-    push_registers
+    ; returns into rax the amount of bytes copied
+    push_registers_keep_rax
 
     mov rcx, 0
     xor r9, r9
@@ -112,7 +113,10 @@ str_copy:
     ; ensure null termination
     mov byte [rax+rcx], 0
 
-    pop_registers
+    ; size copied
+    mov rax, rcx
+
+    pop_registers_keep_rax
     ret
 
 mem_copy:

@@ -7,16 +7,21 @@ send_msg_info:
     ; mov rdi, PAYLOAD_SEND_INFO_LEN
     ; call send_packet_with_payload
 
+    packer_reset
+    pack_str GAME_NETVERSION
+    pack_str password
+    pack_int CLIENT_VERSION
 
     ;  rax = flags (vital & resend)
     mov rax, 0
     set_rax_flag CHUNKFLAG_VITAL
 
     ;  rdi = payload
-    mov rdi, CHUNK_PAYLOAD_SEND_INFO
+    mov rdi, packer_buf
 
     ;  rsi = payload size
-    mov rsi, CHUNK_PAYLOAD_SEND_INFO_LEN
+    mov rsi, 0
+    mov esi, [packer_size]
 
     ; mov rsi, [packer_size]
 
