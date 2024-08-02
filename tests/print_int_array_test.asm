@@ -49,8 +49,8 @@ test_4_byte_int_array:
     mov rbp, rsp
     sub rsp, 12
     mov dword [rbp-12], 0xaabbccdd
-    mov dword [rbp-8], 0xaabbccdf
-    mov dword [rbp-4], 0xaabbccdd
+    mov dword [rbp-8], 0xaabbccde
+    mov dword [rbp-4], 0xaabbccdf
 
     ; rax=buf 4=element size 3=array size
     lea rax, [rbp-12]
