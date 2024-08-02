@@ -89,16 +89,22 @@ print_any_int:
 
     call print_open_bracket
 
-    mov ecx, 0
+    ; counter
+    mov rcx, 0
+
+    ; 64 bit pointer to integer
+    mov rax, [rbp-16]
+
     %%loop_elements:
         inc ecx
 
-        ; 64 bit pointer to integer
-        mov rax, [rbp-16]
         ; 32 bit element size
         mov rdi, 0
         mov dword edi, [rbp-8] ; printed and verified to be 1
         call print_any_int
+
+        ; increment pointer by size
+        add rax, rdi
 
         cmp ecx, [rbp-4]
         je %%loop_elements_skip_comma
