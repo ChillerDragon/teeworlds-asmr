@@ -11,7 +11,7 @@ on_system_message:
     mov r10, rdi
 
     print s_got_system_msg_with_id
-    call print_uint32
+    call println_uint32
 
     ; payload to rax
     mov rax, r10
@@ -21,7 +21,7 @@ on_system_message:
 
     print s_unknown_system_msg
     mov rax, r9
-    call print_uint32
+    call println_uint32
     exit 1
 
 on_system_message_end:

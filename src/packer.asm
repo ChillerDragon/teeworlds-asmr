@@ -14,7 +14,7 @@
     print s_packer_size
 
     mov eax, [packer_size]
-    call print_uint32
+    call println_uint32
 
     pop rax
 %endmacro

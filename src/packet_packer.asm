@@ -66,7 +66,7 @@ send_packet:
     push rax
     print s_sending_packet_with_size
     mov rax, rdi
-    call print_uint32
+    call println_uint32
     pop rax
 
 

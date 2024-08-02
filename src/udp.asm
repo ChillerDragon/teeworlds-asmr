@@ -15,7 +15,7 @@ open_socket:
     mov [socket], rax
     print s_got_file_desc
     mov rax, [socket]
-    call print_uint32
+    call println_uint32
 
     pop_registers
     ret
@@ -47,14 +47,14 @@ recv_udp:
     ; debug print
     print s_received_bytes
     mov rax, [udp_read_len]
-    call print_uint32
+    call println_uint32
     jmp .recv_udp_end
 .recv_udp_error:
     neg rax
     cmp rax, EWOULDBLOCK
     je .recv_udp_end
     print s_udp_error
-    call print_uint32
+    call println_uint32
 .recv_udp_end:
     pop_registers
     ret

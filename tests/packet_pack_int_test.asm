@@ -13,6 +13,10 @@ _start:
     packet_packer_pack_int eax
     mov eax, 1
     packet_packer_pack_int eax
+    mov r9d, 9
+    packet_packer_pack_int r9d
+    mov r9d, 2
+    packet_packer_pack_int r9d
 
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 0]
     assert_al_eq 0x01
@@ -34,6 +38,10 @@ _start:
     assert_al_eq 0x00
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 9]
     assert_al_eq 0x01
+    mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 10]
+    assert_al_eq 0x09
+    mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 11]
+    assert_al_eq 0x02
 
     exit 0
 

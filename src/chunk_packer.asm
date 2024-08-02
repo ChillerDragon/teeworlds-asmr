@@ -94,13 +94,13 @@ pack_chunk_header:
 .pack_chunk_header_error_seq:
     print s_unsupported_seq_size
     mov rax, [connection_sequence]
-    call print_uint32
+    call println_uint32
     exit 1
 
 .pack_chunk_header_error_size:
     print s_unsupported_chunk_size
     mov rax, rdi
-    call print_uint32
+    call println_uint32
     exit 1
 
 .pack_chunk_header_end:

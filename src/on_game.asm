@@ -11,7 +11,7 @@ on_game_message:
     mov r10, rdi
 
     print s_got_game_msg_with_id
-    call print_uint32
+    call println_uint32
 
     ; payload to rax
     mov rax, r10
@@ -21,7 +21,7 @@ on_game_message:
 
     print s_unknown_game_msg
     mov rax, r9
-    call print_uint32
+    call println_uint32
     exit 1
 on_game_message_end:
     ret

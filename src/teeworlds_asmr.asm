@@ -151,7 +151,7 @@ print_udp:
     ; [client]     len: %d
     print s_len
     mov rax, [udp_read_len]
-    call print_uint32
+    call println_uint32
 
     call on_packet
     ret

@@ -24,7 +24,7 @@ on_system_or_game_messages:
     print s_got_packet_with_chunks
     mov rax, 0
     mov al, [in_packet_header_num_chunks]
-    call print_uint32
+    call println_uint32
 
     ; rcx is the offset in bytes pointer
     mov rcx, 0
@@ -80,18 +80,18 @@ on_system_or_game_messages:
 .on_system_or_game_messages_loop_error_end_of_data:
     ; rax is offset
     print s_parser_bytes_red
-    call print_uint32
+    call println_uint32
 
     ; r10 is payload size
     print s_received_bytes
     mov rax, r10
-    call print_uint32
+    call println_uint32
 
     print s_got_end_of_packet_with_chunks_left
     mov rax, 0
     mov byte al, [in_packet_header_num_chunks]
     sub al, bl
-    call print_uint32
+    call println_uint32
     exit 1
 
 .on_system_or_game_messages_loop_end:

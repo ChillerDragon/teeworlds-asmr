@@ -17,12 +17,12 @@ print_chunk_header:
     print s_size
     mov rax, 0
     mov eax, [chunk_header_size]
-    call print_uint32
+    call println_uint32
 
     print s_sequence
     mov rax, 0
     mov eax, [chunk_header_sequence]
-    call print_uint32
+    call println_uint32
 
     is_chunk_flag CHUNKFLAG_VITAL
     je .print_chunk_header_vital

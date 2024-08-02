@@ -49,7 +49,7 @@ on_ctrl_message:
     print s_got_ctrl_msg
 
     mov al, [udp_recv_buf + PACKET_HEADER_LEN]
-    call print_uint32
+    call println_uint32
 
     cmp al, MSG_CTRL_TOKEN
     je on_ctrl_msg_token
@@ -59,7 +59,7 @@ on_ctrl_message:
     je on_ctrl_msg_close
 
     print s_unknown_ctrl_msg
-    call print_uint32
+    call println_uint32
 
 on_ctrl_message_end:
     pop_registers ; pushed in on_ctrl_message

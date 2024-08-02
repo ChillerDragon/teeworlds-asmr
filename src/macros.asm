@@ -68,7 +68,7 @@
     push_registers
     print s_dbg_reg_digit
     mov rax, %1
-    call print_uint32
+    call println_uint32
     pop_registers
 %endmacro
 
