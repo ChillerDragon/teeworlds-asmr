@@ -13,6 +13,18 @@ print_newline:
     pop_registers
     ret
 
+print_minus:
+    push_registers
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, char_minus
+    mov rdx, 1
+    syscall
+
+    pop_registers
+    ret
+
 print_single_quote:
     push_registers
 
@@ -65,6 +77,18 @@ dbg_print_uint32:
     call print_uint32
     call print_newline
 
+    ret
+
+
+print_int32:
+    ; print_int32 [rax]
+    cmp rax, 0
+    jge .print_int32_positive
+.print_int32_negative:
+    call print_minus
+    neg rax
+.print_int32_positive:
+    call print_uint32
     ret
 
 print_uint32:

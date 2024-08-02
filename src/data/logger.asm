@@ -1,6 +1,7 @@
 char_newline      db 0x0a
 char_space        db 0x20
 char_dot          db '.'
+char_minus        db '-'
 char_single_quote db 0x27
 char_double_quote db 0x22
 
