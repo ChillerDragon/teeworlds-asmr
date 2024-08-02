@@ -100,7 +100,11 @@ print_any_int:
         mov dword edi, [rbp-8] ; printed and verified to be 1
         call print_any_int
 
+        cmp ecx, [rbp-4]
+        je %%loop_elements_skip_comma
         call print_comma
+        call print_space
+        %%loop_elements_skip_comma:
 
         cmp ecx, [rbp-4]
         jl %%loop_elements
