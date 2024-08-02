@@ -190,3 +190,43 @@
     pop rcx
     pop rbx
 %endmacro
+
+%macro shift_left 2
+    ; shift_left [register] [amount]
+    ;
+    ; I saw with objdump that `shl edx, cl` is possible.
+    ; But nasm refuses to compile it
+    ;
+    ; So this macro polyfills it
+    ; shift left n bits
+    mov rbp, rsp
+    sub rsp, 8
+
+    push rcx
+    push r12
+
+    ; register
+    mov [rbp-8], %1
+
+    ; amount
+    mov r12, %2
+
+    mov rcx, 0
+    %%shift_left_loop:
+        inc rcx
+        cmp rcx, r12
+        jge %%shift_left_loop_end
+
+        shl qword [rbp-8], 1
+
+        jmp %%shift_left_loop
+    %%shift_left_loop_end:
+
+    pop r12
+    pop rcx
+
+    mov %1, [rbp-8]
+
+    mov rsp, rbp
+%endmacro
+

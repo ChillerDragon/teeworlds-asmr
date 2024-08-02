@@ -61,7 +61,8 @@ section .text
 %include "src/on_game.asm"
 %include "src/packet_packer.asm"
 %include "src/pack_int.asm"
-%include "src/huffman_decompress.asm"
+%include "src/huffman/set_bits_r.asm"
+%include "src/huffman/construct_tree.asm"
 
 assert_ok:
     push_registers
