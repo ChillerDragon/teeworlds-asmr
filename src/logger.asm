@@ -75,7 +75,7 @@ print_any_int:
     sub rsp, 16
 
     ; buffer
-    mov [rbp-16], %1
+    mov qword [rbp-16], %1
 
     ; this matches so the pointer move worked fine
     ; mov rax, [rbp-14]
@@ -119,6 +119,11 @@ print_any_int:
 
     mov rsp, rbp
     pop_registers
+%endmacro
+
+%macro print_int32_array 2
+    ; print_int32_array [array buffer] [array size]
+    print_int_array %1, 4, %2
 %endmacro
 
 print_newline:
