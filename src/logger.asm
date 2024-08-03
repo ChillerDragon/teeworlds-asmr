@@ -222,6 +222,14 @@ print_space:
     pop_registers
     ret
 
+%macro print_i 0
+    print s_print_i
+    push rax
+    mov rax, rcx
+    call println_int32
+    pop rax
+%endmacro
+
 dbg_println_uint32:
     ; dbg_print_num [rax]
     ;

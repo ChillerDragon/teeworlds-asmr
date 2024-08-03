@@ -49,3 +49,19 @@ HUFF_FREQ_TABLE dd 1073741824,4545,2657,431,1950,919,444,482,2244,617,838,542,71
 HUFF_FREQ_TABLE_SIZE equ ($ - HUFF_FREQ_TABLE) / 4
 ; print_int32_array HUFF_FREQ_TABLE, HUFF_FREQ_TABLE_SIZE
 
+s_huff_nodes_i_num_bits db "[huff] nodes[i].num_bits="
+l_s_huff_nodes_i_num_bits equ $ - s_huff_nodes_i_num_bits
+
+s_huff_num_nodes_left db "[huff] num_nodes_left="
+l_s_huff_num_nodes_left equ $ - s_huff_num_nodes_left
+
+
+
+
+
+
+
+
+
+
+

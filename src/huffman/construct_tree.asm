@@ -10,6 +10,16 @@
 ; ; integer with amount of nodes
 ; huff_num_nodes resb 4
 
+; TODO: add assert to check if its called twice
+;       calling construct tree twice is not supported yet
+;       teeworlds calls it from the init method
+;       which first zeros the member variables
+;       we do not zero anything and depend on the bss section
+;       doing the zeroing for us
+;       which means its only zero on the first run
+;       that is also fine because in the client we want to init the tree
+;       on launch once and then use it for the entire runtime
+;       but if this would twice in for example a test it would bug
 _huff_construct_tree:
     push_registers
     mov rbp, rsp
@@ -78,6 +88,11 @@ _huff_construct_tree:
 ._huff_construct_tree_while_loop:
     cmp dword [rbp-4], 1
     jle ._huff_construct_tree_while_loop_end
+
+    ; debug
+    print s_huff_num_nodes_left
+    mov eax, [rbp-4]
+    call println_int32
 
     ;  rax = **ppList
     mov rax, huff_nodes_left
