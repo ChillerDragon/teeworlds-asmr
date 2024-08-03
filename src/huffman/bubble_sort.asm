@@ -66,7 +66,8 @@ _huff_bubble_sort:
     lea rsi, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
     mov [rbp-20], rsi
 
-    ; cmp [r10], [r11]
+    inc rcx ; i++
+    cmp r10, r11
     jge ._huff_bubble_sort_for_i_less_size
 
     ; if(ppList[i]->m_Frequency < ppList[i+1]->m_Frequency)
