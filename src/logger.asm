@@ -301,6 +301,30 @@ print_close_bracket:
     pop_registers
     ret
 
+print_close_paren:
+    push_registers
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, char_close_paren
+    mov rdx, 1
+    syscall
+
+    pop_registers
+    ret
+
+print_open_paren:
+    push_registers
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, char_open_paren
+    mov rdx, 1
+    syscall
+
+    pop_registers
+    ret
+
 print_minus:
     push_registers
 

@@ -10,12 +10,43 @@
 ; ; integer with amount of nodes
 ; huff_num_nodes resb 4
 
+_huff_setbits_r_dbg_print_args:
+    call print_newline
+
+    print s_huff_set_bits
+    call print_ptr
+    call print_comma
+    call print_space
+
+    push rax
+    print s_huff_bits_eq
+    mov rax, rdi
+    call print_int32
+
+    call print_comma
+    call print_space
+
+    print s_huff_depth_eq
+    mov rax, rsi
+    call print_uint32
+    pop rax
+
+    call print_close_paren
+
+    call print_newline
+
+    print s_huff_node_colon
+    call huff_print_struct_cnode
+    call print_newline
+    ret
+
 _huff_setbits_r:
     ; _huff_setbits_r [rax] [rdi] [rsi]
     ;  rax = *pNode
     ;  rdi = int Bits
     ;  rsi = unsigned Depth
     push_registers
+    call _huff_setbits_r_dbg_print_args
 
     ; leaf1
     push rdi

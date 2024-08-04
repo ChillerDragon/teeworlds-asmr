@@ -9,6 +9,8 @@ char_open_bracket  db '['
 char_close_bracket db ']'
 char_open_curly    db '{'
 char_close_curly   db '}'
+char_open_paren    db '('
+char_close_paren   db ')'
 
 s_dbg_rax_digit db "[debug] value of rax is: "
 l_s_dbg_rax_digit equ $ - s_dbg_rax_digit

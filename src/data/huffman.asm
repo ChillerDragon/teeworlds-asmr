@@ -55,13 +55,16 @@ l_s_huff_nodes_i_num_bits equ $ - s_huff_nodes_i_num_bits
 s_huff_num_nodes_left db "[huff] num_nodes_left="
 l_s_huff_num_nodes_left equ $ - s_huff_num_nodes_left
 
+s_huff_set_bits db "[huff] setbits_r(pNode="
+l_s_huff_set_bits equ $ - s_huff_set_bits
 
 
+s_huff_bits_eq db "bits="
+l_s_huff_bits_eq equ $ - s_huff_bits_eq
 
+s_huff_depth_eq db "depth="
+l_s_huff_depth_eq equ $ - s_huff_depth_eq
 
-
-
-
-
-
+s_huff_node_colon db "  node: "
+l_s_huff_node_colon equ $ - s_huff_node_colon
 

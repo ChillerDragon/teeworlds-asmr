@@ -89,11 +89,6 @@ _huff_construct_tree:
     cmp dword [rbp-4], 1
     jle ._huff_construct_tree_while_loop_end
 
-    ; debug
-    print s_huff_num_nodes_left
-    mov eax, [rbp-4]
-    call println_int32
-
     ;  rax = **ppList
     mov rax, huff_nodes_left
     ;  rdi = Size
