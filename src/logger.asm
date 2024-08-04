@@ -173,6 +173,61 @@ print_any_int:
     print_int_array %1, 4, %2
 %endmacro
 
+%macro print_struct_array 4
+    ; print_struct_array [array buffer] [element_print_callback] [element size] [array size]
+    push_registers
+    mov rbp, rsp
+
+    ; allocate 2 64 bit register and for the pointers
+    ; and 2 32 bit register for the integers
+    sub rsp, 24
+
+    ; array buffer
+    mov qword [rbp-24], %1
+
+    ; print callback
+    mov dword [rbp-16], %2
+
+    ; element size
+    mov dword [rbp-8], %3
+
+    ; array size
+    mov dword [rbp-4], %4
+
+    call print_open_bracket
+
+    ; counter
+    mov rcx, 0
+
+    ; 64 bit pointer to struct
+    mov rax, [rbp-24]
+
+    %%loop_elements:
+        inc ecx
+
+        ; 32 bit element size
+        mov rdi, 0
+        mov dword edi, [rbp-8]
+        call [rbp-16]
+
+        ; increment pointer by size
+        add rax, rdi
+
+        cmp ecx, [rbp-4]
+        je %%loop_elements_skip_comma
+        call print_comma
+        call print_space
+        %%loop_elements_skip_comma:
+
+        cmp ecx, [rbp-4]
+        jl %%loop_elements
+
+    call print_close_bracket
+
+    mov rsp, rbp
+    pop_registers
+%endmacro
+
 print_newline:
     push_registers
 
@@ -184,6 +239,31 @@ print_newline:
 
     pop_registers
     ret
+
+print_open_curly:
+    push_registers
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, char_open_curly
+    mov rdx, 1
+    syscall
+
+    pop_registers
+    ret
+
+print_close_curly:
+    push_registers
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, char_close_curly
+    mov rdx, 1
+    syscall
+
+    pop_registers
+    ret
+
 
 print_comma:
     push_registers

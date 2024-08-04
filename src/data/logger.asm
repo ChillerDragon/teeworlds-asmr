@@ -7,6 +7,8 @@ char_double_quote  db 0x22
 char_comma         db ','
 char_open_bracket  db '['
 char_close_bracket db ']'
+char_open_curly    db '{'
+char_close_curly   db '}'
 
 s_dbg_rax_digit db "[debug] value of rax is: "
 l_s_dbg_rax_digit equ $ - s_dbg_rax_digit
