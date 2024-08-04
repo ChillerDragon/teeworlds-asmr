@@ -24,7 +24,7 @@ l_s_string1 equ $ - s_string1
 s_string2 db              "[system]  string2: '"
 l_s_string2 equ $ - s_string2
 
-s_supported_ints db "[logger] supported int sizes are 1, 2 and 4 but got: "
+s_supported_ints db "[logger] supported int sizes are 1, 2, 4 and 8 but got: "
 l_s_supported_ints equ $ - s_supported_ints
 
 s_print_i db "[logger] i="

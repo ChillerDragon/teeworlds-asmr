@@ -1,7 +1,28 @@
+print_hexdump_no_spaces:
+    ; print_hexdump_no_spaces [rax] [rdi]
+    ;   rax: pointer to data
+    ;   rdi: data size
+    push rsi
+    mov rsi, 0
+    call _print_hexdump
+    pop rsi
+    ret
+
 print_hexdump:
     ; print_hexdump [rax] [rdi]
     ;   rax: pointer to data
     ;   rdi: data size
+    push rsi
+    mov rsi, 1
+    call _print_hexdump
+    pop rsi
+    ret
+
+_print_hexdump:
+    ; print_hexdump [rax] [rdi] [rsi]
+    ;   rax: pointer to data
+    ;   rdi: data size
+    ;   rsi: 0 no spaces, 1 spaces
     push rsi
     push rcx
     push rbx
@@ -11,12 +32,16 @@ print_hexdump:
 
     mov r9, rax ; r9 = data
     mov rcx, 0
-.print_udp_loop_bytes:
+._print_hexdump_loop_bytes:
     mov rax, [r9+rcx*1] ; r9 = data
     call print_hex_byte
+    cmp rsi, 0
+    je ._print_hexdump_loop_bytes_skip_space
+    call print_space
+._print_hexdump_loop_bytes_skip_space:
     inc rcx
     cmp rcx, rdi
-    jb .print_udp_loop_bytes
+    jb ._print_hexdump_loop_bytes
 
     pop r9
     pop rdi
@@ -65,8 +90,6 @@ print_hex_byte:
     mov rsi, hex_str ; movabs
     mov edx, 0x2
     syscall
-
-    call print_space
 
     pop_registers
     ret

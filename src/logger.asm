@@ -1,10 +1,50 @@
 ; vim: set tabstop=4:softtabstop=4:shiftwidth=4
 ; vim: set expandtab:
 
+print_0x:
+    push rax
+    push rbp
+    mov rbp, rsp
+    sub rsp, 3
+    mov word [rbp-3], '0x'
+    mov byte [rbp-1], 0
+    lea rax, [rbp-3]
+    print_c_str rax
+    mov rsp, rbp
+    pop rbp
+    pop rax
+    ret
+
+print_ptr:
+    ; print_ptr [rax]
+    ;  rax = holds a 64 bit pointer
+    push rax
+    push rdi
+
+    ; swap endianness
+    ; to match objdump output
+    bswap rax
+
+    call print_0x
+    ; put rax on the stack
+    ; so we can get a pointer to it
+    ; for hexdump
+    push rax
+    mov rax, rsp
+    mov rdi, 8
+    call print_hexdump_no_spaces
+    pop rax
+
+    pop rdi
+    pop rax
+    ret
+
 print_any_int:
     ; print_any_int [rax] [rdi]
     ;  rax = int pointer
     ;  rdi = size in bytes
+    ;
+    ; 8 bit integers will be printed as pointers
     ;
     ; example:
     ;   mov rbp, rsp
@@ -39,6 +79,9 @@ print_any_int:
     cmp rdi, 4
     je .print_any_int_size_4
 
+    cmp rdi, 8
+    je .print_any_int_size_8
+
     jmp .print_any_int_size_error
 
 .print_any_int_size_1:
@@ -52,6 +95,10 @@ print_any_int:
 .print_any_int_size_4:
     mov dword eax, [r9]
     call print_int32
+    jmp .print_any_int_end
+.print_any_int_size_8:
+    mov rax, [r9]
+    call print_ptr
     jmp .print_any_int_end
 
 .print_any_int_size_error:
