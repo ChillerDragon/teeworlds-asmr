@@ -150,9 +150,11 @@
     push r9
     push r10
     push r11
+    push rbp
 %endmacro
 
 %macro pop_registers 0
+    pop rbp
     pop r11
     pop r10
     pop r9
@@ -176,10 +178,12 @@
     push r9
     push r10
     push r11
+    push rbp
 %endmacro
 
 ; useful when you want to use rax as return value
 %macro pop_registers_keep_rax 0
+    pop rbp
     pop r11
     pop r10
     pop r9
