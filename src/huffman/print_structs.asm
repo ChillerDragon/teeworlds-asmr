@@ -86,31 +86,36 @@ huff_print_struct_cnode:
     call print_open_curly
 
     call _huff_print_field_bits
-    mov rax, [rsi+HUFF_CNODE_BITS_OFFSET]
+    mov rax, 0
+    mov eax, [rsi+HUFF_CNODE_BITS_OFFSET]
     call print_int32
     call print_comma
     call print_space
 
     call _huff_print_field_num_bits
-    mov rax, [rsi+HUFF_CNODE_NUM_BITS_OFFSET]
+    mov rax, 0
+    mov eax, [rsi+HUFF_CNODE_NUM_BITS_OFFSET]
     call print_int32
     call print_comma
     call print_space
 
     call _huff_print_field_leafs
     call print_open_bracket
-    mov rax, [rsi+HUFF_CNODE_LEAF_0_OFFSET]
+    mov rax, 0
+    mov ax, [rsi+HUFF_CNODE_LEAF_0_OFFSET]
     call print_int32
     call print_comma
     call print_space
-    mov rax, [rsi+HUFF_CNODE_LEAF_1_OFFSET]
+    mov rax, 0
+    mov ax, [rsi+HUFF_CNODE_LEAF_1_OFFSET]
     call print_int32
     call print_close_bracket
     call print_comma
     call print_space
 
     call _huff_print_field_symbol
-    mov rax, [rsi+HUFF_CNODE_SYMBOL_OFFSET]
+    mov al, 0
+    mov al, [rsi+HUFF_CNODE_SYMBOL_OFFSET]
     call print_int32
 
     call print_close_curly

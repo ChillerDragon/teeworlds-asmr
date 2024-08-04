@@ -198,22 +198,21 @@ _huff_construct_tree:
     call huff_print_arr_nodes
 
     ; asmr
-    ; {bits: -0, NumBits: -1, Leafs: [4294967295, -4294901761], Symbol: -0}
-    ; {bits: -0, NumBits: -1, Leafs: [4294967295, 131071], Symbol: 1}
-    ; {bits: 0, NumBits: 0, Leafs: [511, 131072], Symbol: 2}
-    ; {bits: 0, NumBits: 0, Leafs: [66046, 196609], Symbol: 3}
-    ; {bits: 0, NumBits: 0, Leafs: [131581, 262146], Symbol: 4}
-    ; {bits: 0, NumBits: 0, Leafs: [197116, 327683], Symbol: 5}
+    ; {bits: 0, NumBits: 4294967295, Leafs: [65535, 65535], Symbol: 65280}
+    ; {bits: 0, NumBits: 4294967295, Leafs: [65535, 65535], Symbol: 65281}
+    ; {bits: 0, NumBits: 0, Leafs: [511, 0], Symbol: 2}
+    ; {bits: 0, NumBits: 0, Leafs: [510, 1], Symbol: 3}
+    ; {bits: 0, NumBits: 0, Leafs: [509, 2], Symbol: 4}
+    ; {bits: 0, NumBits: 0, Leafs: [508, 3], Symbol: 5}
     ; [..]
-    ; {bits: 0, NumBits: 0, Leafs: [16253191, 16384248], Symbol: 250}
-    ; {bits: 0, NumBits: 0, Leafs: [16318726, 16449785], Symbol: 251}
-    ; {bits: 0, NumBits: 0, Leafs: [16384261, 16515322], Symbol: 252}
-    ; {bits: 0, NumBits: 0, Leafs: [16449796, 16580859], Symbol: 253}
-    ; {bits: 0, NumBits: 0, Leafs: [16515331, 16646396], Symbol: 254}
-    ; {bits: 0, NumBits: 0, Leafs: [16580866, 16711933], Symbol: 255}
-    ; {bits: 0, NumBits: 0, Leafs: [16646401, 254], Symbol: 0}
-    ; {bits: 0, NumBits: 0, Leafs: [16711936, 255], Symbol: 0}
-    ; {bits: 0, NumBits: 0, Leafs: [0, 0], Symbol: 0}
+    ; {bits: 0, NumBits: 0, Leafs: [263, 248], Symbol: 250}
+    ; {bits: 0, NumBits: 0, Leafs: [262, 249], Symbol: 251}
+    ; {bits: 0, NumBits: 0, Leafs: [261, 250], Symbol: 252}
+    ; {bits: 0, NumBits: 0, Leafs: [260, 251], Symbol: 253}
+    ; {bits: 0, NumBits: 0, Leafs: [259, 252], Symbol: 254}
+    ; {bits: 0, NumBits: 0, Leafs: [258, 253], Symbol: 255}
+    ; {bits: 0, NumBits: 0, Leafs: [257, 254], Symbol: 0}
+    ; {bits: 0, NumBits: 0, Leafs: [256, 255], Symbol: 0}
     ; {bits: 0, NumBits: 0, Leafs: [0, 0], Symbol: 0}
     ; {bits: 0, NumBits: 0, Leafs: [0, 0], Symbol: 0}
     ; {bits: 0, NumBits: 0, Leafs: [0, 0], Symbol: 0}
