@@ -58,7 +58,9 @@ _huff_setbits_r:
     je ._huff_setbits_r_no_leaf1_recursion
 
     ; &m_aNodes[pNode->m_aLeafs[1]]
-    lea rax, [huff_nodes + rcx]
+    mov rbx, rcx
+    imul rbx, HUFF_CNODE_SIZE
+    lea rax, [huff_nodes + rbx]
 
     ; bits | (1<<Depth)
     mov r9, 1
@@ -81,7 +83,9 @@ _huff_setbits_r:
     je ._huff_setbits_r_no_leaf0_recursion
 
     ; &m_aNodes[pNode->m_aLeafs[0]]
-    lea rax, [huff_nodes + rcx]
+    mov rbx, rcx
+    imul rbx, HUFF_CNODE_SIZE
+    lea rax, [huff_nodes + rbx]
 
     ; bits are still in rdi
 
