@@ -66,7 +66,7 @@ _huff_setbits_r:
     mov r9, 1
     shift_left r9, rsi
     xor rdi, r9
-    shl edx,cl
+    shl edx, cl
 
     ; depth + 1
     inc rsi
