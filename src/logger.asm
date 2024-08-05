@@ -186,7 +186,7 @@ print_any_int:
     mov qword [rbp-24], %1
 
     ; print callback
-    mov dword [rbp-16], %2
+    mov qword [rbp-16], %2
 
     ; element size
     mov dword [rbp-8], %3
