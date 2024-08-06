@@ -4,8 +4,9 @@
     ; containing the string
     ; it will also add a null byte in the end
     ;
-    ; you have to free the stack value manually
-    ; by doing
+    ; you have to free the stack value manually. Before that you can not use `push` or `pop`
+    ; because the stack is shifted.
+    ; to free it run:
     ;
     ;  mov rsp, rbp
     ;
@@ -38,27 +39,49 @@
     ;
     ;  stack_printer "hello world"
     ;
+    push rbp
     str_to_stack %1
     print_c_str rax
     mov rsp, rbp
+    pop rbp
 %endmacro
 
-; %macro printdf 2
-;     ; printdf [format str] [int]
-;     push_registers_keep_rax
-; 
-;     ; rax = is null terminated format str
-;     str_to_stack %1
-; 
-;     mov rcx, 0
-; .printf_fmt_char_loop:
-;     mov r9b, byte [rax+rcx]
-;     inc rcx
-;     cmp rcx, 0
-;     jne .printf_fmt_char_loop
-; 
-;     pop_registers_keep_rax
-; %endmacro
+%macro printdf 2
+    ; printdf [format str] [int]
+    push_registers
+
+    ; rax = is null terminated format str
+    str_to_stack %1
+
+    %define MAX_PRINTF_LEN 10
+
+    sub rsp, MAX_PRINTF_LEN
+    ; r10 is index in final output string
+    mov r10, 0
+    ; r11 is pointer to start of output string
+    lea r11, [rbp-MAX_PRINTF_LEN]
+
+    mov rcx, 0
+.printf_fmt_char_loop:
+    mov r9b, byte [rax+rcx]
+    inc rcx
+
+    ; copy one letter from the format string
+    ; to the output buffer
+    mov byte [r11+r10], r9b
+    inc r10
+
+    cmp r9b, 0
+    jne .printf_fmt_char_loop
+
+    ; print output buffer
+    printn r11, r10
+
+    ; frees stack string
+    ; and copy buffer
+    mov rsp, rbp
+    pop_registers
+%endmacro
 
 ; print_label [string]
 ; string has a have a matching l_string length definition
