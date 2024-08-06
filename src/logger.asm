@@ -430,6 +430,8 @@ println_uint32:
     lea rax, [rbp-16]
     print_c_str rax
 
+    call print_newline
+
     mov rsp, rbp
     pop_registers
     ret
@@ -470,6 +472,7 @@ uint32_to_str:
     ; rsi = truncation len (max size)
     lea r9, [rsp+16+1]
     sub r9, rsi
+    dec r9
     call str_copy
 
     add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
