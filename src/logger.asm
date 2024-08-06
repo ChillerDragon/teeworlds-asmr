@@ -399,32 +399,27 @@ dbg_println_uint32:
 
     ret
 
-; newline version
+int32_to_str:
+    ; int32_to_str [rax] [rdi]
+    ;  rax = signed integer
+    ;  rdi = output buffer
+    push rdi
 
-println_int32:
-    ; print_int32 [rax]
     cmp rax, 0
-    jge .println_int32_positive
-.println_int32_negative:
-    call print_minus
+    jge .int32_to_str_positive
+.int32_to_str_negative:
+    mov byte [rdi], '-'
+    inc rdi
     neg rax
-.println_int32_positive:
-    call println_uint32
-    ret
+.int32_to_str_positive:
+    call uint32_to_str
 
-println_uint32:
-    ; println_uint32 [rax]
-    ;
-    ; has a sub label toascii_digit
-    ; and prints the given value in rax
-    ; as a digit to stdout
-    call print_uint32
-    call print_newline
+    pop rdi
     ret
 
 uint32_to_str:
     ; uint32_to_str [rax] [rdi]
-    ;  rax = integer
+    ;  rax = unsigned integer
     ;  rdi = output buffer
     ;
     ; https://stackoverflow.com/a/46301894/6287070
@@ -467,17 +462,20 @@ uint32_to_str:
     pop_registers
     ret
 
-; no newline version
-
-print_int32:
+println_int32:
     ; print_int32 [rax]
-    cmp rax, 0
-    jge .print_int32_positive
-.print_int32_negative:
-    call print_minus
-    neg rax
-.print_int32_positive:
+    call print_int32
+    call print_newline
+    ret
+
+println_uint32:
+    ; println_uint32 [rax]
+    ;
+    ; has a sub label toascii_digit
+    ; and prints the given value in rax
+    ; as a digit to stdout
     call print_uint32
+    call print_newline
     ret
 
 print_uint32:
@@ -500,3 +498,25 @@ print_uint32:
     mov rsp, rbp
     pop_registers
     ret
+
+print_int32:
+    ; print_int32 [rax]
+    ;
+    ; prints the given value in rax
+    ; as a digit to stdout
+    push_registers
+    mov rbp, rsp
+
+    ; allocate 16 byte string
+    sub rsp, 16
+    lea rdi, [rbp-16]
+
+    call int32_to_str
+
+    lea rax, [rbp-16]
+    print_c_str rax
+
+    mov rsp, rbp
+    pop_registers
+    ret
+
