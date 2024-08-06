@@ -43,6 +43,23 @@
     mov rsp, rbp
 %endmacro
 
+; %macro printdf 2
+;     ; printdf [format str] [int]
+;     push_registers_keep_rax
+; 
+;     ; rax = is null terminated format str
+;     str_to_stack %1
+; 
+;     mov rcx, 0
+; .printf_fmt_char_loop:
+;     mov r9b, byte [rax+rcx]
+;     inc rcx
+;     cmp rcx, 0
+;     jne .printf_fmt_char_loop
+; 
+;     pop_registers_keep_rax
+; %endmacro
+
 ; print_label [string]
 ; string has a have a matching l_string length definition
 %macro print_label 1
