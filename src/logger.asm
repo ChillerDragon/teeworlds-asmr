@@ -418,8 +418,32 @@ println_uint32:
     ; has a sub label toascii_digit
     ; and prints the given value in rax
     ; as a digit to stdout
+    push_registers
+    mov rbp, rsp
+
+    ; allocate 16 byte string
+    sub rsp, 16
+    lea rdi, [rbp-16]
+
+    call uint32_to_str
+
+    lea rax, [rbp-16]
+    print_c_str rax
+
+    mov rsp, rbp
+    pop_registers
+    ret
+
+uint32_to_str:
+    ; uint32_to_str [rax] [rdi]
+    ;  rax = integer
+    ;  rdi = output buffer
+    ;
     ; https://stackoverflow.com/a/46301894/6287070
     push_registers
+
+    ; r12 = output buffer
+    mov r12, rdi
 
     mov rcx, 0xa ; base 10
     push rcx ; ASCII newline '\n' = 0xa = base
@@ -427,7 +451,7 @@ println_uint32:
     sub rsp, 16 ; not needed on 64-bit Linux, the red-zone is big enough.  Change the LEA below if you remove this.
 
 ;;; rsi is pointing at '\n' on the stack, with 16B of "allocated" space below that.
-.println_uint32_toascii_digit:                ; do {
+.uint32_to_str_toascii_digit:                ; do {
     xor rdx, rdx
     div rcx ; edx=remainder = low digit = 0..9.  eax/=10
                                  ;; DIV IS SLOW.  use a multiplicative inverse if performance is relevant.
@@ -436,16 +460,17 @@ println_uint32:
     mov [rsi], dl
 
     test rax,rax ; } while(x);
-    jnz  .println_uint32_toascii_digit
+    jnz  .uint32_to_str_toascii_digit
 ;;; rsi points to the first digit
 
-
-    mov rax, SYS_WRITE
-    mov rdi, STDOUT
-    ; pointer already in RSI    ; buf = last digit stored = most significant
-    lea rdx, [rsp+16 + 1]    ; yes, it's safe to truncate pointers before subtracting to find length.
-    sub rdx, rsi             ; RDX = length = end-start, including the \n
-    syscall                     ; write(1, string /*RSI*/,  digits + 1)
+    ; rax = destination buffer pointer
+    mov rax, r12
+    ; rdi = source buffer pointer
+    mov rdi, rsi
+    ; rsi = truncation len (max size)
+    lea r9, [rsp+16+1]
+    sub r9, rsi
+    call str_copy
 
     add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
 
