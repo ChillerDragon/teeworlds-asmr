@@ -1,3 +1,48 @@
+%macro str_to_stack 1
+    ; str_to_stack [fixed str]
+    ; returns into rax a pointer to the stack
+    ; containing the string
+    ; it will also add a null byte in the end
+    ;
+    ; you have to free the stack value manually
+    ; by doing
+    ;
+    ;  mov rsp, rbp
+    ;
+    %strlen _fmt_len %1
+    mov rbp, rsp
+    sub rsp, _fmt_len
+    sub rsp, 1 ; nullbyte
+
+    %assign letter_index 0
+    %rep _fmt_len
+
+    %assign letter_index letter_index+1
+
+    %substr letter %1, letter_index, 1
+    mov byte [rbp-((_fmt_len+2)-letter_index)], letter
+    %endrep
+
+    mov byte [rbp-1], 0
+
+    lea rax, [rbp-(_fmt_len+1)]
+%endmacro
+
+%macro stack_printer 1
+    ; stack_printer [fixed str]
+    ;
+    ; moves a string onto the stack
+    ; and then prints it
+    ;
+    ; example:
+    ;
+    ;  stack_printer "hello world"
+    ;
+    str_to_stack %1
+    print_c_str rax
+    mov rsp, rbp
+%endmacro
+
 ; print_label [string]
 ; string has a have a matching l_string length definition
 %macro print_label 1
