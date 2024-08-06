@@ -67,7 +67,7 @@ assert_ok:
     push_registers
 
     ; verbose
-    ; print s_assert_ok
+    ; print_label s_assert_ok
 
     ; non verbose
     printn char_dot, 1
@@ -141,10 +141,10 @@ assert_ok:
 %macro assert_eax_eq 1
     cmp eax, %1
     je %%assert_ok
-    print s_assert_error
+    print_label s_assert_error
 
     push rax
-    print s_assert_expected
+    print_label s_assert_expected
     mov dword [assert_expect_buf], %1
     mov rax, assert_expect_buf
     mov rdi, 4
@@ -152,7 +152,7 @@ assert_ok:
     call print_newline
     pop rax
 
-    print s_assert_actual
+    print_label s_assert_actual
     mov [assert_actual_buf], rax
     mov rax, assert_actual_buf
     mov rdi, 4
@@ -171,7 +171,7 @@ assert_ok:
 %macro assert_is_true 0
     je %%assert_ok
 
-    print s_assert_true_error
+    print_label s_assert_true_error
     exit 1
 
     %%assert_ok:
@@ -185,7 +185,7 @@ assert_ok:
 %macro assert_is_false 0
     jne %%assert_ok
 
-    print s_assert_false_error
+    print_label s_assert_false_error
     exit 1
 
     %%assert_ok:
@@ -195,10 +195,10 @@ assert_ok:
 %macro assert_al_eq 1
     cmp al, %1
     je %%assert_ok
-    print s_assert_error
+    print_label s_assert_error
 
     push rax
-    print s_assert_expected
+    print_label s_assert_expected
     mov byte [assert_expect_buf], %1
     mov rax, assert_expect_buf
     mov rdi, 1
@@ -206,7 +206,7 @@ assert_ok:
     call print_newline
     pop rax
 
-    print s_assert_actual
+    print_label s_assert_actual
     mov [assert_actual_buf], al
     mov rax, assert_actual_buf
     mov rdi, 1

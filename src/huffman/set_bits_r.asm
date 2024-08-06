@@ -13,20 +13,20 @@
 _huff_setbits_r_dbg_print_args:
     call print_newline
 
-    print s_huff_set_bits
+    print_label s_huff_set_bits
     call print_ptr
     call print_comma
     call print_space
 
     push rax
-    print s_huff_bits_eq
+    print_label s_huff_bits_eq
     mov rax, rdi
     call print_int32
 
     call print_comma
     call print_space
 
-    print s_huff_depth_eq
+    print_label s_huff_depth_eq
     mov rax, rsi
     call print_uint32
     pop rax
@@ -35,7 +35,7 @@ _huff_setbits_r_dbg_print_args:
 
     call print_newline
 
-    print s_huff_node_colon
+    print_label s_huff_node_colon
     call huff_print_struct_cnode
     call print_newline
     ret

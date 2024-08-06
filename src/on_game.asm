@@ -10,7 +10,7 @@ on_game_message:
     ; message payload
     mov r10, rdi
 
-    print s_got_game_msg_with_id
+    print_label s_got_game_msg_with_id
     call println_uint32
 
     ; payload to rax
@@ -19,7 +19,7 @@ on_game_message:
     cmp r9d, MSG_GAME_SV_MOTD
     je on_game_msg_sv_motd
 
-    print s_unknown_game_msg
+    print_label s_unknown_game_msg
     mov rax, r9
     call println_uint32
     exit 1
@@ -29,7 +29,7 @@ on_game_message_end:
 on_game_msg_sv_motd:
     ; on_game_msg_sv_motd [rax]
     ;  rax = message payload
-    print s_motd
+    print_label s_motd
     print_c_str rax
     call print_newline
     jmp on_game_message_end

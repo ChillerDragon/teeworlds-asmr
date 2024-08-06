@@ -1,6 +1,6 @@
-; print [string]
+; print_label [string]
 ; string has a have a matching l_string length definition
-%macro print 1
+%macro print_label 1
     push_registers
 
     mov rax, SYS_WRITE
@@ -12,6 +12,33 @@
     syscall
 
     pop_registers
+%endmacro
+
+; puts [string constant]
+; see also: print (no newline)
+; example:
+;
+;  puts "hello world"
+;
+%macro puts 1
+    print %1
+    call print_newline
+%endmacro
+
+
+; print [string constant]
+; see also: puts (with newline)
+;
+; example:
+;
+;  puts "hello world"
+;
+%macro print 1
+    section .data
+%%string:
+    db %1,0
+    section .text
+    print_c_str %%string
 %endmacro
 
 ; printn [string] [length]
@@ -51,7 +78,7 @@
     ; dbg_hexdump_reg [register]
     push_registers
 
-    print s_dbg_hexdump_register
+    print_label s_dbg_hexdump_register
     push %1
 
     mov rax, rsp
@@ -66,7 +93,7 @@
 
 %macro dbg_print_reg 1
     push_registers
-    print s_dbg_reg_digit
+    print_label s_dbg_reg_digit
     mov rax, %1
     call println_uint32
     pop_registers

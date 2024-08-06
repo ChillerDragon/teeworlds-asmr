@@ -92,13 +92,13 @@ pack_chunk_header:
     jmp .pack_chunk_header_end
 
 .pack_chunk_header_error_seq:
-    print s_unsupported_seq_size
+    print_label s_unsupported_seq_size
     mov rax, [connection_sequence]
     call println_uint32
     exit 1
 
 .pack_chunk_header_error_size:
-    print s_unsupported_chunk_size
+    print_label s_unsupported_chunk_size
     mov rax, rdi
     call println_uint32
     exit 1

@@ -34,3 +34,6 @@ l_s_supported_ints equ $ - s_supported_ints
 s_print_i db "[logger] i="
 l_s_print_i equ $ - s_print_i
 
+s_logger db "[logger] "
+l_s_logger equ $ - s_logger
+

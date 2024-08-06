@@ -21,7 +21,7 @@ on_system_or_game_messages:
     mov r11, rsi
 
     ; print num chunks
-    print s_got_packet_with_chunks
+    print_label s_got_packet_with_chunks
     mov rax, 0
     mov al, [in_packet_header_num_chunks]
     call println_uint32
@@ -79,15 +79,15 @@ on_system_or_game_messages:
 
 .on_system_or_game_messages_loop_error_end_of_data:
     ; rax is offset
-    print s_parser_bytes_red
+    print_label s_parser_bytes_red
     call println_uint32
 
     ; r10 is payload size
-    print s_received_bytes
+    print_label s_received_bytes
     mov rax, r10
     call println_uint32
 
-    print s_got_end_of_packet_with_chunks_left
+    print_label s_got_end_of_packet_with_chunks_left
     mov rax, 0
     mov byte al, [in_packet_header_num_chunks]
     sub al, bl
@@ -148,7 +148,7 @@ on_packet:
     is_packet_in_flag PACKETFLAG_COMPRESSION
     jne .on_packet_game_or_sys
 
-    print s_got_compressed_packet
+    print_label s_got_compressed_packet
     exit 1
 
 .on_packet_game_or_sys:

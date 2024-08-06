@@ -2,7 +2,7 @@ on_ctrl_msg_token:
     mov rax, [udp_recv_buf + 8]
     mov [peer_token], eax
 
-    print s_got_peer_token
+    print_label s_got_peer_token
     mov rax, peer_token
     mov rdi, 4
     call print_hexdump
@@ -16,7 +16,7 @@ on_ctrl_msg_accept:
     mov rax, [udp_recv_buf + 8]
     mov [peer_token], rax
 
-    print s_got_accept
+    print_label s_got_accept
     call send_msg_info
 
     jmp on_ctrl_message_end
@@ -29,14 +29,14 @@ on_ctrl_msg_close:
     je .on_ctrl_msg_close_no_reason
 
 .on_ctrl_msg_close_reason:
-    print s_got_disconnect_with_reason
+    print_label s_got_disconnect_with_reason
     lea rax, [packet_payload + 1]
     print_c_str rax
     call print_newline
     jmp .on_ctrl_msg_close_end
 
 .on_ctrl_msg_close_no_reason:
-    print s_got_disconnect
+    print_label s_got_disconnect
 
 .on_ctrl_msg_close_end:
     exit 0
@@ -46,7 +46,7 @@ on_ctrl_msg_close:
 on_ctrl_message:
     push_registers ; popped in on_ctrl_message_end
 
-    print s_got_ctrl_msg
+    print_label s_got_ctrl_msg
 
     mov al, [udp_recv_buf + PACKET_HEADER_LEN]
     call println_uint32
@@ -58,7 +58,7 @@ on_ctrl_message:
     cmp al, MSG_CTRL_CLOSE
     je on_ctrl_msg_close
 
-    print s_unknown_ctrl_msg
+    print_label s_unknown_ctrl_msg
     call println_uint32
 
 on_ctrl_message_end:

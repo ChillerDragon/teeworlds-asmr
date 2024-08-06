@@ -31,7 +31,7 @@ push_packet_payload_byte:
     push rax
     push rdi
 
-    print s_current_outgoing_packet_bytes
+    print_label s_current_outgoing_packet_bytes
     mov rax, udp_send_buf
     mov dword edi, [udp_payload_index]
     add edi, PACKET_HEADER_LEN

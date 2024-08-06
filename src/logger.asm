@@ -102,7 +102,7 @@ print_any_int:
     jmp .print_any_int_end
 
 .print_any_int_size_error:
-    print s_supported_ints
+    print_label s_supported_ints
     mov rax, rdi
     call println_int32
     exit 1
@@ -374,7 +374,7 @@ print_space:
     ret
 
 %macro print_i 0
-    print s_print_i
+    print_label s_print_i
     push rax
     mov rax, rcx
     call println_int32
@@ -389,7 +389,7 @@ dbg_println_uint32:
     ; prefixed with a debug string message
     push_registers
 
-    print s_dbg_rax_digit
+    print_label s_dbg_rax_digit
 
     ; pop of rax to pass it on to println_uint32
     pop_registers

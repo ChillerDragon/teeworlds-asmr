@@ -65,12 +65,12 @@ str_comp:
 .str_comp_no_match:
     ; debug print non matching strings:
 
-    ; print s_strings_do_not_match
-    ; print s_string1
+    ; print_label s_strings_do_not_match
+    ; print_label s_string1
     ; print_c_str rax
     ; call print_single_quote
     ; call print_newline
-    ; print s_string2
+    ; print_label s_string2
     ; print_c_str rdi
     ; call print_single_quote
     ; call print_newline

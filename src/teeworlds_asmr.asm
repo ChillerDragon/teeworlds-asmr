@@ -142,14 +142,14 @@ section .text
 %include "src/huffman/huffman.asm"
 
 print_udp:
-    print s_got_udp
+    print_label s_got_udp
     ; hexdump
     mov rax, udp_recv_buf
     mov rdi, [udp_read_len]
     call print_hexdump
     call print_newline
     ; [client]     len: %d
-    print s_len
+    print_label s_len
     mov rax, [udp_read_len]
     call println_uint32
 
@@ -169,7 +169,7 @@ connect:
     ret
 
 pump_network:
-    ; print s_non_blocking_read
+    ; print_label s_non_blocking_read
     call recv_udp
     mov rax, [udp_read_len]
     test rax, rax
@@ -181,13 +181,13 @@ pump_network:
     ret
 
 key_a:
-    print s_you_pressed_a
+    print_label s_you_pressed_a
     call connect
     call pump_network
     jmp keypress_end
 
 key_d:
-    print s_you_pressed_d
+    print_label s_you_pressed_d
     jmp keypress_end
 
 keypresses:
@@ -247,7 +247,7 @@ print_stack_str_sample:
 
 _start:
     ; welcome message
-    print s_menu
+    print_label s_menu
     call print_newline
 
     ; setup state
@@ -259,6 +259,6 @@ _start:
 
 end:
     call sane_console
-    print s_end
+    print_label s_end
     exit 0
 

@@ -64,7 +64,7 @@ send_packet:
 
     ; dbg print
     push rax
-    print s_sending_packet_with_size
+    print_label s_sending_packet_with_size
     mov rax, rdi
     call println_uint32
     pop rax

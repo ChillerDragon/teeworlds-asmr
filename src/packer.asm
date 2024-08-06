@@ -11,7 +11,7 @@
 %macro packer_print_size 0
     push rax
 
-    print s_packer_size
+    print_label s_packer_size
 
     mov eax, [packer_size]
     call println_uint32
