@@ -418,22 +418,8 @@ println_uint32:
     ; has a sub label toascii_digit
     ; and prints the given value in rax
     ; as a digit to stdout
-    push_registers
-    mov rbp, rsp
-
-    ; allocate 16 byte string
-    sub rsp, 16
-    lea rdi, [rbp-16]
-
-    call uint32_to_str
-
-    lea rax, [rbp-16]
-    print_c_str rax
-
+    call print_uint32
     call print_newline
-
-    mov rsp, rbp
-    pop_registers
     ret
 
 uint32_to_str:
@@ -472,7 +458,8 @@ uint32_to_str:
     ; rsi = truncation len (max size)
     lea r9, [rsp+16+1]
     sub r9, rsi
-    dec r9
+    mov rsi, r9
+    dec rsi
     call str_copy
 
     add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
@@ -494,42 +481,22 @@ print_int32:
     ret
 
 print_uint32:
-    ; println_uint32 [rax]
+    ; print_uint32 [rax]
     ;
-    ; has a sub label toascii_digit
-    ; and prints the given value in rax
+    ; prints the given value in rax
     ; as a digit to stdout
-    ; https://stackoverflow.com/a/46301894/6287070
     push_registers
+    mov rbp, rsp
 
-    mov rcx, 0xa ; base 10
-    push rcx ; ASCII newline '\n' = 0xa = base
-    mov rsi, rsp
-    sub rsp, 16 ; not needed on 64-bit Linux, the red-zone is big enough.  Change the LEA below if you remove this.
+    ; allocate 16 byte string
+    sub rsp, 16
+    lea rdi, [rbp-16]
 
-;;; rsi is pointing at '\n' on the stack, with 16B of "allocated" space below that.
-.print_uint32_toascii_digit:                ; do {
-    xor rdx, rdx
-    div rcx ; edx=remainder = low digit = 0..9.  eax/=10
-                                 ;; DIV IS SLOW.  use a multiplicative inverse if performance is relevant.
-    add rdx, '0'
-    dec rsi ; store digits in MSD-first printing order, working backwards from the end of the string
-    mov [rsi], dl
+    call uint32_to_str
 
-    test rax,rax ; } while(x);
-    jnz  .print_uint32_toascii_digit
-;;; rsi points to the first digit
+    lea rax, [rbp-16]
+    print_c_str rax
 
-
-    mov rax, SYS_WRITE
-    mov rdi, STDOUT
-    ; pointer already in RSI    ; buf = last digit stored = most significant
-    lea rdx, [rsp+16]    ; yes, it's safe to truncate pointers before subtracting to find length.
-    sub rdx, rsi             ; RDX = length = end-start, including the \n
-    syscall                     ; write(1, string /*RSI*/,  digits + 1)
-
-    add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
-
+    mov rsp, rbp
     pop_registers
     ret
-
