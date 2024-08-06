@@ -86,13 +86,16 @@
     dec r10
     inc rcx
 
-    mov byte [r11+r10], '6'
-    inc r10
-    mov byte [r11+r10], '6'
-    inc r10
-    mov byte [r11+r10], '6'
-    inc r10
+    push rax
+    push rdi
 
+    mov rax, %2
+    lea rdi, [r11+r10]
+    call int32_to_str
+    add r10, rax
+
+    pop rdi
+    pop rax
 %%printf_fmt_char_loop_check_repeat:
 
     cmp r9b, 0

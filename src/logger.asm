@@ -403,7 +403,12 @@ int32_to_str:
     ; int32_to_str [rax] [rdi]
     ;  rax = signed integer
     ;  rdi = output buffer
+    ; returns into rax the size written
     push rdi
+    push r9
+
+    ; size counter
+    mov r9, 0
 
     cmp rax, 0
     jge .int32_to_str_positive
@@ -411,9 +416,12 @@ int32_to_str:
     mov byte [rdi], '-'
     inc rdi
     neg rax
+    inc r9
 .int32_to_str_positive:
     call uint32_to_str
+    add rax, r9
 
+    pop r9
     pop rdi
     ret
 
@@ -421,9 +429,10 @@ uint32_to_str:
     ; uint32_to_str [rax] [rdi]
     ;  rax = unsigned integer
     ;  rdi = output buffer
+    ; returns into rax the size written
     ;
     ; https://stackoverflow.com/a/46301894/6287070
-    push_registers
+    push_registers_keep_rax
 
     ; r12 = output buffer
     mov r12, rdi
@@ -459,7 +468,8 @@ uint32_to_str:
 
     add rsp, 24                ; (in 32-bit: add esp,20) undo the push and the buffer reservation
 
-    pop_registers
+    mov rax, rsi
+    pop_registers_keep_rax
     ret
 
 println_int32:
