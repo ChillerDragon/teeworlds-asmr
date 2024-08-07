@@ -55,7 +55,7 @@ _huff_bubble_sort:
     mov r10, 0
     mov r10d, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
     ; ppList[i] =
-    lea rsi, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
+    lea rsi, [rax + rbx]
     mov [rbp-28], rsi
 
     ; i+1 frequency
@@ -65,7 +65,7 @@ _huff_bubble_sort:
     mov r11, 0
     mov r11d, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
     ; ppList[i+1] =
-    lea rsi, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
+    lea rsi, [rax + rbx]
     mov [rbp-20], rsi
 
     inc rcx ; i++
