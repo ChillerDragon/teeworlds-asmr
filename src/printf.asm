@@ -1,6 +1,7 @@
 %define MAX_PRINTF_ARGS 2
 
 %macro printf 1-*
+    push_registers
     ; amount of args 1 based
     ; without format string
     ;
@@ -33,6 +34,7 @@
     exit 1
 
     %%okay_many_args:
+    pop_registers
 %endmacro
 
 ; ARGS 1
