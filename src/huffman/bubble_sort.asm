@@ -52,8 +52,9 @@ _huff_bubble_sort:
     ; i frequency
     mov rbx, rcx
     imul rbx, HUFF_CCONSTRUCTION_NODE_SIZE
-    mov r10, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
-    ; ppList[i] = 
+    mov r10, 0
+    mov r10d, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
+    ; ppList[i] =
     lea rsi, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
     mov [rbp-28], rsi
 
@@ -61,13 +62,14 @@ _huff_bubble_sort:
     mov rbx, rcx
     inc rbx
     imul rbx, HUFF_CCONSTRUCTION_NODE_SIZE
-    mov r11, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
+    mov r11, 0
+    mov r11d, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
     ; ppList[i+1] =
     lea rsi, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
     mov [rbp-20], rsi
 
     inc rcx ; i++
-    cmp r10, r11
+    cmp r10d, r11d
     jge ._huff_bubble_sort_for_i_less_size
 
     ; if(ppList[i]->m_Frequency < ppList[i+1]->m_Frequency)
