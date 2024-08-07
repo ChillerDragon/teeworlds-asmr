@@ -95,6 +95,7 @@
     jne %%printf_fmt_char_loop
 
     ; print output buffer
+    dec r10
     printn r11, r10
 
     ; frees stack string
@@ -199,6 +200,7 @@
     jne %%printf_fmt_char_loop
 
     ; print output buffer
+    dec r10
     printn r11, r10
 
     ; frees stack string
