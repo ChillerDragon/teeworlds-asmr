@@ -14,6 +14,8 @@ ITS BARLEY A UDP HELLO WORLD!!!!!!!!!!
 sudo apt install nasm make
 ```
 
+It requires nasm 2.16 or newer.
+
 ## build
 
 ```bash
