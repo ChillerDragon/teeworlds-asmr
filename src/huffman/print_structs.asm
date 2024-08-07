@@ -114,9 +114,9 @@ huff_print_struct_cnode:
     call print_space
 
     call _huff_print_field_symbol
-    mov al, 0
+    mov rax, 0
     mov al, [rsi+HUFF_CNODE_SYMBOL_OFFSET]
-    call print_int32
+    call print_uint32
 
     call print_close_curly
 
