@@ -170,7 +170,7 @@ huff_print_construction_node_pointer:
 huff_print_arr_nodes_left:
     ; print huff_nodes_left
     ; which is an array of pointers to construction nodes
-    print_struct_array huff_nodes_left, huff_print_construction_node_pointer, 8, 8 * HUFFMAN_MAX_SYMBOLS
+    print_struct_array huff_nodes_left, huff_print_construction_node_pointer, 8, HUFFMAN_MAX_SYMBOLS
     ret
 
 huff_print_arr_nodes:
