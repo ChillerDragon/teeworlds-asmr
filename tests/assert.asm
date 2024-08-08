@@ -219,5 +219,31 @@ assert_ok:
     call assert_ok
 %endmacro
 
+%macro assert_str_eq 2
+    ; assert_str_eq [expected] [actual]
+    mov rbp, rsp
+    sub rsp, 16
+    mov qword [rbp-16], %1
+    mov qword [rbp-8], %2
+
+    mov rax, [rbp-16]
+    mov rdi, [rbp-8]
+    call str_comp
+    je %%assert_ok
+
+    print_label s_assert_error
+    print "  expected: '"
+    print_c_str [rbp-16]
+    puts "'"
+    print "    actual: '"
+    print_c_str [rbp-8]
+    puts "'"
+
+    %%assert_ok:
+    call assert_ok
+
+    mov rsp, rbp
+%endmacro
+
 assert_entry:
 

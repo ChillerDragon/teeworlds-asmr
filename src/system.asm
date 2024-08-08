@@ -27,7 +27,7 @@ str_comp:
     ;
     ;  mov rax, str_label_a
     ;  mov rdi, str_label_b
-    ;  str_comp
+    ;  call str_comp
     ;  je strings_match
     ;
     push_registers

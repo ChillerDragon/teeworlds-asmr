@@ -1,6 +1,99 @@
 ; vim: set tabstop=4:softtabstop=4:shiftwidth=4
 ; vim: set expandtab:
 
+ptr_to_str:
+    ; ptr_to_str [rax] [rdi]
+    ;  rax = pointer
+    ;  rdi = output buffer
+    ; returns into rax the size written
+    push_registers
+
+    mov rbp, rsp
+    sub rsp, 18
+
+    ; swap endianness
+    ; to match objdump output
+    bswap rax
+
+    ; r11 ptr to ptr
+    push rax
+    mov r11, rsp
+    ; r12 out buffer
+    mov r12, rdi
+
+    ; 8765 43 21 1
+    ; 1111 11 11 09 87 65 43 21
+    ; 0x11 22 33 44 55 66 77 88
+
+    mov word [rbp-18], '0x'
+
+    mov rax, [r11+0]
+    call hex_to_char
+    mov rax, [hex_str]
+    mov ax, [hex_str]
+    mov word [rbp-16], ax
+
+    mov rax, [r11+1]
+    call hex_to_char
+    mov rax, [hex_str]
+    mov ax, [hex_str]
+    mov word [rbp-14], ax
+
+    mov rax, [r11+2]
+    call hex_to_char
+    mov rax, [hex_str]
+    mov ax, [hex_str]
+    mov word [rbp-12], ax
+
+    mov rax, [r11+3]
+    call hex_to_char
+    mov rax, [hex_str]
+    mov ax, [hex_str]
+    mov word [rbp-10], ax
+
+    mov rax, [r11+4]
+    call hex_to_char
+    mov rax, [hex_str]
+    mov ax, [hex_str]
+    mov word [rbp-8], ax
+
+    mov rax, [r11+5]
+    call hex_to_char
+    mov rax, [hex_str]
+    mov ax, [hex_str]
+    mov word [rbp-6], ax
+
+    mov rax, [r11+6]
+    call hex_to_char
+    mov rax, [hex_str]
+    mov ax, [hex_str]
+    mov word [rbp-4], ax
+
+    mov rax, [r11+7]
+    call hex_to_char
+    mov rax, [hex_str]
+    mov ax, [hex_str]
+    mov word [rbp-2], ax
+
+    ; rax = destination buffer pointer
+    mov rax, r12
+    ; rdi = source buffer pointer
+    lea rdi, [rbp-18]
+    ; rsi = truncation len (max size)
+    mov rsi, 18
+    call str_copy
+
+    ; free pointer to pointer from stack
+    pop rax
+
+    mov rsp, rbp
+
+    pop_registers
+
+    ; return fixed size of 18 characters written
+    mov rax, 18
+    ret
+
 print_0x:
     push rax
     push rbp
