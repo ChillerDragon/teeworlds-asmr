@@ -122,6 +122,18 @@
     pop rax
 %endmacro
 
+%macro dbg_ptr_reg 1
+    ; dbg_ptr_reg [register]
+    push rax
+
+    print "[debug] register ptr="
+    mov rax, %1
+    call print_ptr
+    call print_newline
+
+    pop rax
+%endmacro
+
 %macro dbg_hexdump_reg 1
     ; dbg_hexdump_reg [register]
     push_registers
