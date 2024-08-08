@@ -123,6 +123,56 @@ huff_print_struct_cnode:
     pop_registers
     ret
 
+huff_print_struct_cconstruction_node:
+    ; huff_print_struct_cconstruction_node [rax]
+    ;  rax = pointer to cconstruction_node struct
+    push_registers
+    ; pointer to struct
+    mov rsi, rax
+
+    call print_open_curly
+
+    print "NodeId: "
+    mov rax, 0
+    mov eax, [rsi+HUFF_CCONSTRUCTION_NODE_NODE_ID_OFFSET]
+    call print_int32
+    call print_comma
+    call print_space
+
+    print "Frequency: "
+    mov rax, 0
+    mov eax, [rsi+HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
+    call print_int32
+
+    call print_close_curly
+
+    pop_registers
+    ret
+
+huff_print_construction_node_pointer:
+    ; huff_print_construction_node_pointer [rax]
+    ;  rax = pointer to pointer to construction node
+    push_registers
+
+    ; **ppConstructionNode -> *pConstructionNode
+    mov r8, [rax]
+    mov rax, r8
+
+    print "ptr="
+    call print_ptr
+    print " -> "
+
+    call huff_print_struct_cconstruction_node
+
+    pop_registers
+    ret
+
+huff_print_arr_nodes_left:
+    ; print huff_nodes_left
+    ; which is an array of pointers to construction nodes
+    print_struct_array huff_nodes_left, huff_print_construction_node_pointer, 8, 8 * HUFFMAN_MAX_SYMBOLS
+    ret
+
 huff_print_arr_nodes:
     ; print_struct_array [array buffer] [element_print_callback] [element size] [array size]
     print_struct_array huff_nodes, huff_print_struct_cnode, HUFF_CNODE_SIZE, HUFFMAN_MAX_NODES
