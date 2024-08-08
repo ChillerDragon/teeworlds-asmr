@@ -40,6 +40,31 @@
     pop_registers
 %endmacro
 
+_printf_fill_arg:
+    ; _printf_fill_arg [r7]
+    ;  rsi = print function
+
+    ; overwrite the %d
+    dec r10
+    inc rcx
+
+    push rax
+    push rdi
+
+    mov rbx, r8
+    imul rbx, 8
+
+    inc r8
+
+    mov rax, [printf_arg_1_buf+rbx]
+    lea rdi, [r11+r10]
+    call rsi
+    add r10, rax
+
+    pop rdi
+    pop rax
+    ret
+
 %macro printf_args_2 2
     ; printdf [format str] [num args]
     ;  needs the labels [printf_arg_1_buf] and [printf_arg_2_buf] to be filled
@@ -79,30 +104,23 @@
 %%printf_fmt_char_loop_got_percentage:
     mov r9b, byte [rax+rcx]
     cmp r9b, 'd'
-    jne %%printf_fmt_char_loop_check_repeat
+    je %%printf_fmt_char_loop_got_fmt_d
+    cmp r9b, 'p'
+    je %%printf_fmt_char_loop_got_fmt_p
+
+    puts "error: printf got invalid format character"
+    exit 1
 
 %%printf_fmt_char_loop_got_fmt_d:
+    mov rsi, int32_to_str
+    call _printf_fill_arg
+    jmp %%printf_fmt_char_loop_check_repeat
 
-    ; overwrite the %d
-    dec r10
-    inc rcx
+%%printf_fmt_char_loop_got_fmt_p:
+    mov rsi, ptr_to_str
+    call _printf_fill_arg
+    jmp %%printf_fmt_char_loop_check_repeat
 
-    push rax
-    push rdi
-
-    mov rbx, r8
-    imul rbx, 8
-
-    inc r8
-
-%%printf_fmt_char_loop_got_fmt_d_arg:
-    mov rax, [printf_arg_1_buf+rbx]
-    lea rdi, [r11+r10]
-    call int32_to_str
-    add r10, rax
-
-    pop rdi
-    pop rax
 %%printf_fmt_char_loop_check_repeat:
 
     cmp r9b, 0
@@ -123,6 +141,12 @@
     je %%printf_args_end
 
     puts "error: printf number of args does not match number of args in format string"
+    print "      expected args: "
+    mov rax, %2
+    call println_int32
+    print "           got args: "
+    mov rax, r8
+    call println_int32
     exit 1
 
     %%printf_args_end:

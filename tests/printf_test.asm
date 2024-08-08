@@ -10,4 +10,6 @@ _start:
     mov rcx, 1
     printf "rcx=%d (should be one)", rcx
 
+    printf "rsp=%p (should be ptr)", rsp
+
     exit 0
