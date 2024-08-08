@@ -134,8 +134,8 @@ huff_print_struct_cconstruction_node:
 
     print "NodeId: "
     mov rax, 0
-    mov eax, [rsi+HUFF_CCONSTRUCTION_NODE_NODE_ID_OFFSET]
-    call print_int32
+    mov ax, [rsi+HUFF_CCONSTRUCTION_NODE_NODE_ID_OFFSET]
+    call print_uint32
     call print_comma
     call print_space
 
