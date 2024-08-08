@@ -51,9 +51,14 @@ _huff_bubble_sort:
     ; if(ppList[i]->m_Frequency < ppList[i+1]->m_Frequency)
     ; i frequency
     mov rbx, rcx
-    imul rbx, HUFF_CCONSTRUCTION_NODE_SIZE
+    ; array of pointer offset
+    imul rbx, 8
+    ; ppList[i]
+    ; r8 is pointer to the construction node
+    mov r8, [rax + rbx]
+    ; ppList[i]->m_Frequency
     mov r10, 0
-    mov r10d, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
+    mov r10d, [r8 + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
     ; ppList[i] =
     lea rsi, [rax + rbx]
     mov [rbp-28], rsi
@@ -61,9 +66,14 @@ _huff_bubble_sort:
     ; i+1 frequency
     mov rbx, rcx
     inc rbx
-    imul rbx, HUFF_CCONSTRUCTION_NODE_SIZE
+    ; array of pointer offset
+    imul rbx, 8
+    ; ppList[i+1]
+    ; r8 is pointer to the construction node
+    mov r8, [rax + rbx]
+    ; ppList[i+1]->m_Frequency
     mov r11, 0
-    mov r11d, [rax + rbx + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
+    mov r11d, [r8 + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
     ; ppList[i+1] =
     lea rsi, [rax + rbx]
     mov [rbp-20], rsi
