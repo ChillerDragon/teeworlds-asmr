@@ -1,4 +1,4 @@
-%define MAX_PRINTF_ARGS 2
+%define MAX_PRINTF_ARGS 8
 
 %macro printf 1-*
     push_registers
@@ -12,18 +12,61 @@
 
     %if num_args == 1
         mov qword [printf_arg_1_buf], %{2:2}
-        printf_args_2 %1, 1
+        _printf_args %1, 1
     %elif num_args == 2
         mov qword [printf_arg_1_buf], %{2:2}
         mov qword [printf_arg_2_buf], %{3:3}
-        printf_args_2 %1, 2
+        _printf_args %1, 2
+    %elif num_args == 3
+        mov qword [printf_arg_1_buf], %{2:2}
+        mov qword [printf_arg_2_buf], %{3:3}
+        mov qword [printf_arg_3_buf], %{4:4}
+        _printf_args %1, 3
+    %elif num_args == 4
+        mov qword [printf_arg_1_buf], %{2:2}
+        mov qword [printf_arg_2_buf], %{3:3}
+        mov qword [printf_arg_3_buf], %{4:4}
+        mov qword [printf_arg_4_buf], %{5:5}
+        _printf_args %1, 4
+    %elif num_args == 5
+        mov qword [printf_arg_1_buf], %{2:2}
+        mov qword [printf_arg_2_buf], %{3:3}
+        mov qword [printf_arg_3_buf], %{4:4}
+        mov qword [printf_arg_4_buf], %{5:5}
+        mov qword [printf_arg_5_buf], %{6:6}
+        _printf_args %1, 5
+    %elif num_args == 6
+        mov qword [printf_arg_1_buf], %{2:2}
+        mov qword [printf_arg_2_buf], %{3:3}
+        mov qword [printf_arg_3_buf], %{4:4}
+        mov qword [printf_arg_4_buf], %{5:5}
+        mov qword [printf_arg_5_buf], %{6:6}
+        mov qword [printf_arg_6_buf], %{7:7}
+        _printf_args %1, 6
+    %elif num_args == 7
+        mov qword [printf_arg_1_buf], %{2:2}
+        mov qword [printf_arg_2_buf], %{3:3}
+        mov qword [printf_arg_3_buf], %{4:4}
+        mov qword [printf_arg_4_buf], %{5:5}
+        mov qword [printf_arg_5_buf], %{6:6}
+        mov qword [printf_arg_6_buf], %{7:7}
+        mov qword [printf_arg_7_buf], %{8:8}
+        _printf_args %1, 7
+    %elif num_args == 8
+        mov qword [printf_arg_1_buf], %{2:2}
+        mov qword [printf_arg_2_buf], %{3:3}
+        mov qword [printf_arg_3_buf], %{4:4}
+        mov qword [printf_arg_4_buf], %{5:5}
+        mov qword [printf_arg_5_buf], %{6:6}
+        mov qword [printf_arg_6_buf], %{7:7}
+        mov qword [printf_arg_7_buf], %{8:8}
+        mov qword [printf_arg_8_buf], %{9:9}
+        _printf_args %1, 8
     %else
         jmp %%error_many_args
     %endif
 
     jmp %%okay_many_args
-
-    ; todo: set all 8 ...
 
     %%error_many_args:
 
@@ -65,9 +108,14 @@ _printf_fill_arg:
     pop rax
     ret
 
-%macro printf_args_2 2
-    ; printdf [format str] [num args]
-    ;  needs the labels [printf_arg_1_buf] and [printf_arg_2_buf] to be filled
+%macro _printf_args 2
+    ; _printf_args [format str] [num args]
+    ;  needs the labels
+    ;  [printf_arg_1_buf]
+    ;  [printf_arg_2_buf]
+    ;  ...
+    ;
+    ;  to be filled. The amount depends on num_args.
     push_registers
 
     ; TODO: do not segfault when we write out of those bounds
