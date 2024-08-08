@@ -90,31 +90,16 @@
     push rax
     push rdi
 
+    mov rbx, r8
+    imul rbx, 8
+
     inc r8
 
-    cmp r8, 1
-    je %%printf_fmt_char_loop_got_fmt_d_arg_1
-
-    cmp r8, 2
-    je %%printf_fmt_char_loop_got_fmt_d_arg_2
-
-    puts "printf 2 unsupported amount of args"
-    exit 1
-
-%%printf_fmt_char_loop_got_fmt_d_arg_1:
-    mov rax, [printf_arg_1_buf]
+%%printf_fmt_char_loop_got_fmt_d_arg:
+    mov rax, [printf_arg_1_buf+rbx]
     lea rdi, [r11+r10]
     call int32_to_str
     add r10, rax
-    jmp %%printf_fmt_char_loop_got_fmt_d_arg_end
-
-%%printf_fmt_char_loop_got_fmt_d_arg_2:
-    mov rax, [printf_arg_2_buf]
-    lea rdi, [r11+r10]
-    call int32_to_str
-    add r10, rax
-
-%%printf_fmt_char_loop_got_fmt_d_arg_end:
 
     pop rdi
     pop rax
