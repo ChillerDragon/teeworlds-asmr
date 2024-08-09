@@ -19,10 +19,10 @@ _huff_bubble_sort:
     sub rsp, 28
 
     ; &ppList[i] = nullptr
-    mov dword [rbp-28], 0
+    mov qword [rbp-28], 0
 
     ; &ppList[i+1] = nullptr
-    mov dword [rbp-20], 0
+    mov qword [rbp-20], 0
 
     ; int Changed = 1
     mov dword [rbp-12], 1
@@ -79,26 +79,44 @@ _huff_bubble_sort:
     mov [rbp-20], rsi
 
     inc rcx ; i++
+
     cmp r10d, r11d
     jge ._huff_bubble_sort_for_i_less_size
 
     ; if(ppList[i]->m_Frequency < ppList[i+1]->m_Frequency)
     ; is true
 
+    push rax ; use rax in swap
+
     ; pTemp = ppList[i];
+    ; rsi = &&ppList[i]
     mov rsi, [rbp-28]
+    ; rsi = ppList[i]
+    mov rsi, [rsi]
     mov qword [rbp-8], rsi
 
     ; ppList[i] = ppList[i+1];
+    ; rsi = &ppList[i+1]
     mov rsi, [rbp-20]
-    mov qword [rbp-28], rsi
+    ; rsi = ppList[i+1]
+    mov rsi, [rsi]
+    ; rax = ppList[i]
+    mov rax, qword [rbp-28]
+    mov [rax], rsi
+
+    ; printlnf "rax=%p <- rsi=%p nodes_left_storage=%p nodes_left=%p", rax, rsi, huff_nodes_left_storage, huff_nodes_left
 
     ; ppList[i+1] = pTemp;
+    ; rsi = pTemp
     mov rsi, [rbp-8]
-    mov qword [rbp-20], rsi
+    ; rax = ppList[i+1]
+    mov rax, qword [rbp-20]
+    mov [rax], rsi
 
     ; Changed = 1
     mov dword [rbp-12], 0
+
+    pop rax ; use rax in swap
 
     jmp ._huff_bubble_sort_for_i_less_size
 ._huff_bubble_sort_for_i_less_size_end:
