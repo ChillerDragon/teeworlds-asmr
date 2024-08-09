@@ -119,6 +119,8 @@ _huff_setbits_r:
     push rax
     push rdi
     push rsi
+    push rbp
+    push rsp
 
     mov rbp, rsp
 
@@ -139,6 +141,8 @@ _huff_setbits_r:
 
     mov rsp, rbp
 
+    pop rsp
+    pop rbp
     pop rsi
     pop rdi
     pop rax
