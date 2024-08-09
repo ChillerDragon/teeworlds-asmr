@@ -98,7 +98,8 @@ _huff_construct_tree:
     call _huff_bubble_sort
 
     ; m_aNodes[m_NumNodes].m_NumBits = 0;
-    mov rbx, [rbp-4]
+    mov rbx, 0
+    mov ebx, [huff_num_nodes]
     imul rbx, HUFF_CNODE_SIZE
     mov dword [huff_nodes + rbx + HUFF_CNODE_NUM_BITS_OFFSET], 0
 
