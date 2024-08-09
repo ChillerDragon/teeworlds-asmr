@@ -120,8 +120,8 @@ section .bss
 section .text
 
 %include "src/macros.asm"
-%include "src/printf.asm"
 %include "src/syscalls.asm"
+%include "src/printf.asm"
 %include "src/logger.asm"
 %include "src/hex.asm"
 %include "src/terminal.asm"

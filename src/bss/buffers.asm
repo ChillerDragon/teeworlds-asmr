@@ -9,3 +9,5 @@ printf_arg_6_buf resb 8
 printf_arg_7_buf resb 8
 printf_arg_8_buf resb 8
 
+printf_num_args resb 4
+
