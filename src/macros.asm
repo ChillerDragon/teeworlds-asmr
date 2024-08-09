@@ -69,8 +69,10 @@
 ;  puts "hello world"
 ;
 %macro puts 1
+    %%puts:
     print %1
     call print_newline
+    %%puts_end:
 %endmacro
 
 

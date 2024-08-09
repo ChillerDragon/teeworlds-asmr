@@ -108,6 +108,7 @@
     mov rsp, rbp
 
     pop_registers
+    %%printf_end:
 %endmacro
 
 _printf_fill_arg:
