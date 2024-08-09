@@ -1,5 +1,10 @@
 %define MAX_PRINTF_ARGS 8
 
+%macro printlnf 1-*
+    printf %{1:-1}
+    call print_newline
+%endmacro
+
 %macro printf 1-*
     push_registers
     ; amount of args 1 based
@@ -8,9 +13,12 @@
     ;  printf "foo %s", "bar"         => 1 arg
     ;  printf "foo %d %s", 10, "bar"  => 2 arg
     ;
-    %xdefine num_args %count(%{2:-1})
+    %xdefine num_args %count(%{1:-1})
+    %assign num_args (num_args-1)
 
-    %if num_args == 1
+    %if num_args == 0
+        _printf_args %1, 0
+    %elif num_args == 1
         mov qword [printf_arg_1_buf], %{2:2}
         _printf_args %1, 1
     %elif num_args == 2
@@ -147,7 +155,21 @@ _printf_fill_arg:
     inc r10
 
     cmp r9b, '%'
-    jne %%printf_fmt_char_loop_check_repeat
+    je %%printf_fmt_char_loop_got_percentage
+    cmp r9b, '\'
+    je %%printf_fmt_char_loop_got_backslash
+
+    jmp %%printf_fmt_char_loop_check_repeat
+
+%%printf_fmt_char_loop_got_backslash:
+    ; \n newline
+    mov r9b, byte [rax+rcx]
+    cmp r9b, 'n'
+    dec r10
+    mov byte [r11+r10], 0xa
+    inc r10
+    inc rcx
+    jmp %%printf_fmt_char_loop_check_repeat
 
 %%printf_fmt_char_loop_got_percentage:
     mov r9b, byte [rax+rcx]
@@ -181,9 +203,6 @@ _printf_fill_arg:
     ; frees stack string
     ; and copy buffer
     mov rsp, rbp
-
-    ; TODO: support \n escape sequence
-    call print_newline
 
     cmp r8, %2
     je %%printf_args_end
