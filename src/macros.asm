@@ -292,6 +292,8 @@
     ;
     ; So this macro polyfills it
     ; shift left n bits
+    push_registers
+
     mov rbp, rsp
     sub rsp, 8
 
@@ -321,5 +323,7 @@
     mov %1, [rbp-8]
 
     mov rsp, rbp
+
+    pop_registers
 %endmacro
 
