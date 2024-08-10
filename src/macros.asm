@@ -1,6 +1,6 @@
 %macro check_bounds 4
     ; check_bounds [ptr into array] [array] [element size in bytes] [array size in elements]
-    push rbp
+    push_registers
 
     mov rbp, rsp
     sub rsp, 32
@@ -19,7 +19,7 @@
 
     mov rsp, rbp
 
-    pop rbp
+    pop_registers
 %endmacro check_bounds
 
 %macro str_to_stack 1
