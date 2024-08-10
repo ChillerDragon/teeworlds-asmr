@@ -1,3 +1,27 @@
+%macro check_bounds 4
+    ; check_bounds [ptr into array] [array] [element size in bytes] [array size in elements]
+    push rbp
+
+    mov rbp, rsp
+    sub rsp, 32
+
+
+    mov qword [rbp-32], %1
+    mov qword [rbp-24], %2
+    mov qword [rbp-16], %3
+    mov qword [rbp-8], %4
+
+    mov rax, [rbp-32]
+    mov rdi, [rbp-24]
+    mov rsi, [rbp-16]
+    mov rdx, [rbp-8]
+    call _check_bounds
+
+    mov rsp, rbp
+
+    pop rbp
+%endmacro check_bounds
+
 %macro str_to_stack 1
     ; str_to_stack [fixed str]
     ; returns into rax a pointer to the stack

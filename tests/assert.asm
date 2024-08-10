@@ -47,6 +47,7 @@ section .text
 %include "src/printf.asm"
 %include "src/logger.asm"
 %include "src/hex.asm"
+%include "src/check_bounds.asm"
 %include "src/udp.asm"
 %include "src/packer.asm"
 %include "src/packet.asm"
