@@ -50,13 +50,13 @@ _huff_setbits_r:
     huff_assert_nodes_ptr rax
 
     ; leaf1
-    push rdi
-    push rsi
-
     mov rcx, 0
     mov word cx, [rax + HUFF_CNODE_LEAF_1_OFFSET]
     cmp cx, 0xffff
     je ._huff_setbits_r_no_leaf1_recursion
+
+    push rdi
+    push rsi
 
     ; &m_aNodes[pNode->m_aLeafs[1]]
     mov rbx, rcx
