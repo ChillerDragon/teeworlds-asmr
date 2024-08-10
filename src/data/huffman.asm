@@ -14,14 +14,17 @@ HUFFMAN_LUTMASK equ HUFFMAN_LUTSIZE - 1
 ; 	unsigned short m_aLeafs[2];
 ;
 ; 	unsigned char m_Symbol;
+;
+;	// 2 byte bloated C padding
 ; }
 
 HUFF_CNODE_BITS_OFFSET equ 0
 HUFF_CNODE_NUM_BITS_OFFSET equ 4
 HUFF_CNODE_LEAF_0_OFFSET equ 8
 HUFF_CNODE_LEAF_1_OFFSET equ 10
-HUFF_CNODE_SYMBOL_OFFSET equ 12
-HUFF_CNODE_SIZE equ 13
+HUFF_CNODE_SYMBOL_OFFSET equ 12 ; 1 byte
+; 2 byte padding
+HUFF_CNODE_SIZE equ 16
 
 ; struct CHuffmanConstructNode
 ; {

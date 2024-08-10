@@ -15,6 +15,15 @@ _huff_setbits_r_dbg_print_args:
 
     print_label s_huff_set_bits
     call print_ptr
+
+    push rax
+    push r9
+    mov r9, huff_nodes
+    sub rax, r9
+    printf " (offset=%d) arr=%p ", rax, huff_nodes
+    pop r9
+    pop rax
+
     call print_comma
     call print_space
 
