@@ -19,34 +19,26 @@
     %xdefine num_args %count(%{1:-1})
     %assign num_args (num_args-1)
 
-    ; rax = is null terminated format str
-    str_to_stack %1
-
     %if num_args == 0
         mov dword [printf_num_args], 0
-        call _printf_args
     %elif num_args == 1
         mov qword [printf_arg_1_buf], %{2:2}
         mov dword [printf_num_args], 1
-        call _printf_args
     %elif num_args == 2
         mov qword [printf_arg_1_buf], %{2:2}
         mov qword [printf_arg_2_buf], %{3:3}
         mov dword [printf_num_args], 2
-        call _printf_args
     %elif num_args == 3
         mov qword [printf_arg_1_buf], %{2:2}
         mov qword [printf_arg_2_buf], %{3:3}
         mov qword [printf_arg_3_buf], %{4:4}
         mov dword [printf_num_args], 3
-        call _printf_args
     %elif num_args == 4
         mov qword [printf_arg_1_buf], %{2:2}
         mov qword [printf_arg_2_buf], %{3:3}
         mov qword [printf_arg_3_buf], %{4:4}
         mov qword [printf_arg_4_buf], %{5:5}
         mov dword [printf_num_args], 4
-        call _printf_args
     %elif num_args == 5
         mov qword [printf_arg_1_buf], %{2:2}
         mov qword [printf_arg_2_buf], %{3:3}
@@ -54,7 +46,6 @@
         mov qword [printf_arg_4_buf], %{5:5}
         mov qword [printf_arg_5_buf], %{6:6}
         mov dword [printf_num_args], 5
-        call _printf_args
     %elif num_args == 6
         mov qword [printf_arg_1_buf], %{2:2}
         mov qword [printf_arg_2_buf], %{3:3}
@@ -63,7 +54,6 @@
         mov qword [printf_arg_5_buf], %{6:6}
         mov qword [printf_arg_6_buf], %{7:7}
         mov dword [printf_num_args], 6
-        call _printf_args
     %elif num_args == 7
         mov qword [printf_arg_1_buf], %{2:2}
         mov qword [printf_arg_2_buf], %{3:3}
@@ -73,7 +63,6 @@
         mov qword [printf_arg_6_buf], %{7:7}
         mov qword [printf_arg_7_buf], %{8:8}
         mov dword [printf_num_args], 7
-        call _printf_args
     %elif num_args == 8
         mov qword [printf_arg_1_buf], %{2:2}
         mov qword [printf_arg_2_buf], %{3:3}
@@ -84,7 +73,6 @@
         mov qword [printf_arg_7_buf], %{8:8}
         mov qword [printf_arg_8_buf], %{9:9}
         mov dword [printf_num_args], 8
-        call _printf_args
     %else
         jmp %%error_many_args
     %endif
@@ -103,6 +91,10 @@
     exit 1
 
     %%okay_many_args:
+
+    ; rax = is null terminated format str
+    str_to_stack %1
+    call _printf_args
 
     ; frees stack string
     mov rsp, rbp
