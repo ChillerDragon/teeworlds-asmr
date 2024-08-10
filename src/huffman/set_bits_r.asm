@@ -74,9 +74,9 @@ _huff_setbits_r:
     inc rsi
     call _huff_setbits_r
 
-    pop rax
-    pop rsi
     pop rdi
+    pop rsi
+    pop rax
 
 ._huff_setbits_r_no_leaf1_recursion:
 
