@@ -24,8 +24,27 @@ _check_bounds:
 
 
 ._check_bounds_check_element_align:
+    ; needed to not get floating point exception
+    mov rdx, 0
+
+    ; r8 is amount of bytes pointing into the array
+    mov r8, rax
+    sub r8, rdi
+
+    ; is the offset divisible by element size
+    mov eax, r8d
+    div esi
+
+    ; remainder is edx
+    cmp edx, 0
+    jne ._check_bounds_align_error
 
     jmp ._check_bounds_end
+._check_bounds_align_error:
+    puts  "[error] pointer inside of array but not at the start of an element."
+    printlnf "  element offset: %d", rdx
+    jmp ._check_bounds_error
+
 ._check_bounds_oob_left:
     puts  "[error] array pointer out of bounds. (pointer too low)"
     jmp ._check_bounds_error
