@@ -55,6 +55,7 @@ _huff_setbits_r:
     cmp cx, 0xffff
     je ._huff_setbits_r_no_leaf1_recursion
 
+    push rax
     push rdi
     push rsi
 
@@ -73,15 +74,21 @@ _huff_setbits_r:
     inc rsi
     call _huff_setbits_r
 
+    pop rax
     pop rsi
     pop rdi
 
 ._huff_setbits_r_no_leaf1_recursion:
 
     ; leaf0
+    mov rcx, 0
     mov word cx, [rax + HUFF_CNODE_LEAF_0_OFFSET]
     cmp cx, 0xffff
     je ._huff_setbits_r_no_leaf0_recursion
+
+    push rax
+    push rdi
+    push rsi
 
     ; &m_aNodes[pNode->m_aLeafs[0]]
     mov rbx, rcx
@@ -93,6 +100,10 @@ _huff_setbits_r:
     ; depth + 1
     inc rsi
     call _huff_setbits_r
+
+    pop rsi
+    pop rdi
+    pop rax
 
 ._huff_setbits_r_no_leaf0_recursion:
 
