@@ -320,10 +320,14 @@
     ;
     ; So this macro polyfills it
     ; shift left n bits
-    push_registers
-
+    ;
+    ; DOES NOT WORK WITH rbp AS ARGUMENT
+    ;
+    push rbp
     mov rbp, rsp
     sub rsp, 8
+
+    push_registers
 
     push rcx
     push r12
@@ -338,7 +342,7 @@
     %%shift_left_loop:
         inc rcx
         cmp rcx, r12
-        jge %%shift_left_loop_end
+        jg %%shift_left_loop_end
 
         shl qword [rbp-8], 1
 
@@ -348,10 +352,10 @@
     pop r12
     pop rcx
 
-    mov %1, [rbp-8]
-
-    mov rsp, rbp
-
     pop_registers
+
+    mov %1, [rbp-8]
+    mov rsp, rbp
+    pop rbp
 %endmacro
 
