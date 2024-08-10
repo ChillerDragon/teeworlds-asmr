@@ -47,6 +47,7 @@ _huff_setbits_r:
     ;  rsi = unsigned Depth
     push_registers
     call _huff_setbits_r_dbg_print_args
+    huff_assert_nodes_ptr rax
 
     ; leaf1
     push rdi
