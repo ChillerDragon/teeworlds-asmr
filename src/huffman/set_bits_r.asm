@@ -83,8 +83,8 @@ _huff_setbits_r:
     inc rsi
     call _huff_setbits_r
 
-    pop rdi
     pop rsi
+    pop rdi
     pop rax
 
 ._huff_setbits_r_no_leaf1_recursion:
