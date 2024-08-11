@@ -10,24 +10,7 @@
 ; ; integer with amount of nodes
 ; huff_num_nodes resb 4
 
-; TODO: add assert to check if its called twice
-;       calling construct tree twice is not supported yet
-;       teeworlds calls it from the init method
-;       which first zeros the member variables
-;       we do not zero anything and depend on the bss section
-;       doing the zeroing for us
-;       which means its only zero on the first run
-;       that is also fine because in the client we want to init the tree
-;       on launch once and then use it for the entire runtime
-;       but if this would twice in for example a test it would bug
-_huff_construct_tree:
-    push_registers
-    mov rbp, rsp
-
-    sub rsp, 4
-    ; int NumNodesLeft = HUFFMAN_MAX_SYMBOLS
-    mov dword [rbp-4], HUFFMAN_MAX_SYMBOLS
-
+__huff_construct_tree_add_the_symbols:
     mov rcx, 0
     ; for(int i = 0; i < HUFFMAN_MAX_SYMBOLS; i++)
 ._huff_construct_tree_for_loop:
@@ -80,6 +63,28 @@ _huff_construct_tree:
     inc rcx
     jmp ._huff_construct_tree_for_loop
 ._huff_construct_tree_for_loop_end:
+    ret
+
+; TODO: add assert to check if its called twice
+;       calling construct tree twice is not supported yet
+;       teeworlds calls it from the init method
+;       which first zeros the member variables
+;       we do not zero anything and depend on the bss section
+;       doing the zeroing for us
+;       which means its only zero on the first run
+;       that is also fine because in the client we want to init the tree
+;       on launch once and then use it for the entire runtime
+;       but if this would twice in for example a test it would bug
+_huff_construct_tree:
+    push_registers
+    mov rbp, rsp
+
+    sub rsp, 4
+    ; int NumNodesLeft = HUFFMAN_MAX_SYMBOLS
+    mov dword [rbp-4], HUFFMAN_MAX_SYMBOLS
+
+    ; for(int i = 0; i < HUFFMAN_MAX_SYMBOLS; i++)
+    call __huff_construct_tree_add_the_symbols
 
     ; m_NumNodes = HUFFMAN_MAX_SYMBOLS;
     mov dword [huff_num_nodes], HUFFMAN_MAX_SYMBOLS
