@@ -46,7 +46,7 @@ _huff_bubble_sort:
 ._huff_bubble_sort_for_i_less_size:
     ; i < Size-1
     cmp rcx, r9
-    jge ._huff_bubble_sort_while_changed_end
+    jge ._huff_bubble_sort_for_i_less_size_end
 
     ; if(ppList[i]->m_Frequency < ppList[i+1]->m_Frequency)
     ; i frequency
@@ -89,7 +89,7 @@ _huff_bubble_sort:
     push rax ; use rax in swap
 
     ; pTemp = ppList[i];
-    ; rsi = &&ppList[i]
+    ; rsi = &ppList[i]
     mov rsi, [rbp-28]
     ; rsi = ppList[i]
     mov rsi, [rsi]
@@ -114,7 +114,7 @@ _huff_bubble_sort:
     mov [rax], rsi
 
     ; Changed = 1
-    mov dword [rbp-12], 0
+    mov dword [rbp-12], 1
 
     pop rax ; use rax in swap
 
@@ -122,6 +122,7 @@ _huff_bubble_sort:
 ._huff_bubble_sort_for_i_less_size_end:
     ; Size--
     dec rdi
+    jmp ._huff_bubble_sort_while_changed
 
 
 ._huff_bubble_sort_while_changed_end:
