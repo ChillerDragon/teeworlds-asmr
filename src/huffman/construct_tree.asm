@@ -133,6 +133,7 @@ _huff_construct_tree:
     ; apNodesLeft[NumNodesLeft-2]->m_NodeId = m_NumNodes;
     mov rax, [huff_nodes_left + r9 - (2 * 8)] ; get pointer from array
     add rax, HUFF_CCONSTRUCTION_NODE_NODE_ID_OFFSET ; ->m_NodeId
+    mov rsi, 0
     mov si, [huff_num_nodes]
     mov word [rax], si
 
