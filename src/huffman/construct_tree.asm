@@ -65,16 +65,6 @@ __huff_construct_tree_add_the_symbols:
 ._huff_construct_tree_for_loop_end:
     ret
 
-; TODO: add assert to check if its called twice
-;       calling construct tree twice is not supported yet
-;       teeworlds calls it from the init method
-;       which first zeros the member variables
-;       we do not zero anything and depend on the bss section
-;       doing the zeroing for us
-;       which means its only zero on the first run
-;       that is also fine because in the client we want to init the tree
-;       on launch once and then use it for the entire runtime
-;       but if this would twice in for example a test it would bug
 _huff_construct_tree:
     push_registers
     mov rbp, rsp

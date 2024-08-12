@@ -16,3 +16,5 @@ huff_start_node resb 8
 ; integer with amount of nodes
 huff_num_nodes resb 4
 
+huff_is_initalized resb 1
+
