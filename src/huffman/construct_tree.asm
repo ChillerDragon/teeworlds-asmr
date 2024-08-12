@@ -151,7 +151,7 @@ _huff_construct_tree:
     ; get 4 byte field from struct at dereferenced value
     ; r10d = int m_Frequency
     mov r10, 0
-    mov r10d, [rax + HUFF_CCONSTRUCTION_NODE_NODE_ID_OFFSET]
+    mov r10d, [rax + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
 
     ; r11 = apNodesLeft[NumNodesLeft-2]->m_Frequency
     ;                 NumNodesLeft - 2
@@ -159,7 +159,7 @@ _huff_construct_tree:
     ; get 4 byte field from struct at dereferenced value
     ; r10d = int m_Frequency
     mov r11, 0
-    mov r11d, [rax + HUFF_CCONSTRUCTION_NODE_NODE_ID_OFFSET]
+    mov r11d, [rax + HUFF_CCONSTRUCTION_NODE_FREQUENCY_OFFSET]
 
     ; apNodesLeft[NumNodesLeft-1]->m_Frequency + apNodesLeft[NumNodesLeft-2]->m_Frequency;
     add r10, r11
