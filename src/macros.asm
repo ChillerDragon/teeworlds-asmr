@@ -29,23 +29,25 @@
     pop_registers_keep_rax
 %endmacro
 
-%macro check_bounds 4
-    ; check_bounds [ptr into array] [array] [element size in bytes] [array size in elements]
+%macro check_bounds 5
+    ; check_bounds [ptr into array] [array] [element size in bytes] [array size in elements] [source line number]
     push_registers
 
     mov rbp, rsp
-    sub rsp, 32
+    sub rsp, 40
 
 
-    mov qword [rbp-32], %1
-    mov qword [rbp-24], %2
-    mov qword [rbp-16], %3
-    mov qword [rbp-8], %4
+    mov qword [rbp-40], %1
+    mov qword [rbp-32], %2
+    mov qword [rbp-24], %3
+    mov qword [rbp-16], %4
+    mov qword [rbp-8], %5
 
-    mov rax, [rbp-32]
-    mov rdi, [rbp-24]
-    mov rsi, [rbp-16]
-    mov rdx, [rbp-8]
+    mov rax, [rbp-40]
+    mov rdi, [rbp-32]
+    mov rsi, [rbp-24]
+    mov rdx, [rbp-16]
+    mov r10, [rbp-8]
     call _check_bounds
 
     mov rsp, rbp

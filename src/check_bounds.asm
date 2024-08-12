@@ -1,9 +1,11 @@
 _check_bounds:
-    ; check_bounds [rax] [rdi] [rsi] [rdx]
+    ; check_bounds [rax] [rdi] [rsi] [rdx] [r10] [r8]
     ;  rax = pointer to check
     ;  rdi = array
     ;  rsi = element size (in bytes)
     ;  rdx = array size (in elements)
+    ;  r10 = line number
+    ;  r8 = todo file
     push_registers
 
     ; rcx size of array in bytes
@@ -57,6 +59,7 @@ _check_bounds:
     printlnf "         pointer: %p", rax
     printlnf "     array start: %p", rdi
     printlnf "       array end: %p", rbx
+    printlnf "\nin line %d", r10
     exit 1
 
 ._check_bounds_end:

@@ -19,7 +19,7 @@ _huff_build_decode_lut:
     ; CNode *pNode = m_pStartNode;
     mov rax, [huff_start_node]
     mov qword [rbp-S_NODE], rax
-    huff_assert_nodes_ptr rax
+    huff_assert_nodes_ptr rax, __LINE__
 
     ; rdx = int k
     mov rdx, 0
@@ -37,7 +37,7 @@ _huff_build_decode_lut:
         imul rax, 2
 
         mov rsi, [rbp-S_NODE]
-        huff_assert_nodes_ptr rsi
+        huff_assert_nodes_ptr rsi, __LINE__
 
         ; rbx = pNode->m_aLeafs[Bits&1] (unsigned short)
         mov rbx, 0
@@ -46,7 +46,7 @@ _huff_build_decode_lut:
         ; r9 = &m_aNodes[pNode->m_aLeafs[Bits&1]];
         lea r9, [huff_nodes + rbx]
         mov qword [rbp-S_NODE], r9
-        huff_assert_nodes_ptr r9
+        huff_assert_nodes_ptr r9, __LINE__
 
 
         ; Bits >>= 1;
@@ -61,7 +61,7 @@ _huff_build_decode_lut:
 
         ; if(pNode->m_NumBits)
         mov rsi, [rbp-S_NODE]
-        huff_assert_nodes_ptr rsi
+        huff_assert_nodes_ptr rsi, __LINE__
         mov rax, 0
         mov eax, [rsi+HUFF_CNODE_NUM_BITS_OFFSET]
         cmp eax, 0
@@ -69,7 +69,7 @@ _huff_build_decode_lut:
         ._huff_build_decode_lut_got_num_bits:
             ; m_apDecodeLut[i] = pNode;
             mov rax, [rbp-S_NODE]
-            huff_assert_nodes_ptr rax
+            huff_assert_nodes_ptr rax, __LINE__
             mov rbx, rcx
             imul rbx, 8
             ; rbx = [i] into m_apDecodedLut
