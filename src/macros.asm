@@ -1,3 +1,34 @@
+%macro div32_to_rax 2
+    ; div32_to_rax [divided] / [divisor]
+    ;  stores result in rax and ignores remainder
+    push_registers_keep_rax
+
+    mov rbp, rsp
+    sub rsp, 8
+
+    mov dword [rbp-8], %1
+    mov dword [rbp-4], %2
+
+    ; clear result register
+    mov rax, 0
+
+    ; clear dividend remainder thing
+    mov rdx, 0
+
+    ; dividend
+    mov eax, [rbp-8]
+
+    ; divisor
+    mov ecx, [rbp-4]
+
+    ; writes result to rax
+    div ecx
+
+    mov rsp, rbp
+
+    pop_registers_keep_rax
+%endmacro
+
 %macro check_bounds 4
     ; check_bounds [ptr into array] [array] [element size in bytes] [array size in elements]
     push_registers
