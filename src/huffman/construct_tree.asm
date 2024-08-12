@@ -181,6 +181,7 @@ _huff_construct_tree:
     lea rax, [huff_nodes + ebx]
     ; m_pStartNode = &m_aNodes[m_NumNodes-1];
     mov qword [huff_start_node], rax
+    huff_assert_nodes_ptr rax
 
     ;  rax = *pNode (still set)
     ;  rdi = int Bits
