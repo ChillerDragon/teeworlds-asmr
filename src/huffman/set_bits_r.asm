@@ -55,8 +55,8 @@ _huff_setbits_r:
     ;  rdi = int Bits
     ;  rsi = unsigned Depth
     push_registers
-    call _huff_setbits_r_dbg_print_args
-    huff_assert_nodes_ptr rax
+    ; call _huff_setbits_r_dbg_print_args
+    ; huff_assert_nodes_ptr rax
 
     ; leaf1
     mov rcx, 0

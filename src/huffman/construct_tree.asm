@@ -192,8 +192,6 @@ _huff_construct_tree:
     ; m_pStartNode = &m_aNodes[m_NumNodes-1];
     mov qword [huff_start_node], rax
 
-    exit 0
-
     ;  rax = *pNode (still set)
     ;  rdi = int Bits
     mov rdi, 0
