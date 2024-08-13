@@ -1,3 +1,4 @@
+generic_buffer_128 resb 128
 generic_buffer_512 resb 512
 
 printf_arg_1_buf resb 8
