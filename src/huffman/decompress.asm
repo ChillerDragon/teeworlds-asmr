@@ -1,3 +1,4 @@
+%define S_DST_END 40
 %define S_SRC_END 32
 %define S_BITS 24
 %define S_BITCOUNT 20
@@ -27,8 +28,10 @@ huff_decompress:
     call huff_init
 
     mov rbp, rsp
-    sub rsp, S_SRC_END
+    sub rsp, S_DST_END
 
+    ; unsigned char *pDstEnd = nullptr
+    mov qword [rbp-S_DST_END], 0
     ; unsigned char *pSrcEnd = nullptr
     mov qword [rbp-S_SRC_END], 0
     ; int Bits = 0
@@ -39,6 +42,11 @@ huff_decompress:
     mov qword [rbp-S_EOF], 0
     ; CNode *pNode = nullptr
     mov qword [rbp-S_NODE], 0
+
+    ; pDstEnd = pDst + OutputSize
+    mov r9, rsi
+    add r9, rdx
+    mov qword [rbp-S_DST_END], r9
 
     ; pSrcEnd = pSrc + InputSize
     mov r9, rax
@@ -181,10 +189,30 @@ huff_decompress:
         .huff_decompress_walk_while_end:
     ; } // end of outer if(pNode->m_NumBits) if statament
     .huff_decompress_check_for_eof:
+    mov r8, qword [rbp-S_NODE]
+    mov r9, qword [rbp-S_EOF]
+    cmp r8, r9
+    ; if(pNode == pEof) break
+    je .huff_decompress_outer_while_end
 
+    .huff_decompress_check_output_character:
+    cmp rsi, qword [rbp-S_DST_END]
+    je .huff_decompress_error_output_too_small
+
+    .huff_decompress_write_symbol:
+    ; r8 is still pNode
+    mov r10b, byte [r8 + HUFF_CNODE_SYMBOL_OFFSET]
+    mov byte [rsi], r10b
+    ; pDst++
+    inc rsi
+
+    jmp .huff_decompress_outer_while
 .huff_decompress_outer_while_end:
 
     jmp .huff_decompress_end
+.huff_decompress_error_output_too_small:
+    puts "[error] huffman output buffer too small"
+    exit 1
 .huff_decompress_error_c_no_node:
     puts "[error] huffman got node nullptr in {C} section"
     exit 1
@@ -197,6 +225,7 @@ huff_decompress:
     pop_registers
     ret
 
+%undef S_DST_END
 %undef S_SRC_END
 %undef S_BITS
 %undef S_BITCOUNT
