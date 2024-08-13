@@ -1,3 +1,9 @@
+_check_bounds_print_line_trace:
+    printf "\n\n[error] in "
+    print_c_str r8
+    printlnf ":%d", r10
+    ret
+
 _check_bounds:
     ; check_bounds [rax] [rdi] [rsi] [rdx] [r10] [r8]
     ;  rax = pointer to check
@@ -29,6 +35,8 @@ _check_bounds:
     ; needed to not get floating point exception
     mov rdx, 0
 
+    push r8
+
     ; r8 is amount of bytes pointing into the array
     mov r8, rax
     sub r8, rdi
@@ -37,29 +45,33 @@ _check_bounds:
     mov eax, r8d
     div esi
 
+    pop r8
+
     ; remainder is edx
     cmp edx, 0
     jne ._check_bounds_align_error
 
     jmp ._check_bounds_end
 ._check_bounds_align_error:
-    puts  "[error] pointer inside of array but not at the start of an element."
+    call _check_bounds_print_line_trace
+    puts  "        pointer inside of array but not at the start of an element."
     printlnf "  element offset: %d", rdx
     jmp ._check_bounds_error
 
 ._check_bounds_oob_left:
-    puts  "[error] array pointer out of bounds. (pointer too low)"
+    call _check_bounds_print_line_trace
+    puts  "        array pointer out of bounds. (pointer too low)"
     jmp ._check_bounds_error
 
 ._check_bounds_oob_right:
-    puts  "[error] array pointer out of bounds. (pointer too high)"
+    call _check_bounds_print_line_trace
+    puts  "        array pointer out of bounds. (pointer too high)"
     jmp ._check_bounds_error
 
 ._check_bounds_error:
     printlnf "         pointer: %p", rax
     printlnf "     array start: %p", rdi
-    printlnf "       array end: %p", rbx
-    printlnf "\nin line %d", r10
+    printlnf "       array end: %p\n", rbx
     exit 1
 
 ._check_bounds_end:
