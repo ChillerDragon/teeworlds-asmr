@@ -357,6 +357,34 @@
     ;
     ; DOES NOT WORK WITH rbp AS ARGUMENT
     ;
+    shift_dir %1, %2, shl
+%endmacro
+
+%macro shift_right 2
+    ; shift_right [register] [amount]
+    ;
+    ; I saw with objdump that `shr edx, cl` is possible.
+    ; But nasm refuses to compile it
+    ;
+    ; So this macro polyfills it
+    ; shift rigt n bits
+    ;
+    ; DOES NOT WORK WITH rbp AS ARGUMENT
+    ;
+    shift_dir %1, %2, shr
+%endmacro
+
+%macro shift_dir 3
+    ; shift_left [register] [amount] [shl|shr]
+    ;
+    ; I saw with objdump that `shl edx, cl` is possible.
+    ; But nasm refuses to compile it
+    ;
+    ; So this macro polyfills it
+    ; shift left n bits
+    ;
+    ; DOES NOT WORK WITH rbp AS ARGUMENT
+    ;
     push rbp
     mov rbp, rsp
     sub rsp, 8
@@ -378,7 +406,7 @@
         cmp rcx, r12
         jg %%shift_left_loop_end
 
-        shl qword [rbp-8], 1
+        %3 qword [rbp-8], 1
 
         jmp %%shift_left_loop
     %%shift_left_loop_end:
