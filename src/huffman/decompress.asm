@@ -107,7 +107,17 @@ huff_decompress:
     je .huff_decompress_remove_the_bits_that_the_lut_checked_up_for_us
     .huff_decompress_remove_the_bits_for_that_symbol:
         ; Bits >>= pNode->m_NumBits;
+        mov r9, 0
+        mov r9d, dword [rbp-S_BITS]
+        ; r8 is still num bits
+        shift_right r9, r8
+        mov dword [rbp-S_BITS], r9d
 
+        ; Bitcount -= pNode->m_NumBits;
+        mov r9, 0
+        mov r9d, dword [rbp-S_BITCOUNT]
+        sub r9, r8
+        mov dword [rbp-S_BITCOUNT], r9d
     jmp .huff_decompress_check_for_eof
     ; } else {
     .huff_decompress_remove_the_bits_that_the_lut_checked_up_for_us:
