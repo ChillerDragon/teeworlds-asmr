@@ -121,10 +121,64 @@ huff_decompress:
     jmp .huff_decompress_check_for_eof
     ; } else {
     .huff_decompress_remove_the_bits_that_the_lut_checked_up_for_us:
+        ; Bits >>= HUFFMAN_LUTBITS;
+        mov r9, 0
+        mov r9d, dword [rbp-S_BITS]
+        shift_right r9, HUFFMAN_LUTBITS
+        mov dword [rbp-S_BITS], r9d
 
-    .huff_decompress_walk_while:
-    .huff_decompress_walk_while_end:
+        ; Bitcount -= HUFFMAN_LUTBITS;
+        mov r9, 0
+        mov r9d, dword [rbp-S_BITCOUNT]
+        shift_right r9, HUFFMAN_LUTBITS
+        mov dword [rbp-S_BITCOUNT], r9d
 
+        ; walk the tree bit by bit
+        .huff_decompress_walk_while:
+            ; traverse tree
+	    ; pNode = &m_aNodes[pNode->m_aLeafs[Bits&1]];
+            mov r9, 0
+            mov r9d, dword [rbp-S_BITS]
+            and r9, 1
+            imul r9, 2
+            ; r9 [Bits&1]
+            mov r8, qword [rbp-S_NODE]
+            ; rbx is pNode->m_aLeafs[Bits&1]
+            mov rbx, 0
+            mov bx, [r8 + HUFF_CNODE_LEAF_0_OFFSET + r9]
+            imul rbx, HUFF_CNODE_SIZE
+            ; r8 = &m_aNodes[pNode->m_aLeafs[Bits&1]];
+            mov r8, qword [huff_nodes + rbx]
+            mov qword [rbp-S_NODE], r8
+
+            ; remove bit
+            mov r8, 0
+            mov r8d, dword [rbp-S_BITCOUNT]
+            dec r8
+            mov dword [rbp-S_BITCOUNT], r8d
+
+            mov r8d, dword [rbp-S_BITS]
+            shr r8d, 1
+            mov dword [rbp-S_BITS], r8d
+
+            ; check if we hit a symbol
+            ; r10=pNode and r8=numbits
+            mov r10, qword [rbp-S_NODE]
+            huff_assert_nodes_ptr r10, __LINE__, __FILE__
+            mov r8, 0
+            mov r8d, dword [r10 + HUFF_CNODE_NUM_BITS_OFFSET]
+            cmp r8d, 0
+            je .huff_decompress_hit_no_symbol
+            .huff_decompress_hit_symbol:
+                ; break
+                jmp .huff_decompress_walk_while_end
+            .huff_decompress_hit_no_symbol:
+
+            ; no more bits, decoding error
+            cmp dword [rbp-S_BITCOUNT], 0
+            je .huff_decompress_error_no_more_bits
+            jmp .huff_decompress_walk_while
+        .huff_decompress_walk_while_end:
     ; } // end of outer if(pNode->m_NumBits) if statament
     .huff_decompress_check_for_eof:
 
@@ -133,6 +187,9 @@ huff_decompress:
     jmp .huff_decompress_end
 .huff_decompress_error_c_no_node:
     puts "[error] huffman got node nullptr in {C} section"
+    exit 1
+.huff_decompress_error_no_more_bits:
+    puts "[error] huffman no more bits"
     exit 1
 .huff_decompress_end:
     mov rsp, rbp
