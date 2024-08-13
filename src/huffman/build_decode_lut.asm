@@ -1,12 +1,11 @@
-%define S_BITS 0
+%define S_BITS 12
 %define S_NODE 4
-%define S_SIZE 12
 
 _huff_build_decode_lut:
     push_registers
 
     mov rbp, rsp
-    sub rsp, S_SIZE
+    sub rsp, S_BITS
     mov dword [rbp-S_BITS], 0
     mov qword [rbp-S_NODE], 0
 
@@ -19,7 +18,6 @@ _huff_build_decode_lut:
     ; CNode *pNode = m_pStartNode;
     mov rax, [huff_start_node]
     mov qword [rbp-S_NODE], rax
-    huff_assert_nodes_ptr rax, __LINE__, __FILE__
 
     ; rdx = int k
     mov rdx, 0
@@ -37,7 +35,6 @@ _huff_build_decode_lut:
         imul rax, 2
 
         mov rsi, [rbp-S_NODE]
-        huff_assert_nodes_ptr rsi, __LINE__, __FILE__
 
         ; rbx = pNode->m_aLeafs[Bits&1] (unsigned short)
         mov rbx, 0
@@ -46,7 +43,6 @@ _huff_build_decode_lut:
         ; r9 = &m_aNodes[pNode->m_aLeafs[Bits&1]];
         lea r9, [huff_nodes + rbx]
         mov qword [rbp-S_NODE], r9
-        huff_assert_nodes_ptr r9, __LINE__, __FILE__
 
 
         ; Bits >>= 1;
@@ -61,7 +57,6 @@ _huff_build_decode_lut:
 
         ; if(pNode->m_NumBits)
         mov rsi, [rbp-S_NODE]
-        huff_assert_nodes_ptr rsi, __LINE__, __FILE__
         mov rax, 0
         mov eax, [rsi+HUFF_CNODE_NUM_BITS_OFFSET]
         cmp eax, 0
@@ -69,7 +64,6 @@ _huff_build_decode_lut:
         ._huff_build_decode_lut_got_num_bits:
             ; m_apDecodeLut[i] = pNode;
             mov rax, [rbp-S_NODE]
-            huff_assert_nodes_ptr rax, __LINE__, __FILE__
             mov rbx, rcx
             imul rbx, 8
             ; rbx = [i] into m_apDecodedLut
@@ -105,5 +99,4 @@ _huff_build_decode_lut:
 
 %undef S_BITS
 %undef S_NODE
-%undef S_SIZE
 
