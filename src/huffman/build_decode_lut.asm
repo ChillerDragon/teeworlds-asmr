@@ -38,7 +38,8 @@ _huff_build_decode_lut:
 
         ; rbx = pNode->m_aLeafs[Bits&1] (unsigned short)
         mov rbx, 0
-        mov bx, [rsi + rax]
+        mov bx, [rsi + HUFF_CNODE_LEAF_0_OFFSET + rax]
+        imul rbx, HUFF_CNODE_SIZE
 
         ; r9 = &m_aNodes[pNode->m_aLeafs[Bits&1]];
         lea r9, [huff_nodes + rbx]
