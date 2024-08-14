@@ -81,7 +81,7 @@ huff_decompress:
     mov r9, 0
     mov r9b, byte [rax]
     mov r8, 0
-    mov r9d, dword [rbp-S_BITCOUNT]
+    mov r8d, dword [rbp-S_BITCOUNT]
     shift_left r9, r8
     ; r9 = (*pSrc++) << Bitcount;
     mov r8, 0
