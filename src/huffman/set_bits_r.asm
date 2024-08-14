@@ -76,7 +76,7 @@ _huff_setbits_r:
     ; bits | (1<<Depth)
     mov r9, 1
     shift_left r9, rsi
-    xor rdi, r9
+    or rdi, r9
     shl edx, cl
 
     ; depth + 1
