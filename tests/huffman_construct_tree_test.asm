@@ -15,15 +15,15 @@ _test_call_huff_construct_tree_assert_node_0:
     ; call huff_print_struct_cnode
 
     mov eax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    ; assert_eax_eq 1
+    assert_eax_eq 1
     mov eax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    ; assert_eax_eq 1
+    assert_eax_eq 1
     movzx rax, word [rsi + HUFF_CNODE_LEAF_0_OFFSET]
     assert_eax_eq 65535
     movzx rax, word [rsi + HUFF_CNODE_LEAF_1_OFFSET]
     assert_eax_eq 65535
     movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    ; assert_eax_eq 0
+    assert_eax_eq 0
 
 _test_call_huff_construct_tree_assert_node_1:
     lea rsi, [huff_nodes + (HUFF_CNODE_SIZE * 1)]

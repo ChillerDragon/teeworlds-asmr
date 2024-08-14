@@ -118,7 +118,8 @@ _huff_setbits_r:
 
     ; num bits
     mov dword ecx, [rax + HUFF_CNODE_LEAF_0_OFFSET]
-    je ._huff_setbits_r_got_num_bits
+    cmp ecx, 0
+    jne ._huff_setbits_r_got_num_bits
     jmp ._huff_setbits_r_end
 
 ._huff_setbits_r_got_num_bits:
