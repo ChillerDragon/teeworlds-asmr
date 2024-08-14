@@ -117,7 +117,7 @@ _huff_setbits_r:
 ._huff_setbits_r_no_leaf0_recursion:
 
     ; num bits
-    mov dword ecx, [rax + HUFF_CNODE_LEAF_0_OFFSET]
+    mov dword ecx, [rax + HUFF_CNODE_NUM_BITS_OFFSET]
     cmp ecx, 0
     jne ._huff_setbits_r_got_num_bits
     jmp ._huff_setbits_r_end
