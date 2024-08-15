@@ -26,6 +26,10 @@ _test_call_huff_construct_tree_assert_start_node:
     mov rax, qword [huff_start_node]
     huff_assert_nodes_ptr rax, __LINE__, __FILE__
 
+
+    ; 0-19 (beginning of array)
+
+
 _test_call_huff_construct_tree_assert_node_0:
     test_assert_node i, 0, bits, 1, num_bits, 1, leaf0, 65535, leaf1, 65535, symbol, 0
 
@@ -85,6 +89,23 @@ _test_call_huff_construct_tree_assert_node_18:
 
 _test_call_huff_construct_tree_assert_node_19:
     test_assert_node i, 19, bits, 170, num_bits, 9, leaf0, 65535, leaf1, 65535, symbol, 19
+
+
+    ; 255-257 (257 and onwards are different because they are not set in the symbol loop anymore)
+
+
+_test_call_huff_construct_tree_assert_node_255:
+    test_assert_node i, 255, bits, 146, num_bits, 8, leaf0, 65535, leaf1, 65535, symbol, 255
+
+_test_call_huff_construct_tree_assert_node_256:
+    test_assert_node i, 256, bits, 7050, num_bits, 15, leaf0, 65535, leaf1, 65535, symbol, 0
+
+_test_call_huff_construct_tree_assert_node_257:
+    test_assert_node i, 257, bits, 0, num_bits, 0, leaf0, 256, leaf1, 119, symbol, 0
+
+
+    ; 510-513 (last nodes in array)
+
 
 _test_call_huff_construct_tree_assert_node_510:
     lea rsi, [huff_nodes + (HUFF_CNODE_SIZE * 510)]
