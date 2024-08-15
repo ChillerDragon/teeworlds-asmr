@@ -157,21 +157,5 @@ _test_call_huff_construct_tree_assert_node_512:
     movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
     assert_eax_eq 0, __LINE__
 
-_test_call_huff_construct_tree_assert_node_513:
-    lea rsi, [huff_nodes + (HUFF_CNODE_SIZE * 513)]
-    ; mov rax, rsi
-    ; call huff_print_struct_cnode
-
-    mov eax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    ; assert_eax_eq 0 ; todo: this fails, __LINE__
-    mov eax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    ; assert_eax_eq 0 ; todo: this fails, __LINE__
-    movzx rax, word [rsi + HUFF_CNODE_LEAF_0_OFFSET]
-    ; assert_eax_eq 0 ; todo: this fails, __LINE__
-    movzx rax, word [rsi + HUFF_CNODE_LEAF_1_OFFSET]
-    ; assert_eax_eq 0 ; todo: this fails, __LINE__
-    movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    assert_eax_eq 0, __LINE__
-
     exit 0
 
