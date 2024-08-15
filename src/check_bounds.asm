@@ -26,9 +26,8 @@ _check_bounds:
     jl ._check_bounds_oob_left
 
 ._check_bounds_check_oob_right:
-    ; todo: is this jg or jge?
     cmp rax, rbx
-    jg ._check_bounds_oob_right
+    jge ._check_bounds_oob_right
 
 
 ._check_bounds_check_element_align:
