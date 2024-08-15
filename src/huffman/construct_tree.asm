@@ -76,31 +76,6 @@ _huff_construct_tree:
     ; for(int i = 0; i < HUFFMAN_MAX_SYMBOLS; i++)
     call __huff_construct_tree_add_the_symbols
 
-    ; ; 513 is broken
-    ; ; but we just fix it by hand instead of fixing construct tree
-    ; ; seems easier to dance around the bug
-    ; ; https://youtu.be/CgdKYBqe6QA?t=50
-
-    ; push rsi
-    ; push rax
-
-    ; lea rsi, [huff_nodes + (HUFF_CNODE_SIZE * 513)]
-
-    ; lea rax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    ; mov dword [rax], 0
-    ; lea rax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    ; mov dword [rax], 0
-    ; lea rax, [rsi + HUFF_CNODE_LEAF_0_OFFSET]
-    ; mov word [rax], 0
-    ; lea rax, [rsi + HUFF_CNODE_LEAF_1_OFFSET]
-    ; mov word [rax], 0
-    ; lea rax, [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    ; mov byte [rax], 0
-
-    ; pop rax
-    ; pop rsi
-
-
     ; m_NumNodes = HUFFMAN_MAX_SYMBOLS;
     mov dword [huff_num_nodes], HUFFMAN_MAX_SYMBOLS
 
