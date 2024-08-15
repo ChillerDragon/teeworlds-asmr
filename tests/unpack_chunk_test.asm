@@ -14,16 +14,16 @@ test_vital_low_seq_and_size:
 
     mov rax, 0
     mov al, [chunk_header_flags]
-    assert_al_eq 0x40
+    assert_al_eq 0x40, __LINE__
 
     is_rax_flag CHUNKFLAG_VITAL
-    assert_is_true
+    assert_is_true __LINE__
 
     mov eax, [chunk_header_size]
-    assert_al_eq 0x02
+    assert_al_eq 0x02, __LINE__
 
     mov eax, [chunk_header_sequence]
-    assert_al_eq 0x05
+    assert_al_eq 0x05, __LINE__
 
 test_vital_size_3_seq_201:
     assert_input_buf_reset
@@ -36,16 +36,16 @@ test_vital_size_3_seq_201:
 
     mov rax, 0
     mov al, [chunk_header_flags]
-    assert_al_eq 0x40
+    assert_al_eq 0x40, __LINE__
 
     is_rax_flag CHUNKFLAG_VITAL
-    assert_is_true
+    assert_is_true __LINE__
 
     mov eax, [chunk_header_size]
-    assert_al_eq 3
+    assert_al_eq 3, __LINE__
 
     mov eax, [chunk_header_sequence]
-    assert_al_eq 201
+    assert_al_eq 201, __LINE__
 
 test_vital_size_58_seq_1:
     assert_input_buf_reset
@@ -58,16 +58,16 @@ test_vital_size_58_seq_1:
 
     mov rax, 0
     mov al, [chunk_header_flags]
-    assert_al_eq 0x40
+    assert_al_eq 0x40, __LINE__
 
     is_rax_flag CHUNKFLAG_VITAL
-    assert_is_true
+    assert_is_true __LINE__
 
     mov eax, [chunk_header_size]
-    assert_al_eq 58
+    assert_al_eq 58, __LINE__
 
     mov eax, [chunk_header_sequence]
-    assert_al_eq 1
+    assert_al_eq 1, __LINE__
 
 test_vital_maxed_all_set_size_4095_seq_1023:
     assert_input_buf_reset
@@ -80,10 +80,10 @@ test_vital_maxed_all_set_size_4095_seq_1023:
 
     mov rax, 0
     mov al, [chunk_header_flags]
-    assert_al_eq 0xC0
+    assert_al_eq 0xC0, __LINE__
 
     is_rax_flag CHUNKFLAG_VITAL
-    assert_is_true
+    assert_is_true __LINE__
 
     mov eax, [chunk_header_size]
     assert_eax_eq 4095, __LINE__

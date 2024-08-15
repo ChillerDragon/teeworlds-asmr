@@ -212,9 +212,11 @@ assert_ok:
 ; checks if the equal or zero flag is set
 ; do a `cmp` and then call assert_is_true
 ; if they match the assert will pass
-%macro assert_is_true 0
+%macro assert_is_true 1
+    ; assert_is_true [__LINE__]
     je %%assert_ok
 
+    assert_trace %1
     print_label s_assert_true_error
     exit 1
 
@@ -226,9 +228,11 @@ assert_ok:
 ; checks if the equal or zero flag is set
 ; do a `cmp` and then call assert_is_true
 ; if they match the assert will pass
-%macro assert_is_false 0
+%macro assert_is_false 1
+    ; assert_is_false [__LINE__]
     jne %%assert_ok
 
+    assert_trace %1
     print_label s_assert_false_error
     exit 1
 
@@ -236,9 +240,11 @@ assert_ok:
     call assert_ok
 %endmacro
 
-%macro assert_al_eq 1
+%macro assert_al_eq 2
+    ; assert_al_eq [value] [__LINE__]
     cmp al, %1
     je %%assert_ok
+    assert_trace %2
     print_label s_assert_error
 
     push rax

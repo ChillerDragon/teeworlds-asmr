@@ -25,7 +25,7 @@ test_str_copy_aaaabbbb:
 
     ; expect 8 bytes to be copied
     cmp rax, 8
-    assert_is_true
+    assert_is_true __LINE__
 
 .test_str_copy_aaaabbbb_compare_result:
     assert_expect_buf_reset
@@ -42,7 +42,7 @@ test_str_copy_aaaabbbb:
     mov rax, assert_input_buf
     lea rdi, assert_expect_buf
     call str_comp
-    assert_is_true
+    assert_is_true __LINE__
 
 test_str_copy_aaaabbbb_max_len_2:
 .test_str_copy_aaaabbbb_max_len_2_copy:
@@ -66,7 +66,7 @@ test_str_copy_aaaabbbb_max_len_2:
 
     ; expect 2 bytes to be copied
     cmp rax, 2
-    assert_is_true
+    assert_is_true __LINE__
 
 .test_str_copy_aaaabbbb_max_len_2_compare_result:
     assert_expect_buf_reset
@@ -77,7 +77,7 @@ test_str_copy_aaaabbbb_max_len_2:
     mov rax, assert_input_buf
     lea rdi, assert_expect_buf
     call str_comp
-    assert_is_true
+    assert_is_true __LINE__
 
     exit 0
 

@@ -19,11 +19,11 @@ _start:
 
     ; assert flags
     mov al, [in_packet_header_flags]
-    assert_al_eq 0x04
+    assert_al_eq 0x04, __LINE__
 
     ; assert flags
     mov al, [in_packet_header_num_chunks]
-    assert_al_eq 0x02
+    assert_al_eq 0x02, __LINE__
 
     ; assert token
     mov rax, [in_packet_header_token]

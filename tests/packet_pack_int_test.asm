@@ -21,29 +21,29 @@ _start:
     packet_packer_pack_int r9d
 
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 0]
-    assert_al_eq 0x01
+    assert_al_eq 0x01, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 1]
-    assert_al_eq 0x01
+    assert_al_eq 0x01, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 2]
-    assert_al_eq 0x01
+    assert_al_eq 0x01, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 3]
-    assert_al_eq 0x02
+    assert_al_eq 0x02, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 4]
-    assert_al_eq 0x80
+    assert_al_eq 0x80, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 5]
-    assert_al_eq 0x01
+    assert_al_eq 0x01, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 6]
-    assert_al_eq 0x40
+    assert_al_eq 0x40, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 7]
-    assert_al_eq 0x02
+    assert_al_eq 0x02, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 8]
-    assert_al_eq 0x00
+    assert_al_eq 0x00, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 9]
-    assert_al_eq 0x01
+    assert_al_eq 0x01, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 10]
-    assert_al_eq 0x09
+    assert_al_eq 0x09, __LINE__
     mov byte al, [udp_send_buf + PACKET_HEADER_LEN + 11]
-    assert_al_eq 0x02
+    assert_al_eq 0x02, __LINE__
 
     exit 0
 

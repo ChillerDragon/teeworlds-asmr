@@ -19,7 +19,7 @@ test_str_comp_aaa_eq:
     mov rax, assert_input_buf
     lea rdi, [assert_input_buf + 4]
     call str_comp
-    assert_is_true
+    assert_is_true __LINE__
 
 test_str_comp_aaa_neq:
     ; prepare
@@ -37,7 +37,7 @@ test_str_comp_aaa_neq:
     mov rax, assert_input_buf
     lea rdi, [assert_input_buf + 4]
     call str_comp
-    assert_is_false
+    assert_is_false __LINE__
 
 test_str_comp_different_length:
     ; prepare
@@ -56,7 +56,7 @@ test_str_comp_different_length:
     mov rax, assert_input_buf
     lea rdi, [assert_input_buf + 4]
     call str_comp
-    assert_is_false
+    assert_is_false __LINE__
 
 test_str_comp_different_casing:
     ; prepare
@@ -74,7 +74,7 @@ test_str_comp_different_casing:
     mov rax, assert_input_buf
     lea rdi, [assert_input_buf + 4]
     call str_comp
-    assert_is_false
+    assert_is_false __LINE__
 
     exit 0
 

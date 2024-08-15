@@ -8,19 +8,19 @@ test__pack_int_single_positive:
     mov rdi, assert_input_buf
     call _pack_int
     mov al, [assert_input_buf]
-    assert_al_eq 9
+    assert_al_eq 9, __LINE__
 
     mov rax, 2
     mov rdi, assert_input_buf
     call _pack_int
     mov al, [assert_input_buf]
-    assert_al_eq 2
+    assert_al_eq 2, __LINE__
 
     mov rax, 63
     mov rdi, assert_input_buf
     call _pack_int
     mov al, [assert_input_buf]
-    assert_al_eq 63
+    assert_al_eq 63, __LINE__
 
 test__pack_int_single_positive_offset_1:
     mov rax, 9
@@ -62,13 +62,13 @@ test__pack_int_single_negative:
     mov rdi, assert_input_buf
     call _pack_int
     mov al, [assert_input_buf]
-    assert_al_eq 0x40
+    assert_al_eq 0x40, __LINE__
 
     mov rax, -2
     mov rdi, assert_input_buf
     call _pack_int
     mov al, [assert_input_buf]
-    assert_al_eq 0x41
+    assert_al_eq 0x41, __LINE__
 
 test__pack_int_double_negative:
     mov rax, -65

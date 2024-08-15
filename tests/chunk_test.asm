@@ -13,11 +13,11 @@ test_pack_chunk_header:
     call pack_chunk_header
 
     mov al, [assert_actual_buf]
-    assert_al_eq 0x40
+    assert_al_eq 0x40, __LINE__
     mov al, [assert_actual_buf + 1]
-    assert_al_eq 0x06
+    assert_al_eq 0x06, __LINE__
     mov al, [assert_actual_buf + 2]
-    assert_al_eq 0x09
+    assert_al_eq 0x09, __LINE__
 
     ; the chunk header packer should not increment the sequence number
 
@@ -29,7 +29,7 @@ test_pack_chunk_header:
 
 
     mov al, [assert_actual_buf + 2]
-    assert_al_eq 0x09
+    assert_al_eq 0x09, __LINE__
 
 test_pack_queue_chunk:
     packet_packer_reset
@@ -67,11 +67,11 @@ test_pack_queue_chunk:
     ; asserts
 
     mov al, [udp_send_buf + PACKET_HEADER_LEN]
-    assert_al_eq 0x40
+    assert_al_eq 0x40, __LINE__
     mov al, [udp_send_buf + PACKET_HEADER_LEN + 1]
-    assert_al_eq 0x03 ; payload size 2 plus 1 byte message id
+    assert_al_eq 0x03, __LINE__ ; payload size 2 plus 1 byte message id
     mov al, [udp_send_buf + PACKET_HEADER_LEN + 2]
-    assert_al_eq 0x0A
+    assert_al_eq 0x0A, __LINE__
 
     ; call again to verify sequence incrementing
     packet_packer_reset
@@ -86,7 +86,7 @@ test_pack_queue_chunk:
 
     ; asserts
     mov al, [udp_send_buf + PACKET_HEADER_LEN + 2]
-    assert_al_eq 0x0B
+    assert_al_eq 0x0B, __LINE__
 
 
     ; call again to verify sequence incrementing even more
@@ -100,6 +100,6 @@ test_pack_queue_chunk:
 
     ; asserts
     mov al, [udp_send_buf + PACKET_HEADER_LEN + 2]
-    assert_al_eq 0x0C
+    assert_al_eq 0x0C, __LINE__
 
     exit 0
