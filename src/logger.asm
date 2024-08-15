@@ -333,6 +333,18 @@ print_newline:
     pop_registers
     ret
 
+print_colon:
+    push_registers
+
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
+    mov rsi, char_colon
+    mov rdx, 1
+    syscall
+
+    pop_registers
+    ret
+
 print_open_curly:
     push_registers
 
