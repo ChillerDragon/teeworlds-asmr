@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 test_1_byte_int_array:
     ; no asserts just checking if we crash or not
 

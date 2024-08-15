@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 test_vital_low_seq_and_size:
     assert_input_buf_reset
     assert_input_buf_push_byte 0x40
@@ -84,9 +86,9 @@ test_vital_maxed_all_set_size_4095_seq_1023:
     assert_is_true
 
     mov eax, [chunk_header_size]
-    assert_eax_eq 4095
+    assert_eax_eq 4095, __LINE__
 
     mov eax, [chunk_header_sequence]
-    assert_eax_eq 1023
+    assert_eax_eq 1023, __LINE__
 
     exit 0

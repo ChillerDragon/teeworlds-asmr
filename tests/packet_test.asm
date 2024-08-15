@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
     ; prepare
     assert_input_buf_reset
     assert_input_buf_push_byte 0x04
@@ -25,7 +27,7 @@ _start:
 
     ; assert token
     mov rax, [in_packet_header_token]
-    assert_eax_eq 0xFFFFFFCC
+    assert_eax_eq 0xFFFFFFCC, __LINE__
 
     exit 0
 

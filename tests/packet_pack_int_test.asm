@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
     packet_packer_reset
     packet_packer_pack_int 01
     packet_packer_pack_int 01

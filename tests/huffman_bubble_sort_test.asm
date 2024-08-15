@@ -18,7 +18,7 @@
     mov r9, 0
     mov r9d, [rbp-4]
 
-    assert_eax_eq r9d
+    assert_eax_eq r9d, __LINE__
 
     mov rsp, rbp
 
@@ -45,7 +45,7 @@
     mov r9, 0
     mov r9d, [rbp-4]
 
-    assert_eax_eq r9d
+    assert_eax_eq r9d, __LINE__
 
     mov rsp, rbp
 
@@ -55,6 +55,7 @@
 %endmacro
 
 _start:
+    init_test __FILE__
     call __huff_construct_tree_add_the_symbols
 
     ;  rax = **ppList

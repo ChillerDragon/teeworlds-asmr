@@ -10,6 +10,8 @@ section .data
     %include "src/data/udp.asm"
     %include "src/data/huffman.asm"
 
+    s_assertion_failed_in db 0x0a, "[assert] assertion failed in "
+    l_s_assertion_failed_in equ $ - s_assertion_failed_in
     s_assert_ok db "[assert] OK", 0x0a
     l_s_assert_ok equ $ - s_assert_ok
     s_assert_error db "[assert] assertion error: rax does not match the expected value", 0x0a
@@ -28,6 +30,11 @@ section .bss
     %include "src/bss/teeworlds.asm"
     %include "src/bss/buffers.asm"
     %include "src/bss/huffman.asm"
+
+    ; holds the path to the current source code file
+    ; of the test as a null terminated C string
+    ; will be used in backtraces
+    assert_test_filename resb 2048
 
     ; used in assert eq macros
     ; but can also be used as argument to user code
@@ -64,6 +71,38 @@ section .text
 %include "src/packet_packer.asm"
 %include "src/pack_int.asm"
 %include "src/huffman/huffman.asm"
+
+%macro init_test 1
+    ; init_test [__FILE__]
+    str_to_stack %1
+    mov rdi, rax
+    mov rax, assert_test_filename
+    mov rsi, 2048
+    call str_copy
+    mov rsp, rbp
+%endmacro
+
+_assert_trace:
+    ; _assert_trace [rax]
+    ;  rax = line number
+    ;
+    ; prints
+    ;
+    ; [assert] assertion failed in file/path/to/test.asm:79
+    ;
+    print_label s_assertion_failed_in
+    print_c_str assert_test_filename
+    call print_colon
+    call println_uint32
+    ret
+
+%macro assert_trace 1
+    ; assert_trace [line number]
+    push rax
+    mov rax, %1
+    call _assert_trace
+    pop rax
+%endmacro
 
 assert_ok:
     push_registers
@@ -135,14 +174,17 @@ assert_ok:
 ; example:
 ;
 ;  mov rax, 0xAABB
-;  assert_eax_eq 0xAABB
+;  assert_eax_eq 0xAABB, __LINE__
 ;
 ;  mox eax, 0
-;  assert_eax_eq 0
+;  assert_eax_eq 0, __LINE__
 ;
-%macro assert_eax_eq 1
+%macro assert_eax_eq 2
+    ; assert_eax_eq [value] [__LINE__]
     cmp eax, %1
     je %%assert_ok
+
+    assert_trace %2
     print_label s_assert_error
 
     push rax

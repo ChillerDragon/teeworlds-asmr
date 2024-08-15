@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
     printlnf "hello %d world", 10
     printf "%d %d foo bar ", 777, -1
     printf "%d, %d, %d;", 1, 2, 3

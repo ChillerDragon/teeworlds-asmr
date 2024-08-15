@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 test_str_comp_aaa_eq:
     ; prepare
     assert_input_buf_reset

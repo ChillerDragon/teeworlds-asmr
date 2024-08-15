@@ -6,18 +6,20 @@
     ; call huff_print_struct_cnode
 
     mov eax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    assert_eax_eq %4
+    assert_eax_eq %4, __LINE__
     mov eax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    assert_eax_eq %6
+    assert_eax_eq %6, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_0_OFFSET]
-    assert_eax_eq %8
+    assert_eax_eq %8, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_1_OFFSET]
-    assert_eax_eq %10
+    assert_eax_eq %10, __LINE__
     movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    assert_eax_eq %12
+    assert_eax_eq %12, __LINE__
 %endmacro
 
 _start:
+    init_test __FILE__
+
 _test_call_huff_construct_tree:
     call print_newline ; todo: remove
     call _huff_construct_tree
@@ -113,15 +115,15 @@ _test_call_huff_construct_tree_assert_node_510:
     ; call huff_print_struct_cnode
 
     mov eax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
     mov eax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_0_OFFSET]
-    assert_eax_eq 507
+    assert_eax_eq 507, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_1_OFFSET]
-    assert_eax_eq 508
+    assert_eax_eq 508, __LINE__
     movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
 
 _test_call_huff_construct_tree_assert_node_511:
     lea rsi, [huff_nodes + (HUFF_CNODE_SIZE * 511)]
@@ -129,15 +131,15 @@ _test_call_huff_construct_tree_assert_node_511:
     ; call huff_print_struct_cnode
 
     mov eax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
     mov eax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_0_OFFSET]
-    assert_eax_eq 509
+    assert_eax_eq 509, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_1_OFFSET]
-    assert_eax_eq 510
+    assert_eax_eq 510, __LINE__
     movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
 
 _test_call_huff_construct_tree_assert_node_512:
     lea rsi, [huff_nodes + (HUFF_CNODE_SIZE * 512)]
@@ -145,15 +147,15 @@ _test_call_huff_construct_tree_assert_node_512:
     ; call huff_print_struct_cnode
 
     mov eax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
     mov eax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_0_OFFSET]
-    assert_eax_eq 511
+    assert_eax_eq 511, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_1_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
     movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
 
 _test_call_huff_construct_tree_assert_node_513:
     lea rsi, [huff_nodes + (HUFF_CNODE_SIZE * 513)]
@@ -161,15 +163,15 @@ _test_call_huff_construct_tree_assert_node_513:
     ; call huff_print_struct_cnode
 
     mov eax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    ; assert_eax_eq 0 ; todo: this fails
+    ; assert_eax_eq 0 ; todo: this fails, __LINE__
     mov eax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    ; assert_eax_eq 0 ; todo: this fails
+    ; assert_eax_eq 0 ; todo: this fails, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_0_OFFSET]
-    ; assert_eax_eq 0 ; todo: this fails
+    ; assert_eax_eq 0 ; todo: this fails, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_1_OFFSET]
-    ; assert_eax_eq 0 ; todo: this fails
+    ; assert_eax_eq 0 ; todo: this fails, __LINE__
     movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
 
     exit 0
 

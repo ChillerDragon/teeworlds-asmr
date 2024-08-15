@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 test__pack_int_single_positive:
     mov rax, 9
     mov rdi, assert_input_buf
@@ -29,20 +31,20 @@ test__pack_int_single_positive_offset_1:
 
     ; expect 1 byte pointer offset returned
     ; when packing number 9
-    assert_eax_eq 1
+    assert_eax_eq 1, __LINE__
 
 test__pack_int_double_positive:
     mov rax, 64
     mov rdi, assert_input_buf
     call _pack_int
     mov eax, [assert_input_buf]
-    assert_eax_eq 0x01_80 ; 0x80 0x81 is the sane people endianness
+    assert_eax_eq 0x01_80, __LINE__ ; 0x80 0x81 is the sane people endianness
 
     mov rax, 65
     mov rdi, assert_input_buf
     call _pack_int
     mov eax, [assert_input_buf]
-    assert_eax_eq 0x01_81 ; 0x81 0x01 is the sane people endianness
+    assert_eax_eq 0x01_81, __LINE__ ; 0x81 0x01 is the sane people endianness
 
 test__pack_int_double_positive_offset_2:
     mov rax, 65
@@ -53,7 +55,7 @@ test__pack_int_double_positive_offset_2:
 
     ; expect 2 byte pointer offset returned
     ; when packing number 65
-    assert_eax_eq 2
+    assert_eax_eq 2, __LINE__
 
 test__pack_int_single_negative:
     mov rax, -1
@@ -73,13 +75,13 @@ test__pack_int_double_negative:
     mov rdi, assert_input_buf
     call _pack_int
     mov eax, [assert_input_buf]
-    assert_eax_eq 0x01_C0; 0xC0 0x01 is the sane people endianness
+    assert_eax_eq 0x01_C0, __LINE__; 0xC0 0x01 is the sane people endianness
 
     mov rax, -66
     mov rdi, assert_input_buf
     call _pack_int
     mov eax, [assert_input_buf]
-    assert_eax_eq 0x01_C1 ; 0xC1 0x01 is the sane people endianness
+    assert_eax_eq 0x01_C1, __LINE__ ; 0xC1 0x01 is the sane people endianness
 
     exit 0
 

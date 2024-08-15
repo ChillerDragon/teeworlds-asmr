@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 test_pack_chunk_header:
     mov dword [connection_sequence], 9
 

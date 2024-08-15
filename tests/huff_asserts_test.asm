@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
     mov rax, huff_nodes
     huff_assert_nodes_ptr rax, __LINE__, __FILE__
 

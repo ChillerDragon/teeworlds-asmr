@@ -11,6 +11,8 @@ test_message_callback:
     ret
 
 _start:
+    init_test __FILE__
+
 test_madeup_chunks_with_one_byte_payload:
     ; prepare
     assert_input_buf_reset
@@ -43,7 +45,8 @@ test_madeup_chunks_with_one_byte_payload:
     mov rsi, test_message_callback
     call on_system_or_game_messages
 
-    mov rax, [assert_counter]
-    assert_eax_eq 2
+    mov rax, 0
+    mov eax, dword [assert_counter]
+    assert_eax_eq 2, __LINE__
 
     exit 0

@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 test_int_to_str:
     mov rax, 10
     mov rdi, assert_actual_buf

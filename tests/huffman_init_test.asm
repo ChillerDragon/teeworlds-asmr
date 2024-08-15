@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 _test_huff_init:
     call print_newline ; todo: remove
     call huff_init
@@ -39,15 +41,15 @@ _test_huff_init_assert_eof_node:
     ; call huff_print_struct_cnode
 
     mov eax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    assert_eax_eq 7050
+    assert_eax_eq 7050, __LINE__
     mov eax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    assert_eax_eq 15
+    assert_eax_eq 15, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_0_OFFSET]
-    assert_eax_eq 65535
+    assert_eax_eq 65535, __LINE__
     movzx rax, word [rsi + HUFF_CNODE_LEAF_1_OFFSET]
-    assert_eax_eq 65535
+    assert_eax_eq 65535, __LINE__
     movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
 
 _test_huff_init_assert_lut_nodes:
 
@@ -57,15 +59,15 @@ _test_huff_init_assert_lut_nodes:
     ; ;  PrintNode(m_apDecodeLut[0]);
     ; mov rsi, [huff_decode_lut + (8 * 0)]
     ; mov eax, [rsi + HUFF_CNODE_BITS_OFFSET]
-    ; assert_eax_eq 0
+    ; assert_eax_eq 0, __LINE__
     ; mov eax, [rsi + HUFF_CNODE_NUM_BITS_OFFSET]
-    ; assert_eax_eq 5
+    ; assert_eax_eq 5, __LINE__
     ; movzx rax, word [rsi + HUFF_CNODE_LEAF_0_OFFSET]
-    ; assert_eax_eq 65535
+    ; assert_eax_eq 65535, __LINE__
     ; movzx rax, word [rsi + HUFF_CNODE_LEAF_1_OFFSET]
-    ; assert_eax_eq 65535
+    ; assert_eax_eq 65535, __LINE__
     ; movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
-    ; assert_eax_eq 128
+    ; assert_eax_eq 128, __LINE__
 
     exit 0
 

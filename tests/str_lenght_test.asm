@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 test_str_length_triple_a:
     ; prepare
     assert_input_buf_reset
@@ -13,7 +15,7 @@ test_str_length_triple_a:
     mov rax, assert_input_buf
     call str_length
 
-    assert_eax_eq 3
+    assert_eax_eq 3, __LINE__
 
 test_str_length_empty:
     ; prepare
@@ -24,5 +26,5 @@ test_str_length_empty:
     mov rax, assert_input_buf
     call str_length
 
-    assert_eax_eq 0
+    assert_eax_eq 0, __LINE__
     exit 0

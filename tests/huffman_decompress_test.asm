@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 _test_huff_decompress_A:
     ; matching huffman-py test case
 

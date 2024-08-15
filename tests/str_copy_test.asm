@@ -1,6 +1,8 @@
 %include "tests/assert.asm"
 
 _start:
+    init_test __FILE__
+
 test_str_copy_aaaabbbb:
 .test_str_copy_aaaabbbb_copy:
     push rbp
