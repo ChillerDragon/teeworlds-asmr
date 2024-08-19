@@ -49,7 +49,7 @@ _huff_build_decode_lut:
         ; Bits >>= 1;
         mov rax, 0
         mov eax, [rbp-S_BITS]
-        inc eax
+        shr eax, 1
         mov [rbp-S_BITS], eax
 
         ; C++ has a null pointer check for 
