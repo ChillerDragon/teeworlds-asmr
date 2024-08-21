@@ -8,7 +8,7 @@
     ;
     ;  packer_reset
     ;  pack_str GAME_NETVERSION
-    ;  pack_str password
+    ;  pack_str cfg_password
     ;  pack_int CLIENT_VERSION
     ;  send_msg MSG_SYSTEM_INFO, CHUNKFLAG_VITAL, CHUNK_SYSTEM
 

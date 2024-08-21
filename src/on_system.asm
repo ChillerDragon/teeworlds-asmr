@@ -45,7 +45,7 @@ on_system_msg_con_ready:
     ; on_system_msg_con_ready [rax]
     ;  rax = message payload
 
-    puts "TODO: got ready"
+    call send_start_info
 
     jmp on_system_message_end
 
