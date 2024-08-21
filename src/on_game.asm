@@ -18,6 +18,8 @@ on_game_message:
 
     cmp r9d, MSG_GAME_SV_MOTD
     je on_game_msg_sv_motd
+    cmp r9d, MSG_GAME_SV_SERVERSETTINGS
+    je on_game_msg_sv_serversettings
 
     print_label s_unknown_game_msg
     mov rax, r9
@@ -33,5 +35,10 @@ on_game_msg_sv_motd:
     print_label s_motd
     print_c_str rax
     call print_newline
+    jmp on_game_message_end
+
+on_game_msg_sv_serversettings:
+    ; on_game_msg_sv_serversettings [rax]
+    ;  rax = message payload
     jmp on_game_message_end
 
