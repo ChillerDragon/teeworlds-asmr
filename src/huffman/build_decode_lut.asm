@@ -1,6 +1,16 @@
 %define S_BITS 12
 %define S_NODE 4
 
+%macro set_decode_lut_at_i_to_p_node 0
+        ; m_apDecodeLut[i] = pNode;
+        mov rax, [rbp-S_NODE]
+        mov rbx, rcx
+        imul rbx, 8
+        ; rbx = [i] into m_apDecodedLut
+        lea rsi, [huff_decode_lut + rbx]
+        mov [rsi], rax
+%endmacro
+
 _huff_build_decode_lut:
     push_registers
 
@@ -64,12 +74,7 @@ _huff_build_decode_lut:
         je ._huff_build_decode_lut_check_for_k_repeat
         ._huff_build_decode_lut_got_num_bits:
             ; m_apDecodeLut[i] = pNode;
-            mov rax, [rbp-S_NODE]
-            mov rbx, rcx
-            imul rbx, 8
-            ; rbx = [i] into m_apDecodedLut
-            lea rsi, [huff_decode_lut + rbx]
-            mov [rsi], rax
+            set_decode_lut_at_i_to_p_node
 
             ; break
             jmp ._huff_build_decode_lut_for_k_end
@@ -84,8 +89,11 @@ _huff_build_decode_lut:
 
     ; if(k == HUFFMAN_LUTBITS)
     cmp rdx, HUFFMAN_LUTBITS
-    je ._huff_build_decode_lut_for_i_end
+    jne ._huff_build_decode_lut_check_for_i_repeat
+    ; m_apDecodeLut[i] = pNode;
+    set_decode_lut_at_i_to_p_node
 
+    ._huff_build_decode_lut_check_for_i_repeat:
     ; i++
     inc rcx
     ; i < HUFFMAN_LUTSIZE
@@ -97,6 +105,8 @@ _huff_build_decode_lut:
 
     pop_registers
     ret
+
+%unmacro set_decode_lut_at_i_to_p_node 0
 
 %undef S_BITS
 %undef S_NODE
