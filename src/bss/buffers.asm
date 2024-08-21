@@ -1,5 +1,6 @@
 generic_buffer_128 resb 128
 generic_buffer_512 resb 512
+generic_buffer_1024 resb 1024
 
 printf_arg_1_buf resb 8
 printf_arg_2_buf resb 8

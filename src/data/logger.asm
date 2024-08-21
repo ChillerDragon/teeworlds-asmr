@@ -29,6 +29,9 @@ l_s_string1 equ $ - s_string1
 s_string2 db              "[system]  string2: '"
 l_s_string2 equ $ - s_string2
 
+s_too_many_shifts db "[error] crash because got too many shifts: "
+l_s_too_many_shifts equ $ - s_too_many_shifts
+
 s_supported_ints db "[logger] supported int sizes are 1, 2, 4 and 8 but got: "
 l_s_supported_ints equ $ - s_supported_ints
 

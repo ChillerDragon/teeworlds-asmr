@@ -374,6 +374,13 @@
     shift_dir %1, %2, shr
 %endmacro
 
+%macro dbg_break 0
+    %%dbg_break:
+    mov rax, 0
+    mov byte [rax], 0xff
+    %%dbg_break_end:
+%endmacro
+
 %macro shift_dir 3
     ; shift_left [register] [amount] [shl|shr]
     ;
@@ -399,6 +406,22 @@
 
     ; amount
     mov r12, %2
+
+    ; crash if we are shifting too many bits
+    ; we do not expect to shift more than 8
+    ; so everything above 100 is for sure not wanted
+    ; so fail fast and hard to make debugging easier
+    ; and avoid getting stuck in long loops because we shift 0xfffffff times
+    cmp r12, 100
+    jl %%amount_ok
+    %%crash_on_purpose_because_shift_amount_is_too_high:
+    print_label s_too_many_shifts
+    push rax
+    mov rax, r12
+    call println_uint32
+    pop rax
+    dbg_break
+    %%amount_ok:
 
     mov rcx, 0
     %%shift_left_loop:
