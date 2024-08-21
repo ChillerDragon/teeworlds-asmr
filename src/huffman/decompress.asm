@@ -143,7 +143,7 @@ huff_decompress:
         ; Bitcount -= HUFFMAN_LUTBITS;
         mov r9, 0
         mov r9d, dword [rbp-S_BITCOUNT]
-        shift_right r9, HUFFMAN_LUTBITS
+        sub r9, HUFFMAN_LUTBITS
         mov dword [rbp-S_BITCOUNT], r9d
 
         ; walk the tree bit by bit

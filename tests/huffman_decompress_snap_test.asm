@@ -211,14 +211,19 @@ _test_huff_decompress_real_traffic:
     mov rsi, generic_buffer_512
     ;  rdx = output size
     mov rdx, 512
-    ; call huff_decompress
+    call huff_decompress
 
-    ; ; expect 200 as decompressed output size
-    ; assert_eax_eq 200, __LINE__
+    ; expect 200 as decompressed output size
+    assert_eax_eq 200, __LINE__
 
-    ; mov rax, 0
-    ; mov al, byte [generic_buffer_512 + 0]
-    ; assert_al_eq 0x40, __LINE__
+    movzx rax, byte [generic_buffer_512 + 0]
+    assert_al_eq 0x40, __LINE__
+
+    movzx rax, byte [generic_buffer_512 + 1]
+    assert_al_eq 0x06, __LINE__
+
+    movzx rax, byte [generic_buffer_512 + 2]
+    assert_al_eq 0x09, __LINE__
 
     exit 0
 
