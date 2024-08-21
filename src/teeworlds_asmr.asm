@@ -88,6 +88,7 @@ section .data
     %include "src/data/syscalls.asm"
     %include "src/data/teeworlds.asm"
     %include "src/data/teeworlds_settings.asm"
+    %include "src/data/teeworlds_state.asm"
     %include "src/data/teeworlds_strings.asm"
     %include "src/data/terminal.asm"
     %include "src/data/logger.asm"
