@@ -156,7 +156,7 @@ huff_decompress:
             mov bx, [r8 + HUFF_CNODE_LEAF_0_OFFSET + r9]
             imul rbx, HUFF_CNODE_SIZE
             ; r8 = &m_aNodes[pNode->m_aLeafs[Bits&1]];
-            mov r8, qword [huff_nodes + rbx]
+            lea r8, qword [huff_nodes + rbx]
             mov qword [rbp-S_NODE], r8
 
             ; remove bit

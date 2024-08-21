@@ -32,11 +32,11 @@ _test_huff_decompress_A:
     mov rsi, generic_buffer_512
     ;  rdx = output size
     mov rdx, 512
-    ; call huff_decompress
+    call huff_decompress
 
     mov rax, 0
     mov al, byte [generic_buffer_512]
-    ; assert_al_eq 'A'
+    assert_al_eq 'A', __LINE__
 
     exit 0
 
