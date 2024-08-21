@@ -19,8 +19,18 @@ socket resb 4
 ; the udp_recv_buf overflows into the packet payload label
 ; this is a hack to be able to access the payload without offsetting
 ; from the udp_recv_buf
+;
+; warning the packet_payload might contain huffman compressed data
+; so only read from this label when it is a control message or you checked
+; the compression flag
+; if the compression flag is set there will be a decompressed payload in
+; the label decompressed_packet_payload
 udp_recv_buf resb 7
-packet_payload resb 1400
+packet_payload resb NET_MAX_PACKETSIZE ; 1400
+
+; only set if the packet is compressed
+; otherwise look at the label packet_payload
+decompressed_packet_payload resb NET_MAX_PAYLOAD ; 1391
 
 packer_buf resb 2048
 packer_size resb 4

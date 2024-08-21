@@ -145,15 +145,25 @@ on_packet:
 
     is_packet_in_flag PACKETFLAG_CONTROL
     je on_ctrl_message
+    mov rax, packet_payload
     is_packet_in_flag PACKETFLAG_COMPRESSION
     jne .on_packet_game_or_sys
 
-    print_label s_got_compressed_packet
-    exit 1
+    ;  rax = input
+    mov rax, packet_payload
+    ;  rdi = input size
+    mov rdi, [udp_read_len]
+    ;  rsi = output
+    mov rsi, decompressed_packet_payload
+    ;  rdx = output size
+    mov rdx, NET_MAX_PAYLOAD
+    call huff_decompress
+
+    mov rax, decompressed_packet_payload
 
 .on_packet_game_or_sys:
-
-    mov rax, packet_payload
+    ; rax is the input buffer
+    ; it is already set to packet_payload or decompressed_packet_payload
     mov rdi, [udp_read_len]
     sub rdi, PACKET_HEADER_LEN
     mov rsi, on_message
