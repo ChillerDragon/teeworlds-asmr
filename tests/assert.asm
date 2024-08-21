@@ -32,6 +32,7 @@ section .bss
     %include "src/bss/teeworlds.asm"
     %include "src/bss/buffers.asm"
     %include "src/bss/huffman.asm"
+    %include "src/bss/unpacker.asm"
 
     ; holds the path to the current source code file
     ; of the test as a null terminated C string
@@ -73,6 +74,7 @@ section .text
 %include "src/on_game.asm"
 %include "src/packet_packer.asm"
 %include "src/pack_int.asm"
+%include "src/unpacker.asm"
 %include "src/huffman/huffman.asm"
 
 %macro init_test 1

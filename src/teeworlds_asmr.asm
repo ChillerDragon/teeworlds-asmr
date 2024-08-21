@@ -119,6 +119,7 @@ section .bss
     %include "src/bss/teeworlds.asm"
     %include "src/bss/buffers.asm"
     %include "src/bss/huffman.asm"
+    %include "src/bss/unpacker.asm"
 section .text
 
 %include "src/macros.asm"
@@ -144,6 +145,7 @@ section .text
 %include "src/on_game.asm"
 %include "src/packet_packer.asm"
 %include "src/pack_int.asm"
+%include "src/unpacker.asm"
 %include "src/huffman/huffman.asm"
 
 print_udp:

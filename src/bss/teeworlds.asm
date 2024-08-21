@@ -34,8 +34,6 @@ decompressed_packet_payload resb NET_MAX_PAYLOAD ; 1391
 
 packer_buf resb 2048
 packer_size resb 4
-unpacker_buf resb 2048
-unpacker_size resb 4
 
 ; NET_MAX_PACKETSIZE 1400
 ; tw codebase also calls recvfrom with it
