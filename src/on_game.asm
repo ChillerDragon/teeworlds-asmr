@@ -24,6 +24,7 @@ on_game_message:
     call println_uint32
     exit 1
 on_game_message_end:
+    pop_registers
     ret
 
 on_game_msg_sv_motd:
