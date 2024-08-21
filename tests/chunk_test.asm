@@ -31,6 +31,63 @@ test_pack_chunk_header:
     mov al, [assert_actual_buf + 2]
     assert_al_eq 0x09, __LINE__
 
+test_pack_chunk_header_big_size:
+    mov dword [connection_sequence], 3
+
+    mov rax, 0
+    set_rax_flag CHUNKFLAG_VITAL
+    mov rdi, 69
+    mov rsi, assert_actual_buf
+    call pack_chunk_header
+
+    mov al, [assert_actual_buf]
+    assert_al_eq 0x41, __LINE__
+    mov al, [assert_actual_buf + 1]
+    assert_al_eq 0x05, __LINE__
+    mov al, [assert_actual_buf + 2]
+    assert_al_eq 0x03, __LINE__
+
+    ; the chunk header packer should not increment the sequence number
+
+    mov rax, 0
+    set_rax_flag CHUNKFLAG_VITAL
+    mov rdi, 69
+    mov rsi, assert_actual_buf
+    call pack_chunk_header
+
+
+    mov al, [assert_actual_buf + 2]
+    assert_al_eq 0x03, __LINE__
+
+test_pack_chunk_header_big_size_and_big_seq:
+    mov dword [connection_sequence], 1023
+
+    mov rax, 0
+    set_rax_flag CHUNKFLAG_VITAL
+    mov rdi, 69
+    mov rsi, assert_actual_buf
+    call pack_chunk_header
+
+    mov al, [assert_actual_buf]
+    assert_al_eq 0x41, __LINE__
+    mov al, [assert_actual_buf + 1]
+    assert_al_eq 0xc5, __LINE__
+    mov al, [assert_actual_buf + 2]
+    assert_al_eq 0xff, __LINE__
+
+    ; the chunk header packer should not increment the sequence number
+
+    mov rax, 0
+    set_rax_flag CHUNKFLAG_VITAL
+    mov rdi, 69
+    mov rsi, assert_actual_buf
+    call pack_chunk_header
+
+
+    mov al, [assert_actual_buf + 2]
+    assert_al_eq 0xff, __LINE__
+
+
 test_pack_queue_chunk:
     packet_packer_reset
 

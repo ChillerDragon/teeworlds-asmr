@@ -17,10 +17,6 @@ s_got_packet_with_chunks db "[client] got packet with chunks: "
 l_s_got_packet_with_chunks equ $ - s_got_packet_with_chunks
 s_unhandled_packet db "[client] UNHANDLED PACKET!!"
 l_s_unhandled_packet equ $ - s_unhandled_packet
-s_unsupported_chunk_size db "[error] chunk sizes higher than 63 are not supported yet. got size: "
-l_s_unsupported_chunk_size equ $ - s_unsupported_chunk_size
-s_unsupported_seq_size db "[error] chunk sequence numbers higher than 255 are not supported yet. got sequence number: "
-l_s_unsupported_seq_size equ $ - s_unsupported_seq_size
 s_got_chunk_header db "[client] got chunk header:", 0x0a
 l_s_got_chunk_header  equ $ - s_got_chunk_header
 s_size db "[client]  size: "

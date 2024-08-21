@@ -51,15 +51,6 @@ pack_chunk_header:
     ;
     push_registers_keep_rax
 
-    cmp rdi, 63
-    jg .pack_chunk_header_error_size
-
-    push rax
-    mov eax, [connection_sequence]
-    cmp eax, 255
-    jg .pack_chunk_header_error_seq
-    pop rax
-
     ; rcx will be used for tmp register holding the return value
     ; in the end it will be written to rax
     ;
@@ -73,35 +64,38 @@ pack_chunk_header:
     ; | 2 bits  | 6 bits  | 2 bits          | 6 bits | 8 bits          |
     ; +---------+---------+-----------------+--------+-----------------+
 
-    ; flags
-    mov [rsi], al
-    ; size (only in the 2nd byte for now)
-    mov [rsi+1], dil
+    ; first byte is 2 bit flags (we xor them in)
+    ; and the remaining 6 bit are the first part of size
+    mov r8, rdi
+    shr r8, 6
+    and r8b, 0b00111111
+    mov byte [rsi], r8b
+    xor byte [rsi], al
+
+    ; second byte is only the size
+    ; the sequence number will also be inserted later if it is vital
+    mov r8, rdi
+    and r8, 0b00111111
+    mov byte [rsi+1], r8b
 
     ; sequence only included if it is a vital chunk
     is_rax_flag CHUNKFLAG_VITAL
     jne .pack_chunk_header_end
 
-    ; sequence (only in the 3rd byte for now)
+    ; patch 2 bits in the second byte
+    ; if sequence is bigger than 8 bit
+    mov r8, 0
+    mov r8d, dword [connection_sequence]
+    shr r8, 2
+    and r8, 0b11000000
+    or byte [rsi+1], r8b
+
+    ; full 8 bit sequence into third byte
     mov byte al, [connection_sequence]
-    mov [rsi+2], al
+    mov byte [rsi+2], al
 
     ; return size for vital chunks
     mov rcx, 3
-
-    jmp .pack_chunk_header_end
-
-.pack_chunk_header_error_seq:
-    print_label s_unsupported_seq_size
-    mov rax, [connection_sequence]
-    call println_uint32
-    exit 1
-
-.pack_chunk_header_error_size:
-    print_label s_unsupported_chunk_size
-    mov rax, rdi
-    call println_uint32
-    exit 1
 
 .pack_chunk_header_end:
     mov rax, rcx
