@@ -1,3 +1,4 @@
+%define S_DST_START 48
 %define S_DST_END 40
 %define S_SRC_END 32
 %define S_BITS 24
@@ -21,15 +22,19 @@ huff_decompress:
     ;  rdi = input size in bytes
     ;  rsi = output
     ;  rdx = output size in bytes
-    push_registers
+    ; returns into rax the decompressed size
+    push_registers_keep_rax
 
     ; init can be called multiple times
     ; and it only does stuff once
     call huff_init
 
     mov rbp, rsp
-    sub rsp, S_DST_END
+    sub rsp, S_DST_START
 
+    ; not in C++ version backup of rsi to compute size
+    ; in the end
+    mov qword [rbp-S_DST_START], rsi
     ; unsigned char *pDstEnd = nullptr
     mov qword [rbp-S_DST_END], 0
     ; unsigned char *pSrcEnd = nullptr
@@ -222,9 +227,14 @@ huff_decompress:
 .huff_decompress_end:
     mov rsp, rbp
 
-    pop_registers
+    mov rax, qword [rbp-S_DST_START]
+    sub rsi, rax
+    mov rax, rsi
+
+    pop_registers_keep_rax
     ret
 
+%undef S_DST_START
 %undef S_DST_END
 %undef S_SRC_END
 %undef S_BITS

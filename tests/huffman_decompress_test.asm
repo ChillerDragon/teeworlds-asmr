@@ -34,6 +34,8 @@ _test_huff_decompress_A:
     mov rdx, 512
     call huff_decompress
 
+    assert_eax_eq 1, __LINE__
+
     mov rax, 0
     mov al, byte [generic_buffer_512]
     assert_al_eq 'A', __LINE__
@@ -71,6 +73,8 @@ _test_huff_decompress_AABB:
     ;  rdx = output size
     mov rdx, 512
     call huff_decompress
+
+    assert_eax_eq 4, __LINE__
 
     mov rax, 0
     mov eax, dword [generic_buffer_512]
