@@ -52,7 +52,7 @@ _huff_build_decode_lut:
         shr eax, 1
         mov [rbp-S_BITS], eax
 
-        ; C++ has a null pointer check for 
+        ; C++ has a null pointer check for
         ; pNode here. While porting to go and python
         ; i realized that is not needed so yolo
 
