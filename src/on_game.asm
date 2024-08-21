@@ -18,6 +18,12 @@ on_game_message:
 
     cmp r9d, MSG_GAME_SV_MOTD
     je on_game_msg_sv_motd
+    cmp r9d, MSG_GAME_SV_TUNEPARAMS
+    je on_game_msg_sv_tuneparams
+    cmp r9d, MSG_GAME_SV_READYTOENTER
+    je on_game_msg_sv_readytoenter
+    cmp r9d, MSG_GAME_SV_VOTECLEAROPTIONS
+    je on_game_msg_sv_voteclearoptions
     cmp r9d, MSG_GAME_SV_SERVERSETTINGS
     je on_game_msg_sv_serversettings
 
@@ -35,6 +41,21 @@ on_game_msg_sv_motd:
     print_label s_motd
     print_c_str rax
     call print_newline
+    jmp on_game_message_end
+
+on_game_msg_sv_tuneparams:
+    ; on_game_msg_sv_tuneparams [rax]
+    ;  rax = message payload
+    jmp on_game_message_end
+
+on_game_msg_sv_readytoenter:
+    ; on_game_msg_sv_readytoenter [rax]
+    ;  rax = message payload
+    jmp on_game_message_end
+
+on_game_msg_sv_voteclearoptions:
+    ; on_game_msg_sv_voteclearoptions [rax]
+    ;  rax = message payload
     jmp on_game_message_end
 
 on_game_msg_sv_serversettings:
