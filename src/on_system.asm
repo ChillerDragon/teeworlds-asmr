@@ -22,6 +22,10 @@ on_system_message:
     je on_system_msg_serverinfo
     cmp r9d, MSG_SYSTEM_CON_READY
     je on_system_msg_con_ready
+    cmp r9d, MSG_SYSTEM_SNAP
+    je on_system_msg_snap
+    cmp r9d, MSG_SYSTEM_SNAPSINGLE
+    je on_system_msg_snapsingle
 
     print_label s_unknown_system_msg
     mov rax, r9
@@ -54,5 +58,15 @@ on_system_msg_con_ready:
 
     call send_start_info
 
+    jmp on_system_message_end
+
+on_system_msg_snap:
+    ; on_system_msg_snap [rax]
+    ;  rax = message payload
+    jmp on_system_message_end
+
+on_system_msg_snapsingle:
+    ; on_system_msg_snapsingle [rax]
+    ;  rax = message payload
     jmp on_system_message_end
 

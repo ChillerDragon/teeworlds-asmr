@@ -26,6 +26,10 @@ on_game_message:
     je on_game_msg_sv_voteclearoptions
     cmp r9d, MSG_GAME_SV_SERVERSETTINGS
     je on_game_msg_sv_serversettings
+    cmp r9d, MSG_GAME_SV_CLIENTINFO
+    je on_game_msg_sv_clientinfo
+    cmp r9d, MSG_GAME_SV_GAMEINFO
+    je on_game_msg_sv_gameinfo
 
     print_label s_unknown_game_msg
     mov rax, r9
@@ -63,6 +67,16 @@ on_game_msg_sv_voteclearoptions:
 
 on_game_msg_sv_serversettings:
     ; on_game_msg_sv_serversettings [rax]
+    ;  rax = message payload
+    jmp on_game_message_end
+
+on_game_msg_sv_clientinfo:
+    ; on_game_msg_sv_clientinfo [rax]
+    ;  rax = message payload
+    jmp on_game_message_end
+
+on_game_msg_sv_gameinfo:
+    ; on_game_msg_sv_gameinfo [rax]
     ;  rax = message payload
     jmp on_game_message_end
 
