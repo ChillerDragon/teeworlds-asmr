@@ -18,6 +18,8 @@ on_system_message:
 
     cmp r9d, MSG_SYSTEM_MAP_CHANGE
     je on_system_msg_map_change
+    cmp r9d, MSG_SYSTEM_CON_READY
+    je on_system_msg_con_ready
 
     print_label s_unknown_system_msg
     mov rax, r9
@@ -38,3 +40,12 @@ on_system_msg_map_change:
     call send_ready
 
     jmp on_system_message_end
+
+on_system_msg_con_ready:
+    ; on_system_msg_con_ready [rax]
+    ;  rax = message payload
+
+    puts "TODO: got ready"
+
+    jmp on_system_message_end
+
