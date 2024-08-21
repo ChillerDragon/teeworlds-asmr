@@ -21,7 +21,6 @@ _start:
     init_test __FILE__
 
 _test_call_huff_construct_tree:
-    call print_newline ; todo: remove
     call _huff_construct_tree
 
 _test_call_huff_construct_tree_assert_start_node:

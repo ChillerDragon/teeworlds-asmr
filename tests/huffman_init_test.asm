@@ -4,7 +4,6 @@ _start:
     init_test __FILE__
 
 _test_huff_init:
-    call print_newline ; todo: remove
     call huff_init
 
 
