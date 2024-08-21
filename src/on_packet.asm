@@ -145,10 +145,10 @@ on_packet:
 
     is_packet_in_flag PACKETFLAG_CONTROL
     je on_ctrl_message
-    mov rax, packet_payload
     is_packet_in_flag PACKETFLAG_COMPRESSION
-    jne .on_packet_game_or_sys
+    jne .on_packet_game_or_sys_not_compressed
 
+.on_packet_game_or_sys_compressed:
     ;  rax = input
     mov rax, packet_payload
     ;  rdi = input size
@@ -159,13 +159,25 @@ on_packet:
     mov rdx, NET_MAX_PAYLOAD
     call huff_decompress
 
+    ; rax is returned size from huffman decompress
+    ; will be used as rdi size arg for on_system_or_game_messages
+    mov rdi, rax
+
+    ; set input buffer arg for on_system_or_game_messages
     mov rax, decompressed_packet_payload
 
-.on_packet_game_or_sys:
-    ; rax is the input buffer
-    ; it is already set to packet_payload or decompressed_packet_payload
+    jmp .on_packet_game_or_sys
+.on_packet_game_or_sys_not_compressed:
+    ; set input arg for on_system_or_game_messages
+    mov rax, packet_payload
+
+    ; set size arg for on_system_or_game_messages
     mov rdi, [udp_read_len]
     sub rdi, PACKET_HEADER_LEN
+
+.on_packet_game_or_sys:
+    ; rax is the input buffer (already set above in if branches)
+    ; rdi is the size (already set above in if branches)
     mov rsi, on_message
     call on_system_or_game_messages
 
