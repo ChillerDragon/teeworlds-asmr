@@ -51,6 +51,9 @@ on_game_msg_sv_tuneparams:
 on_game_msg_sv_readytoenter:
     ; on_game_msg_sv_readytoenter [rax]
     ;  rax = message payload
+
+    call send_msg_enter_game
+
     jmp on_game_message_end
 
 on_game_msg_sv_voteclearoptions:

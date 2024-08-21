@@ -23,3 +23,14 @@ send_msg_info:
     pop_registers
     ret
 
+send_msg_enter_game:
+    push_registers
+
+    packer_reset
+    send_msg MSG_SYSTEM_ENTERGAME, CHUNKFLAG_VITAL, CHUNK_SYSTEM
+
+    call send_packet
+
+    pop_registers
+    ret
+

@@ -18,6 +18,8 @@ on_system_message:
 
     cmp r9d, MSG_SYSTEM_MAP_CHANGE
     je on_system_msg_map_change
+    cmp r9d, MSG_SYSTEM_SERVERINFO
+    je on_system_msg_serverinfo
     cmp r9d, MSG_SYSTEM_CON_READY
     je on_system_msg_con_ready
 
@@ -39,6 +41,11 @@ on_system_msg_map_change:
 
     call send_ready
 
+    jmp on_system_message_end
+
+on_system_msg_serverinfo:
+    ; on_system_msg_serverinfo [rax]
+    ;  rax = message payload
     jmp on_system_message_end
 
 on_system_msg_con_ready:
