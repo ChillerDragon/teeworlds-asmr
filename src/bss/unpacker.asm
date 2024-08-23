@@ -1,4 +1,10 @@
+; total size should never change
 unpacker_size resb 4
-unpacker_index resb 4
-unpacker_data resb 8
+
+; will be incremented
+unpacker_data_ptr resb 8
+
+; should not change and can be used
+; to compute the size that was already consumed
+unpacker_data_start resb 8
 
