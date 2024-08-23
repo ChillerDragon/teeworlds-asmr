@@ -160,6 +160,31 @@ get_int:
 get_string:
     ; get_string
     ; returns into rax a pointer to the string
+    push_registers_keep_rax
+
+    ; return value
+    ; thats all we need
+    ; the string is already null terminated in the memory
+    ; the rest of the code is just to update the packer state
+    mov rax, [unpacker_data_ptr]
+
+    ._get_string_char_loop:
+    mov r9, [unpacker_data_ptr]
+    movzx r8, byte [r9]
+    cmp r8, 0
+    je ._get_string_end
+
+    inc r9
+    mov [unpacker_data_ptr], r9
+    jmp ._get_string_char_loop
+
+    ._get_string_end:
+
+    ; skip null byte
+    inc r9
+    mov [unpacker_data_ptr], r9
+
+    pop_registers_keep_rax
     ret
 
 get_raw:

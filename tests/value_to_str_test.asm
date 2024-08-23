@@ -17,6 +17,7 @@ test_negative_int_to_str0:
 
     str_to_stack "-10"
     assert_str_eq rax, rdi
+    mov rsp, rbp
 test_ptr_to_str:
     mov rax, 0x1122334455667788
     mov rdi, assert_actual_buf
@@ -24,5 +25,6 @@ test_ptr_to_str:
 
     str_to_stack "0x1122334455667788"
     assert_str_eq rax, rdi
+    mov rsp, rbp
     exit 0
 
