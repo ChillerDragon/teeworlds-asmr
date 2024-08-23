@@ -31,8 +31,8 @@ _test_positive_three_byte:
     mov byte [generic_buffer_128 + 2], 0x01
     unpacker_reset generic_buffer_128, 3
 
-    ; call get_int
-    ; assert_eax_eq 16382, __LINE__
+    call get_int
+    assert_eax_eq -16384, __LINE__
 
     exit 0
 
