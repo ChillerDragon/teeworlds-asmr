@@ -81,6 +81,7 @@ get_int:
     movzx r8, byte [r9]
     and r8, 0x7f
     shl r8, 6
+    or rax, r8
 
     ; if(!(*pSrc & 0x80))
     ;   break;
@@ -98,6 +99,7 @@ get_int:
     movzx r8, byte [r9]
     and r8, 0x7f
     shl r8, (6 + 7)
+    or rax, r8
 
     ; if(!(*pSrc & 0x80))
     ;   break;
@@ -115,6 +117,7 @@ get_int:
     movzx r8, byte [r9]
     and r8, 0x7f
     shl r8, (6 + 7 + 7)
+    or rax, r8
 
     ; if(!(*pSrc & 0x80))
     ;   break;
@@ -132,6 +135,7 @@ get_int:
     movzx r8, byte [r9]
     and r8, 0x7f
     shl r8, (6 + 7 + 7 + 7)
+    or rax, r8
 
     ._get_int_end:
 
