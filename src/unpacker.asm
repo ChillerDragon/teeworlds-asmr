@@ -59,7 +59,8 @@ get_int:
     ; *pInOut = *pSrc & 0x3F;
     mov r9, [unpacker_data_ptr]
     mov r8, 0
-    and r8b, byte [r9]
+    mov r8b, byte [r9]
+    and r8b, 0x3f
     mov rax, r8
 
     ._get_int_do_block:
