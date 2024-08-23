@@ -20,8 +20,8 @@ _test_negative_multi_byte:
     mov byte [generic_buffer_128 + 1], 0x01
     unpacker_reset generic_buffer_128, 2
 
-    ; call get_int
-    ; assert_eax_eq -128, __LINE__
+    call get_int
+    assert_eax_eq -128, __LINE__
 
     exit 0
 
