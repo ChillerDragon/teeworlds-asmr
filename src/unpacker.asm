@@ -191,5 +191,34 @@ get_raw:
     ; get_raw [rax]
     ;  rax = size
     ; returns into rax a pointer to the raw data
+    push_registers_keep_rax
+
+    ; final return value
+    mov r8, [unpacker_data_ptr]
+
+    ; r10 is end
+    mov r10, r9
+    add r10, rax
+
+    ._get_raw_byte_loop:
+    cmp r9, r10
+    jge ._get_raw_end
+
+    mov r9, [unpacker_data_ptr]
+    inc r9
+    mov [unpacker_data_ptr], r9
+    jmp ._get_raw_byte_loop
+
+    ._get_raw_end:
+
+
+    mov r9, [unpacker_data_ptr]
+    inc r9
+    mov [unpacker_data_ptr], r9
+
+    ; return value
+    mov rax, r8
+
+    pop_registers_keep_rax
     ret
 
