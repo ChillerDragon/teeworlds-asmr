@@ -47,6 +47,10 @@ s_map_change db "[client] got map change. new map: "
 l_s_map_change equ $ - s_map_change
 s_motd db "[motd] "
 l_s_motd equ $ - s_motd
+s_broadcast db "[broadcast] "
+l_s_broadcast equ $ - s_broadcast
+s_chat db "[chat] "
+l_s_chat equ $ - s_chat
 
 
 s_sending_packet_with_size db "[client] sending packet with size: "
