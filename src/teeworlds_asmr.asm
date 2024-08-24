@@ -230,7 +230,6 @@ gametick:
     ; main gameloop
     nanosleep 100
     call pump_network
-    ; mov dword [input_direction], 0
     call keypresses
     jmp gametick
 

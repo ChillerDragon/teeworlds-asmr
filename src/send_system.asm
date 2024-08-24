@@ -27,11 +27,10 @@ send_msg_input:
     push_registers
 
     packer_reset
-    send_msg MSG_SYSTEM_INPUT, 0, CHUNK_SYSTEM
     pack_int [ack_game_tick]
     pack_int [ack_game_tick] ; this is the pred tick lol
     pack_int 40 ; size
-    pack_int 1 ; [input_direction]
+    pack_int [input_direction]
     pack_int [input_target_x]
     pack_int [input_target_y]
     pack_int [input_jump]
@@ -43,7 +42,12 @@ send_msg_input:
     pack_int [input_prev_weapon]
     pack_int 0 ; what is ping correction ????
 
+    send_msg MSG_SYSTEM_INPUT, 0, CHUNK_SYSTEM
+
     call send_packet
+
+
+    mov dword [input_direction], 0
 
     pop_registers
     ret
