@@ -67,8 +67,38 @@ on_system_msg_snap:
     ; on_system_msg_snap [rax]
     ;  rax = message payload
 
+    ; game tick
     call get_int
     mov dword [ack_game_tick], eax
+
+    ; delta tick
+    call get_int
+
+    ; num parts
+    call get_int
+
+    ; part
+    call get_int
+
+    ; crc
+    call get_int
+
+    ; part size
+    call get_int
+    mov rdi, rax
+
+    ; data
+    call get_int
+
+    ; there is no snapshot storage yet
+    ; so we just claim there was no payload (SNAPEMPTY)
+    ; when we get a partial snap
+
+    ; data = nulltpr
+    mov rax, 0
+    ; data size = 0
+    mov rdi, 0
+    call on_snap
 
     jmp on_system_message_end
 
@@ -78,6 +108,12 @@ on_system_msg_snapempty:
 
     call get_int
     mov dword [ack_game_tick], eax
+
+    ; data = nulltpr
+    mov rax, 0
+    ; data size = 0
+    mov rdi, 0
+    call on_snap
 
     jmp on_system_message_end
 
