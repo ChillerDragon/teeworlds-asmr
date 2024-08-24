@@ -335,6 +335,38 @@ assert_ok:
     print_c_str [rbp-8]
     puts "'"
 
+    exit 1
+
+    %%assert_ok:
+    call assert_ok
+
+    mov rsp, rbp
+
+    pop_registers
+%endmacro
+
+%macro assert_str_not_eq 3
+    ; assert_str_not_eq [expected] [actual] [__LINE__]
+    push_registers
+
+    mov rbp, rsp
+    sub rsp, 16
+    mov qword [rbp-16], %1
+    mov qword [rbp-8], %2
+
+    mov rax, [rbp-16]
+    mov rdi, [rbp-8]
+    call str_comp
+    jne %%assert_ok
+
+    assert_trace %3
+    print_label s_assert_error
+    print "    expected strings to not be equal: '"
+    print_c_str [rbp-8]
+    puts "'"
+
+    exit 1
+
     %%assert_ok:
     call assert_ok
 
