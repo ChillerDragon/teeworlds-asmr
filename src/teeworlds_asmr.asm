@@ -269,6 +269,7 @@ _start:
     call gametick
 
 end:
+    call send_ctrl_close
     call sane_console
     print_label s_end
     exit 0

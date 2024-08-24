@@ -12,6 +12,21 @@ send_ctrl_msg_token:
     pop rax
     ret
 
+send_ctrl_close:
+
+    packet_pack_byte MSG_CTRL_CLOSE
+    packet_pack_byte 'a'
+    packet_pack_byte 's'
+    packet_pack_byte 'm'
+    packet_pack_byte 'r'
+    packet_pack_byte 0x00
+
+    mov byte [out_packet_header_flags], PACKETFLAG_CONTROL
+    mov byte [out_packet_header_num_chunks], 0
+    call send_packet
+
+    ret
+
 send_ctrl_msg_connect:
     push rax
 
