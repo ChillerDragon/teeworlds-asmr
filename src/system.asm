@@ -84,6 +84,50 @@ str_comp:
     pop_registers
     ret
 
+str_startswith:
+    ; str_startswith [rax] [rdi]
+    ;  rax = string
+    ;  rdi = prefix (has to be null terminated)
+    ; returns boolean into zero flag
+    ; "je" jumps if the prefix is matched
+    push_registers
+
+    mov r9, 0
+
+    ._str_startswith_loop:
+    ; end of prefix is always match
+    cmp byte [rdi], 0x00
+    je ._str_startswith_match
+
+    ; compare
+    mov r9b, byte [rax]
+    cmp byte [rdi], r9b
+    jne ._str_startswith_no_match
+
+    inc rax
+    inc rdi
+    jmp ._str_startswith_loop
+
+._str_startswith_match:
+    ; ugly hack to flip the zero flag like in is_rax_flag
+    ; set EQUAL FLAG
+
+    mov al, 0
+    cmp al, 0
+
+    jmp ._str_startswith_end
+
+._str_startswith_no_match:
+    ; ugly hack to flip the zero flag like in is_rax_flag
+    ; set NOT EQUAL FLAG
+
+    mov al, 0
+    cmp al, 1
+
+._str_startswith_end:
+    pop_registers
+    ret
+
 str_copy:
     ; str_copy [rax] [rdi] [rsi]
     ;   rax = destination buffer pointer
