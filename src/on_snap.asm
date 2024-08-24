@@ -10,6 +10,8 @@ on_snap:
     ;
     push_registers
 
+    call send_msg_input
+
     pop_registers
     ret
 

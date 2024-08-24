@@ -66,15 +66,45 @@ on_system_msg_con_ready:
 on_system_msg_snap:
     ; on_system_msg_snap [rax]
     ;  rax = message payload
+
+    call get_int
+    mov dword [ack_game_tick], eax
+
     jmp on_system_message_end
 
 on_system_msg_snapempty:
     ; on_system_msg_snapempty [rax]
     ;  rax = message payload
+
+    call get_int
+    mov dword [ack_game_tick], eax
+
     jmp on_system_message_end
 
 on_system_msg_snapsingle:
     ; on_system_msg_snapsingle [rax]
     ;  rax = message payload
+
+    ; game tick
+    call get_int
+    mov dword [ack_game_tick], eax
+
+    ; delta tick
+    call get_int
+
+    ; crc
+    call get_int
+
+    ; part size
+    call get_int
+    mov rdi, rax
+
+    ; data
+    call get_int
+
+    ; rax = data
+    ; rdi = part size
+    call on_snap
+
     jmp on_system_message_end
 
