@@ -72,6 +72,7 @@ section .text
 %include "src/send_game.asm"
 %include "src/receive_control.asm"
 %include "src/system.asm"
+%include "src/string.asm"
 %include "src/packet_header.asm"
 %include "src/packet_packer.asm"
 %include "src/pack_int.asm"
