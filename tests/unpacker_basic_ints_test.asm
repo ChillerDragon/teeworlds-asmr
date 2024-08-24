@@ -64,7 +64,7 @@ _test_int_plus_string:
     call get_string
     mov rdi, rax
     str_to_stack "AB"
-    assert_str_eq rax, rdi
+    assert_str_eq rax, rdi, __LINE__
     mov rsp, rbp
 
 _test_multiple_ints_plus_strings:
@@ -86,7 +86,7 @@ _test_multiple_ints_plus_strings:
     call get_string
     mov rdi, rax
     str_to_stack "CC"
-    assert_str_eq rax, rdi
+    assert_str_eq rax, rdi, __LINE__
     mov rsp, rbp
 
     call get_int
@@ -95,7 +95,7 @@ _test_multiple_ints_plus_strings:
     call get_string
     mov rdi, rax
     str_to_stack "foo"
-    assert_str_eq rax, rdi
+    assert_str_eq rax, rdi, __LINE__
     mov rsp, rbp
 
     call get_int
@@ -121,20 +121,20 @@ _test_unpack_raw:
     call get_raw
     mov rdi, rax
     str_to_stack "CC"
-    assert_str_eq rax, rdi
+    assert_str_eq rax, rdi, __LINE__
     mov rsp, rbp
 
-    ; call get_int
-    ; assert_eax_eq 5, __LINE__
+    call get_int
+    assert_eax_eq 5, __LINE__
 
-    ; call get_string
-    ; mov rdi, rax
-    ; str_to_stack "foo"
-    ; assert_str_eq rax, rdi
-    ; mov rsp, rbp
+    call get_string
+    mov rdi, rax
+    str_to_stack "foo"
+    assert_str_eq rax, rdi, __LINE__
+    mov rsp, rbp
 
-    ; call get_int
-    ; assert_eax_eq 9, __LINE__
+    call get_int
+    assert_eax_eq 9, __LINE__
 
     exit 0
 
