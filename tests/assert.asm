@@ -314,6 +314,8 @@ assert_ok:
 
 %macro assert_str_eq 3
     ; assert_str_eq [expected] [actual] [__LINE__]
+    push_registers
+
     mov rbp, rsp
     sub rsp, 16
     mov qword [rbp-16], %1
@@ -337,6 +339,8 @@ assert_ok:
     call assert_ok
 
     mov rsp, rbp
+
+    pop_registers
 %endmacro
 
 assert_entry:

@@ -3,13 +3,6 @@
 _start:
     init_test __FILE__
 
-    ; print_label s_assert_expected
-    ; mov rax, rsp
-    ; mov rdi, 8
-    ; call print_hexdump
-    ; call print_newline
-
-
 test_int_to_str:
     mov rax, 10
     mov rdi, assert_actual_buf
@@ -18,6 +11,7 @@ test_int_to_str:
     str_to_stack "10"
     assert_str_eq rax, rdi, __LINE__
     mov rsp, rbp
+
 test_negative_int_to_str0:
     mov rax, -10
     mov rdi, assert_actual_buf
@@ -35,7 +29,5 @@ test_ptr_to_str:
     assert_str_eq rax, rdi, __LINE__
     mov rsp, rbp
 
-    ; TODO: this fails
-    exit 0
-    ; end_test __LINE__
+    end_test __LINE__
 
