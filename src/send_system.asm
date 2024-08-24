@@ -31,7 +31,7 @@ send_msg_input:
     pack_int [ack_game_tick]
     pack_int [ack_game_tick] ; this is the pred tick lol
     pack_int 40 ; size
-    pack_int [input_direction]
+    pack_int 1 ; [input_direction]
     pack_int [input_target_x]
     pack_int [input_target_y]
     pack_int [input_jump]

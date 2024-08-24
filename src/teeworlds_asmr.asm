@@ -190,12 +190,12 @@ pump_network:
 
 key_a:
     print_label s_you_pressed_a
-    call connect
-    call pump_network
+    mov dword [input_direction], -1
     jmp keypress_end
 
 key_d:
     print_label s_you_pressed_d
+    mov dword [input_direction], 1
     jmp keypress_end
 
 keypresses:
@@ -230,6 +230,7 @@ gametick:
     ; main gameloop
     nanosleep 100
     call pump_network
+    ; mov dword [input_direction], 0
     call keypresses
     jmp gametick
 
@@ -261,6 +262,9 @@ _start:
     ; setup state
     call non_blocking_keypresses
     call open_socket
+
+    ; connect to server
+    call connect
 
     ; run game
     call gametick
