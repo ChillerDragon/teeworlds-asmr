@@ -46,6 +46,7 @@ on_system_or_game_messages:
     is_chunk_flag CHUNKFLAG_VITAL
     jne .on_system_or_game_messages_chunk_non_vital_skip
     inc rcx
+    inc dword [connection_ack]
 .on_system_or_game_messages_chunk_non_vital_skip:
 
     ; user callback
