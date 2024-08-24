@@ -51,7 +51,8 @@ s_broadcast db "[broadcast] "
 l_s_broadcast equ $ - s_broadcast
 s_chat db "[chat] "
 l_s_chat equ $ - s_chat
-
+s_rcon db "[rcon] "
+l_s_rcon equ $ - s_rcon
 
 s_sending_packet_with_size db "[client] sending packet with size: "
 l_s_sending_packet_with_size equ $ - s_sending_packet_with_size
