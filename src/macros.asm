@@ -87,6 +87,39 @@
     lea rax, [rbp-(_fmt_len+1)]
 %endmacro
 
+%macro write_str_to_mem 2
+    ; write_str_to_mem [string literal] [destination pointer]
+    push_registers
+
+    ; crazy hack to store %2 on the stack
+    ; before the stack allocated string
+    ; and pop it back with a unknown stack offset
+    mov rax, %2
+    push rax
+    mov r9, rsp
+
+    str_to_stack %1
+    ; stack string is source buffer pointer for str_copy
+    mov rdi, rax
+
+    ; soft pop rax of the hacked stack
+    ; rax is destination buffer pointer for str_copy
+    mov rax, [r9]
+
+    ;   rsi = truncation len (max size)
+    %strlen _str_len %1
+    mov rsi, _str_len
+    call str_copy
+
+    ; free stack str
+    mov rsp, rbp
+
+    ; free ptr hack
+    pop rax
+
+    pop_registers
+%endmacro
+
 %macro stack_printer 1
     ; stack_printer [fixed str]
     ;
