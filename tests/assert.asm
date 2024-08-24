@@ -82,6 +82,7 @@ section .text
 %include "src/on_system.asm"
 %include "src/on_game.asm"
 %include "src/on_snap.asm"
+%include "src/console/console.asm"
 
 %macro init_test 1
     ; init_test [__FILE__]

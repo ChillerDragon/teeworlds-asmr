@@ -149,6 +149,7 @@ section .text
 %include "src/on_system.asm"
 %include "src/on_game.asm"
 %include "src/on_snap.asm"
+%include "src/console/console.asm"
 
 print_udp:
     print_label s_got_udp
