@@ -12,6 +12,8 @@
 
 
 %macro unpacker_reset 2
+    push rax
+    push rdi
     push rbp
 
     mov rbp, rsp
@@ -23,7 +25,11 @@
     mov rdi, qword [rbp-8]
     call _unpacker_reset
 
+    mov rsp, rbp
+
     pop rbp
+    pop rdi
+    pop rax
 %endmacro
 
 _unpacker_reset:

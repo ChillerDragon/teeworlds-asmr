@@ -136,7 +136,5 @@ _test_unpack_raw:
     call get_int
     assert_eax_eq 9, __LINE__
 
-    ; TODO: this fails
-    ; end_test __LINE__
-    exit 0
+    end_test __LINE__
 
