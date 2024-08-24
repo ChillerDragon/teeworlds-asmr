@@ -109,17 +109,22 @@ on_message:
     ; payload pointer (todo: should not be at offset one but use int unpacker)
     mov rdi, rax
 
-    ; backup first byte in rcx
+
+    push rdi
+    mov rdi, 0
+    mov edi, [chunk_header_size]
+    unpacker_reset rax, rdi
+    pop rdi
+
+    ; unpack msgid and system flag
+    call get_int
+
+    ; backup msgid and sys flag int in rcx
     ; to be later checked for system flag
-    mov rcx, [rax]
+    mov rcx, rax
 
     ; extract message id
-    ; todo: this should be int unpacker not reading only one byte
-    mov rbx, 0
-    mov byte bl, [rax]
-    shr ebx, 1
-    mov rax, 0
-    mov eax, ebx
+    shr eax, 1
 
     is_rcx_flag CHUNK_SYSTEM
     je .on_message_system

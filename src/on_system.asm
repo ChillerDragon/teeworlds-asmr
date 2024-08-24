@@ -42,6 +42,7 @@ on_system_msg_map_change:
     ; on_system_msg_map_change [rax]
     ;  rax = message payload
     print_label s_map_change
+    call get_string
     print_c_str rax
     call print_newline
 
