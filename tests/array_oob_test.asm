@@ -30,5 +30,5 @@ _start:
     ; imul rax, HUFF_CNODE_SIZE
     ; add rax, huff_nodes
     ; check_bounds rax, huff_nodes, HUFF_CNODE_SIZE, HUFFMAN_MAX_NODES, __LINE__, assert_test_filename
-    exit 0
 
+    end_test __LINE__

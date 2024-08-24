@@ -26,6 +26,8 @@ section .data
     l_s_assert_true_error  equ $ - s_assert_true_error
     s_assert_false_error db "[assert] assertion error: assert_is_false failed (expected cmp to not match and zero flag to be unset)", 0x0a
     l_s_assert_false_error  equ $ - s_assert_false_error
+    s_assert_stack_error db "[assert] reached test end with different stack pointer", 0x0a
+    l_s_assert_stack_error  equ $ - s_assert_stack_error
 
 section .bss
     %include "src/bss/hex.asm"
@@ -50,6 +52,8 @@ section .bss
     assert_input_buf_index resb 4
 
     assert_counter resb 4
+
+    assert_init_stack_ptr resb 8
 section .text
 
 %include "src/macros.asm"
@@ -86,6 +90,40 @@ section .text
     mov rsi, 2048
     call str_copy
     mov rsp, rbp
+
+    mov [assert_init_stack_ptr], rsp
+%endmacro
+
+%macro end_test 1
+    ; end_test [__LINE__]
+    cmp qword [assert_init_stack_ptr], rsp
+    je %%end_test_ok
+
+    assert_trace %1
+    print_label s_assert_stack_error
+
+
+
+    print_label s_assert_expected
+    mov rax, assert_init_stack_ptr
+    mov rdi, 8
+    call print_hexdump
+    call print_newline
+
+    print_label s_assert_actual
+    mov [assert_actual_buf], rsp
+    mov rax, assert_actual_buf
+    mov rdi, 8
+    call print_hexdump
+    call print_newline
+
+
+
+
+    exit 1
+
+    %%end_test_ok:
+    exit 0
 %endmacro
 
 _assert_trace:

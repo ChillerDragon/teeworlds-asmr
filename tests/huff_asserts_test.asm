@@ -11,5 +11,5 @@ _start:
 
     lea rax, [huff_nodes + (HUFF_CNODE_SIZE*10)]
     huff_assert_nodes_ptr rax, __LINE__, __FILE__
-    exit 0
 
+    end_test __LINE__

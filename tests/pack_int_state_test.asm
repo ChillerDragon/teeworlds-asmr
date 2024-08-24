@@ -19,5 +19,4 @@ test_packer_macro_pack_two_mixed_len_byte_ints:
     mov eax, [packer_buf]
     assert_eax_eq 0x02_01_81, __LINE__ ; 0x81 0x01 0x02 is the sane people endianness
 
-    exit 0
-
+    end_test __LINE__

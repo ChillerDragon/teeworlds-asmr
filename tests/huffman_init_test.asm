@@ -68,5 +68,4 @@ _test_huff_init_assert_lut_nodes:
     ; movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
     ; assert_eax_eq 128, __LINE__
 
-    exit 0
-
+    end_test __LINE__

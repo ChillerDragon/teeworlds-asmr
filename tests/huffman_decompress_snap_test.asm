@@ -225,5 +225,5 @@ _test_huff_decompress_real_traffic:
     movzx rax, byte [generic_buffer_512 + 2]
     assert_al_eq 0x09, __LINE__
 
-    exit 0
+    end_test __LINE__
 

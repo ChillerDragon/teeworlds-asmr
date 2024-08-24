@@ -54,5 +54,5 @@ _test_div_macro:
     div32_to_rax eax, ecx
     assert_eax_eq 10, __LINE__
 
-    exit 0
+    end_test __LINE__
 

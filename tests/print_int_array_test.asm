@@ -61,5 +61,5 @@ test_4_byte_int_array:
 
     mov rsp, rbp
 
-    exit 0
+    end_test __LINE__
 

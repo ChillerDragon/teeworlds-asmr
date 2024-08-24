@@ -80,5 +80,5 @@ _test_huff_decompress_AABB:
     mov eax, dword [generic_buffer_512]
     assert_eax_eq 'AABB', __LINE__
 
-    exit 0
+    end_test __LINE__
 

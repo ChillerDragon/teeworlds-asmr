@@ -156,5 +156,4 @@ _test_call_huff_construct_tree_assert_node_512:
     movzx rax, byte [rsi + HUFF_CNODE_SYMBOL_OFFSET]
     assert_eax_eq 0, __LINE__
 
-    exit 0
-
+    end_test __LINE__

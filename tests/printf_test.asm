@@ -19,4 +19,4 @@ _start:
 
     printf "new\nline"
 
-    exit 0
+    end_test __LINE__

@@ -159,4 +159,4 @@ test_pack_queue_chunk:
     mov al, [udp_send_buf + PACKET_HEADER_LEN + 2]
     assert_al_eq 0x0C, __LINE__
 
-    exit 0
+    end_test __LINE__

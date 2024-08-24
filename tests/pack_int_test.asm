@@ -83,5 +83,5 @@ test__pack_int_double_negative:
     mov eax, [assert_input_buf]
     assert_eax_eq 0x01_C1, __LINE__ ; 0xC1 0x01 is the sane people endianness
 
-    exit 0
+    end_test __LINE__
 

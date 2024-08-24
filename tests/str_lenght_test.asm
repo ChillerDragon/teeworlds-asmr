@@ -27,4 +27,5 @@ test_str_length_empty:
     call str_length
 
     assert_eax_eq 0, __LINE__
-    exit 0
+
+    end_test __LINE__

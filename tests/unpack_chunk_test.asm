@@ -91,4 +91,4 @@ test_vital_maxed_all_set_size_4095_seq_1023:
     mov eax, [chunk_header_sequence]
     assert_eax_eq 1023, __LINE__
 
-    exit 0
+    end_test __LINE__

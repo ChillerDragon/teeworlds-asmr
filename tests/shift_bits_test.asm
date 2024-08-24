@@ -43,4 +43,4 @@ _test_shift_left_128_24:
     shift_left rax, 24
     assert_eax_eq 2147483648, __LINE__
 
-    exit 0
+    end_test __LINE__

@@ -29,5 +29,5 @@ _start:
     mov rax, [in_packet_header_token]
     assert_eax_eq 0xFFFFFFCC, __LINE__
 
-    exit 0
+    end_test __LINE__
 

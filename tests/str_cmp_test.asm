@@ -76,5 +76,4 @@ test_str_comp_different_casing:
     call str_comp
     assert_is_false __LINE__
 
-    exit 0
-
+    end_test __LINE__

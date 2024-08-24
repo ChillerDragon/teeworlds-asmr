@@ -79,5 +79,5 @@ test_str_copy_aaaabbbb_max_len_2:
     call str_comp
     assert_is_true __LINE__
 
-    exit 0
+    end_test __LINE__
 

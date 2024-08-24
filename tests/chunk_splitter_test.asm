@@ -49,4 +49,4 @@ test_madeup_chunks_with_one_byte_payload:
     mov eax, dword [assert_counter]
     assert_eax_eq 2, __LINE__
 
-    exit 0
+    end_test __LINE__

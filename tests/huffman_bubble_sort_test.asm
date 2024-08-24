@@ -121,5 +121,4 @@ _start:
     ; call huff_print_struct_cconstruction_node
     ; call print_newline
 
-    exit 0
-
+    end_test __LINE__
