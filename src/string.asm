@@ -32,6 +32,37 @@ str_get_word_boundary_offset:
     pop_registers_keep_rax
     ret
 
+str_to_int:
+    ; str_to_int [rax]
+    ;  rax = string terminated by a non-digit
+    ; returns integer into rax
+
+    cmp byte [rax], '-'
+    jne .positive
+
+    .negative:
+    inc rax
+    call str_to_int_unsigned
+    neg rax
+    jmp .end
+
+    .positive:
+    cmp byte [rax], '0'
+    jl .nan
+    cmp byte [rax], '9'
+    jg .nan
+
+    jmp .is_number
+    .nan:
+    mov rax, 0
+    jmp .end
+
+    .is_number:
+    call str_to_int_unsigned
+
+    .end:
+    ret
+
 ; https://stackoverflow.com/a/49548057
 str_to_int_unsigned:
     ; str_to_int [rax]
