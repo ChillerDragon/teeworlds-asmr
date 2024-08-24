@@ -36,20 +36,30 @@ str_to_int:
     ; str_to_int [rax]
     ;  rax = string terminated by a non-digit
     ; returns integer into rax
+    push rdi
+    mov rdi, rax
+    call str_to_int_seek_rdi
+    pop rdi
+    ret
 
-    cmp byte [rax], '-'
+str_to_int_seek_rdi:
+    ; str_to_int_seek_rdi [rdi]
+    ;  rdi = string terminated by a non-digit
+    ; seeks rdi to next non digit
+    ; returns into rax the integer
+    cmp byte [rdi], '-'
     jne .positive
 
     .negative:
-    inc rax
+    inc rdi
     call str_to_int_unsigned
     neg rax
     jmp .end
 
     .positive:
-    cmp byte [rax], '0'
+    cmp byte [rdi], '0'
     jl .nan
-    cmp byte [rax], '9'
+    cmp byte [rdi], '9'
     jg .nan
 
     jmp .is_number
@@ -67,11 +77,10 @@ str_to_int:
 str_to_int_unsigned:
     ; str_to_int [rax]
     ;  rax = string terminated by a non-digit
+    ; returnes seeked string into rdi
     ; returns integer into rax
     ; code by Peter Cordes
-    push rdi
     push rcx
-    mov rdi, rax
     movzx   eax, byte [rdi]    ; start with the first digit
     sub     eax, '0'           ; convert from ASCII to number
     cmp     al, 9              ; check that it's a decimal digit [0..9]
@@ -94,6 +103,5 @@ str_to_int_unsigned:
     cmp     ecx, 9
     jbe     .next_digit ; } while( digit <= 9 )
     pop rcx
-    pop rdi
     ret
 
