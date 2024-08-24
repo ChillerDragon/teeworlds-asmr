@@ -140,13 +140,14 @@ section .text
 %include "src/receive_control.asm"
 %include "src/system.asm"
 %include "src/packet_header.asm"
-%include "src/on_packet.asm"
-%include "src/on_system.asm"
-%include "src/on_game.asm"
 %include "src/packet_packer.asm"
 %include "src/pack_int.asm"
 %include "src/unpacker.asm"
 %include "src/huffman/huffman.asm"
+%include "src/on_packet.asm"
+%include "src/on_system.asm"
+%include "src/on_game.asm"
+%include "src/on_snap.asm"
 
 print_udp:
     print_label s_got_udp
