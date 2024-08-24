@@ -163,6 +163,39 @@ str_copy:
     pop_registers_keep_rax
     ret
 
+str_find_char:
+    ; str_find_char [rax] [rdi]
+    ;  rax = pointer to haystack nullterminated string
+    ;  rdi = character to find by value
+    ; returns into rax the offset if found and -1 if not found
+    push_registers_keep_rax
+
+    mov r9, 0
+
+    mov rcx, 0
+
+    ._str_find_char_loop:
+        cmp byte [rax+rcx], 0
+        je ._str_find_char_no_match
+
+        cmp byte [rax+rcx], dil
+        je ._str_find_char_match
+
+        inc rcx
+        jmp ._str_find_char_loop
+
+    ._str_find_char_match:
+    mov rax, rcx
+    jmp ._str_find_char_end
+
+    ._str_find_char_no_match:
+    mov rax, -1
+
+    ._str_find_char_end:
+
+    pop_registers_keep_rax
+    ret
+
 mem_copy:
     ; mem_copy [rax] [rdi] [rsi]
     ;   rax = destination buffer pointer
