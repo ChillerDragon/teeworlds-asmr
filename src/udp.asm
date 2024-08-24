@@ -44,10 +44,10 @@ recv_udp:
     ; we do not process the udp payload
     js .recv_udp_error
 
-    ; debug print
-    print_label s_received_bytes
-    mov rax, [udp_read_len]
-    call println_uint32
+    ; ; debug print
+    ; print_label s_received_bytes
+    ; mov rax, [udp_read_len]
+    ; call println_uint32
     jmp .recv_udp_end
 .recv_udp_error:
     neg rax

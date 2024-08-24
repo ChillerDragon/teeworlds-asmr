@@ -10,8 +10,8 @@ on_system_message:
     ; message payload
     mov r10, rdi
 
-    print_label s_got_system_msg_with_id
-    call println_uint32
+    ; print_label s_got_system_msg_with_id
+    ; call println_uint32
 
     ; payload to rax
     mov rax, r10

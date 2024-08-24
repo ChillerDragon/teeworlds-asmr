@@ -62,12 +62,12 @@ send_packet:
     mov edi, [udp_payload_index]
     add rdi, PACKET_HEADER_LEN
 
-    ; dbg print
-    push rax
-    print_label s_sending_packet_with_size
-    mov rax, rdi
-    call println_uint32
-    pop rax
+    ; ; dbg print
+    ; push rax
+    ; print_label s_sending_packet_with_size
+    ; mov rax, rdi
+    ; call println_uint32
+    ; pop rax
 
 
     call send_udp

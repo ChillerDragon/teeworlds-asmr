@@ -161,11 +161,11 @@ print_udp:
     mov rax, [udp_read_len]
     call println_uint32
 
-    call on_packet
     ret
 
 on_udp_packet:
-    call print_udp
+    ; call print_udp
+    call on_packet
     ret
 
 connect:
@@ -189,12 +189,12 @@ pump_network:
     ret
 
 key_a:
-    print_label s_you_pressed_a
+    ; print_label s_you_pressed_a
     mov dword [input_direction], -1
     jmp keypress_end
 
 key_d:
-    print_label s_you_pressed_d
+    ; print_label s_you_pressed_d
     mov dword [input_direction], 1
     jmp keypress_end
 
