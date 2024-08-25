@@ -17,6 +17,42 @@ str_length:
     pop_registers_keep_rax
     ret
 
+mem_comp:
+    ; mem_comp [rax] [rdi] [rsi]
+    ;  rax = memory region a to compare
+    ;  rdi = memory region b to compare
+    ;  rsi = amount of bytes to compare
+    ; returns boolean into zero flag
+    ; "je" will jump if they match
+    push_registers
+
+    mov rcx, 0
+
+    .mem_comp_byte_loop:
+    mov r8b, byte [rdi+rcx]
+    cmp byte [rax+rcx], r8b
+    jne .mem_comp_no_match
+    inc rcx
+    cmp rcx, rsi
+    jle .mem_comp_byte_loop
+
+.mem_comp_match:
+    ; ugly hack to flip the zero flag like in is_rax_flag
+    ; set EQUAL FLAG
+    mov al, 0
+    cmp al, 0
+    jmp .mem_comp_end
+
+.mem_comp_no_match:
+    ; ugly hack to flip the zero flag like in is_rax_flag
+    ; set NOT EQUAL FLAG
+    mov al, 0
+    cmp al, 1
+
+.mem_comp_end:
+    pop_registers
+    ret
+
 str_comp:
     ; str_comp [rax] [rdi]
     ;   rax = string to compare

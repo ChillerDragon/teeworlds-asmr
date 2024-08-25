@@ -314,6 +314,45 @@ assert_ok:
     call assert_ok
 %endmacro
 
+%macro assert_mem_eq 4
+    ; assert_mem_eq [expected] [actual] [size] [__LINE__]
+    push_registers
+
+    mov rbp, rsp
+    sub rsp, 24
+    mov qword [rbp-24], %1
+    mov qword [rbp-16], %2
+    mov qword [rbp-8], %3
+
+    mov rax, [rbp-24]
+    mov rdi, [rbp-16]
+    mov rsi, [rbp-8]
+    call mem_comp
+    je %%assert_ok
+
+    assert_trace %3
+    print_label s_assert_error
+    print_label s_assert_expected
+    mov rax, [rbp-24]
+    mov rdi, [rbp-8]
+    call print_hexdump
+    call print_newline
+    print_label s_assert_actual
+    mov rax, [rbp-16]
+    mov rdi, [rbp-8]
+    call print_hexdump
+    call print_newline
+
+    exit 1
+
+    %%assert_ok:
+    call assert_ok
+
+    mov rsp, rbp
+
+    pop_registers
+%endmacro
+
 %macro assert_str_eq 3
     ; assert_str_eq [expected] [actual] [__LINE__]
     push_registers
@@ -330,12 +369,16 @@ assert_ok:
 
     assert_trace %3
     print_label s_assert_error
-    print "  expected: '"
+    print_label s_assert_expected
+    call print_single_quote
     print_c_str [rbp-16]
-    puts "'"
-    print "    actual: '"
+    call print_single_quote
+    call print_newline
+    print_label s_assert_actual
+    call print_single_quote
     print_c_str [rbp-8]
-    puts "'"
+    call print_single_quote
+    call print_newline
 
     exit 1
 

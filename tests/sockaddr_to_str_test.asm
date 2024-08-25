@@ -10,8 +10,7 @@ section .text
 _start:
     init_test __FILE__
 
-_test_str_startswith_basic_match:
-
+_test_sockaddr_to_str:
     ; sockaddr_to_str [rax] [rdi]
     ;  rax = pointer to sockaddr struct
     ;  rdi = output buffer
