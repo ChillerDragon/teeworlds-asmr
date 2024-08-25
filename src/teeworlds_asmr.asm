@@ -103,7 +103,7 @@ section .data
     KEY_RETURN  equ 0x0D ; '\r' (carriage ret)
 
     ; strings
-    s_menu db "+--+ teeworlds_asmr (ESCAPE to quit the game) +--+",0x0a
+    s_menu db "+--+ teeworlds_asmr ('q' to quit the game) +--+",0x0a
     l_s_menu equ $ - s_menu
     s_end db "quitting the game...",0x0a
     l_s_end equ $ - s_end
@@ -257,10 +257,30 @@ _start:
     call non_blocking_keypresses
     call open_socket
 
-    ; connect to server
-    call connect
+    ; parse command line arguments
+    mov rcx, [rsp]
+    cmp rcx, 1
+    je .no_args
+    cmp rcx, 2
+    je .one_arg
+    jg .too_many_args
 
-    ; run game
+    .no_args:
+    print_label s_no_cli_args
+    ; connect to server with default address 127.0.0.1:8303
+    call connect
+    jmp .run_game
+
+    .one_arg:
+    mov rax, [rsp+16]
+    call exec_line
+    jmp .run_game
+
+    .too_many_args:
+    print_label s_usage
+    exit 1
+
+    .run_game:
     call gametick
 
 end:

@@ -55,6 +55,10 @@ s_rcon db "[rcon] "
 l_s_rcon equ $ - s_rcon
 s_connecting_to db "[client] connecting to "
 l_s_connecting_to equ $ - s_connecting_to
+s_usage db '[usage] ./teeworlds_asmr "connect 127.0.0.1:8303"', 0x0a
+l_s_usage equ $ - s_usage
+s_no_cli_args db "[client] no cli arguments given defaulting to connect localhost ...", 0x0a
+l_s_no_cli_args equ $ - s_no_cli_args
 
 s_sending_packet_with_size db "[client] sending packet with size: "
 l_s_sending_packet_with_size equ $ - s_sending_packet_with_size
