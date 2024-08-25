@@ -59,6 +59,8 @@ s_usage db '[usage] ./teeworlds_asmr "connect 127.0.0.1:8303"', 0x0a
 l_s_usage equ $ - s_usage
 s_no_cli_args db "[client] no cli arguments given defaulting to connect localhost ...", 0x0a
 l_s_no_cli_args equ $ - s_no_cli_args
+s_3_stars db "***"
+l_s_3_stars equ $ - s_3_stars
 
 s_sending_packet_with_size db "[client] sending packet with size: "
 l_s_sending_packet_with_size equ $ - s_sending_packet_with_size

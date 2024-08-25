@@ -19,12 +19,22 @@ on_chat:
 
     print_label s_chat
 
+    ; check srv msg
+    cmp r8w, -1
+    jne .human_msg
+
+    .server_msg:
+    print_label s_3_stars
+    jmp .message_content
+
+    .human_msg:
     ; get author name
     mov rbx, r8
     imul rbx, TW_CLIENT_SIZE
     lea rsi, [tw_clients + rbx + TW_CLIENT_NAME_OFFSET]
     print_c_str rsi
 
+    .message_content:
     call print_colon
     call print_space
 
