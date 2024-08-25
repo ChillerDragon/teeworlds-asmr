@@ -88,8 +88,11 @@ on_game_msg_null:
 on_game_msg_sv_motd:
     ; on_game_msg_sv_motd [rax]
     ;  rax = message payload
-    print_label s_motd
     call get_string
+    cmp byte [rax], 0x00
+    je on_game_message_end
+
+    print_label s_motd
     print_c_str rax
     call print_newline
     jmp on_game_message_end
