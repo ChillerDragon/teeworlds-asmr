@@ -1,5 +1,7 @@
 # teeworlds but its asmr
 
+Basic light weight teeworlds 0.7 client written in pure assembly. Terminal only (no gui) and no external dependencies. Not even libc.
+
 [![asmr janina](https://i3.ytimg.com/vi/irZzz8Ul58Q/maxresdefault.jpg)](https://www.youtube.com/watch?v=irZzz8Ul58Q)
 
 ## deps
