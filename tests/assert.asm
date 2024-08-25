@@ -35,6 +35,7 @@ section .bss
     %include "src/bss/buffers.asm"
     %include "src/bss/huffman.asm"
     %include "src/bss/unpacker.asm"
+    %include "src/bss/teeworlds_state.asm"
 
     ; holds the path to the current source code file
     ; of the test as a null terminated C string
@@ -84,6 +85,8 @@ section .text
 %include "src/on_snap.asm"
 %include "src/console/console.asm"
 %include "src/client.asm"
+%include "src/client_info.asm"
+%include "src/on_chat.asm"
 
 %macro init_test 1
     ; init_test [__FILE__]

@@ -106,8 +106,7 @@ on_game_msg_sv_broadcast:
 on_game_msg_sv_chat:
     ; on_game_msg_sv_chat [rax]
     ;  rax = message payload
-    print_label s_chat
-    call print_newline
+    call on_chat
     jmp on_game_message_end
 
 on_game_msg_sv_team:
@@ -186,6 +185,23 @@ on_game_msg_sv_serversettings:
 on_game_msg_sv_clientinfo:
     ; on_game_msg_sv_clientinfo [rax]
     ;  rax = message payload
+
+    ; client id
+    call get_int
+    mov rcx, rax
+
+    ; local
+    call get_int
+    cmp rax, 1
+    jne .skip_local
+    .local_client_info:
+    mov dword [local_client_id], ecx
+    .skip_local:
+
+    ; client id
+    mov rax, rcx
+    call set_client_info
+
     jmp on_game_message_end
 
 on_game_msg_sv_clientdrop:
