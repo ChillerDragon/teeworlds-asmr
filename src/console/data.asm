@@ -1,6 +1,7 @@
 section .data
     _con_str_quit db "quit", 0
     _con_str_ping db "ping", 0
+    _con_str_connect db "connect", 0
 
 
     s_console_got_command db "[console] got command '"

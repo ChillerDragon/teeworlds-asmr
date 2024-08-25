@@ -53,6 +53,8 @@ s_chat db "[chat] "
 l_s_chat equ $ - s_chat
 s_rcon db "[rcon] "
 l_s_rcon equ $ - s_rcon
+s_connecting_to db "[client] connecting to "
+l_s_connecting_to equ $ - s_connecting_to
 
 s_sending_packet_with_size db "[client] sending packet with size: "
 l_s_sending_packet_with_size equ $ - s_sending_packet_with_size

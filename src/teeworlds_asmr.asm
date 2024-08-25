@@ -150,6 +150,7 @@ section .text
 %include "src/on_game.asm"
 %include "src/on_snap.asm"
 %include "src/console/console.asm"
+%include "src/client.asm"
 
 print_udp:
     print_label s_got_udp
@@ -168,14 +169,6 @@ print_udp:
 on_udp_packet:
     ; call print_udp
     call on_packet
-    ret
-
-connect:
-    packet_packer_reset
-    mov dword [peer_token], 0xFFFFFFFF
-
-    call send_ctrl_msg_token
-
     ret
 
 pump_network:

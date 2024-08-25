@@ -26,6 +26,7 @@ _console_callback_matcher:
 
     match_cmd quit
     match_cmd ping
+    match_cmd connect
 
     _console_callback_matcher_unknown_command:
     print_label s_console_unknown_command
@@ -104,15 +105,12 @@ exec_line:
 
 
 test_console:
-    str_to_stack "quip"
-    call exec_line
-    mov rsp, rbp
+    ; str_to_stack "connect 127.0.0.1:8303"
+    ; call exec_line
+    ; mov rsp, rbp
 
-    str_to_stack "ping args"
-    call exec_line
-    mov rsp, rbp
 
-    str_to_stack "quit foo"
+    str_to_stack "ping"
     call exec_line
     mov rsp, rbp
 
