@@ -2,11 +2,6 @@
 
 [![asmr janina](https://i3.ytimg.com/vi/irZzz8Ul58Q/maxresdefault.jpg)](https://www.youtube.com/watch?v=irZzz8Ul58Q)
 
-## disclaimer and project state
-
-THIS IS NOT FINISHED OMG. ITS NOT A FUNCTIONAL TEEWORLDS CLIENT YET!
-ITS BARLEY A UDP HELLO WORLD!!!!!!!!!!
-
 ## deps
 
 ```
@@ -16,11 +11,11 @@ sudo apt install nasm make
 
 It requires nasm 2.16 or newer.
 
-## build
+## build and connect to server
 
 ```bash
 make
-./teeworlds_asmr
+./teeworlds_asmr "connect 127.0.0.1:8303"
 ```
 
 ## debug
@@ -52,8 +47,12 @@ The gdb extension [peda](https://github.com/longld/peda) is quite helpful. It sh
 
 ## project goal
 
-I want to see how far I can get. Trying to build a teeworlds 0.7 client (without graphics).
-And planning to gain some asm skills along the way. Currently im looking at these resources and copy pasting from stack overflow.
+Implement enough client side teeworlds 0.7 protocol to have a headless (without graphics) client that can connect to
+real teeworlds servers. Written in pure assembly without depending on any external library not even libc.
+
+## ressources
+
+Thanks to these blog posts and documentations. They helped a lot.
 
 - [https://x64.syscall.sh/](https://x64.syscall.sh/)
 - [http://ansonliu.com/si485-site/lec/15/lec.html](http://ansonliu.com/si485-site/lec/15/lec.html)
