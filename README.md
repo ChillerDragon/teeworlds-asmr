@@ -20,6 +20,12 @@ make
 ./teeworlds_asmr "connect 127.0.0.1:8303"
 ```
 
+## features
+
+- Can connect to teeworlds 0.7 and ddnet 0.7 servers.
+- Walk left and right with "a" and "d" keys
+- Get basic log output from broadcast/motd and chat
+
 ## debug
 
 To debug syscalls you can use strace
