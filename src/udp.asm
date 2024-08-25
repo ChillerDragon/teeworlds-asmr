@@ -1,3 +1,81 @@
+sockaddr_to_str:
+    ; sockaddr_to_str [rax] [rdi]
+    ;  rax = pointer to sockaddr struct
+    ;  rdi = output buffer
+    push_registers
+
+    ; ****
+    ; addr
+    ; ****
+
+    mov r8, 0
+    mov r8b, byte [rax+SOCKADDR_ADDR_OFFSET+0]
+    push rax
+    mov rax, r8
+    call uint32_to_str_seek_rdi
+    ; rdi outout
+    pop rax
+    mov byte [rdi], '.'
+    inc rdi
+
+
+    mov r8, 0
+    mov r8b, byte [rax+SOCKADDR_ADDR_OFFSET+1]
+    push rax
+    mov rax, r8
+    call uint32_to_str_seek_rdi
+    ; rdi outout
+    pop rax
+    mov byte [rdi], '.'
+    inc rdi
+
+
+    mov r8, 0
+    mov r8b, byte [rax+SOCKADDR_ADDR_OFFSET+2]
+    push rax
+    mov rax, r8
+    call uint32_to_str_seek_rdi
+    ; rdi outout
+    pop rax
+    mov byte [rdi], '.'
+    inc rdi
+
+
+    mov r8, 0
+    mov r8b, byte [rax+SOCKADDR_ADDR_OFFSET+3]
+    push rax
+    mov rax, r8
+    call uint32_to_str_seek_rdi
+    ; rdi outout
+    pop rax
+    mov byte [rdi], ':'
+    inc rdi
+
+    ; ****
+    ; port
+    ; ****
+
+    ; we have to swap the endianness first
+    ; from network to host i guess
+    mov r8, 0
+    mov r8b, byte [rax+SOCKADDR_PORT_OFFSET+1]
+    mov byte [generic_buffer_16+0], r8b
+    mov r8b, byte [rax+SOCKADDR_PORT_OFFSET+0]
+    mov byte [generic_buffer_16+1], r8b
+    mov r8w, word [generic_buffer_16]
+
+    ; the sockaddr port is a uint16_t
+    ; but we have no int to str helper for that
+    ; so we cut it off and use it as a uint32
+    push rax
+    mov rax, r8
+    call uint32_to_str_seek_rdi
+    ; rdi outout
+    pop rax
+
+    pop_registers
+    ret
+
 open_socket:
     ; open_socket
     ;
@@ -84,7 +162,7 @@ send_udp:
     xor r10, r10
 
     ; target socket address
-    mov r8, sockaddr_localhost_8303
+    mov r8, sockaddr_server
 
     ; target socket address size
     mov r9, 16

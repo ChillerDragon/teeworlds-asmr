@@ -530,6 +530,17 @@ int32_to_str:
     pop rdi
     ret
 
+uint32_to_str_seek_rdi:
+    ; uint32_to_str [rax] [rdi]
+    ;  rax = unsigned integer
+    ;  rdi = output buffer
+    ; seeks rdi by the amount of bytes written
+    push rax
+    call uint32_to_str
+    add rdi, rax
+    pop rax
+    ret
+
 uint32_to_str:
     ; uint32_to_str [rax] [rdi]
     ;  rax = unsigned integer
