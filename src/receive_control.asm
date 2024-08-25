@@ -13,8 +13,11 @@ on_ctrl_msg_token:
     jmp on_ctrl_message_end
 
 on_ctrl_msg_accept:
-    mov rax, [udp_recv_buf + 8]
-    mov [peer_token], rax
+    ; ignore cursed token only ddnet servers send
+    ; https://github.com/ddnet/ddnet/issues/8805
+
+    ; mov rax, [udp_recv_buf + 8]
+    ; mov [peer_token], rax
 
     print_label s_got_accept
     call send_msg_info

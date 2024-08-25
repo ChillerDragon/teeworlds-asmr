@@ -16,6 +16,8 @@ on_system_message:
     ; payload to rax
     mov rax, r10
 
+    cmp r9d, MSG_SYSTEM_NULL
+    je on_system_msg_null
     cmp r9d, MSG_SYSTEM_MAP_CHANGE
     je on_system_msg_map_change
     cmp r9d, MSG_SYSTEM_MAP_DATA
@@ -57,6 +59,11 @@ on_system_message:
 on_system_message_end:
     pop_registers
     ret
+
+on_system_msg_null:
+    ; on_system_msg_null [rax]
+    ;  rax = message payload
+    jmp on_system_message_end
 
 on_system_msg_map_change:
     ; on_system_msg_map_change [rax]

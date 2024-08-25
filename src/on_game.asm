@@ -16,6 +16,8 @@ on_game_message:
     ; payload to rax
     mov rax, r10
 
+    cmp r9d, MSG_GAME_NULL
+    je on_game_msg_null
     cmp r9d, MSG_GAME_SV_MOTD
     je on_game_msg_sv_motd
     cmp r9d, MSG_GAME_SV_BROADCAST
@@ -76,6 +78,12 @@ on_game_message:
 on_game_message_end:
     pop_registers
     ret
+
+
+on_game_msg_null:
+    ; on_game_msg_null [rax]
+    ;  rax = message payload
+    jmp on_game_message_end
 
 on_game_msg_sv_motd:
     ; on_game_msg_sv_motd [rax]
