@@ -330,7 +330,7 @@ assert_ok:
     call mem_comp
     je %%assert_ok
 
-    assert_trace %3
+    assert_trace %4
     print_label s_assert_error
     print_label s_assert_expected
     mov rax, [rbp-24]

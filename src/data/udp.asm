@@ -5,6 +5,7 @@ sockaddr_server dw AF_INET ; 0x2 0x00
             db 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ; watafk is this?!
 SOCKADDR_PORT_OFFSET equ 2
 SOCKADDR_ADDR_OFFSET equ 4
+SOCKADDR_SIZE equ 16
 
 s_non_blocking_read db "doing a non blocking udp read ...", 0x0a
 l_s_non_blocking_read equ $ - s_non_blocking_read

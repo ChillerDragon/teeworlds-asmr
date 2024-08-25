@@ -1,3 +1,55 @@
+str_to_sockaddr:
+    ; str_to_sockaddr [rax] [rdi]
+    ;  rax = input string in the format "127.0.0.1:8303"
+    ;  rdi = output buffer for sockaddr struct
+    push_registers
+
+    ; r9 output buffer
+    mov r9, rdi
+
+    ; two byte family
+    mov byte [r9+0], AF_INET
+    mov byte [r9+1], 0x00
+
+    ; 4 byte addr
+    mov rdi, rax
+    call str_to_int_seek_rdi
+    inc rdi ; skip dot
+    mov byte [r9+4], al
+    call str_to_int_seek_rdi
+    inc rdi ; skip dot
+    mov byte [r9+5], al
+    call str_to_int_seek_rdi
+    inc rdi ; skip dot
+    mov byte [r9+6], al
+    call str_to_int_seek_rdi
+    inc rdi ; skip colon
+    mov byte [r9+7], al
+
+    ; two byte port
+    call str_to_int_seek_rdi
+    ; swap bytes (host to network i guess)
+    mov word [swap_buffer_16], ax
+    mov r8b, byte [swap_buffer_16+1]
+    mov byte [swap_buffer_8+0], r8b
+    mov r8b, byte [swap_buffer_16+0]
+    mov byte [swap_buffer_8+1], r8b
+    mov r8w, word [swap_buffer_8]
+    mov word [r9+2], r8w
+
+    ; 8 byte watafak padding
+    mov byte [r9+8], 0x00
+    mov byte [r9+9], 0x00
+    mov byte [r9+10], 0x00
+    mov byte [r9+11], 0x00
+    mov byte [r9+12], 0x00
+    mov byte [r9+13], 0x00
+    mov byte [r9+14], 0x00
+    mov byte [r9+15], 0x00
+
+    pop_registers
+    ret
+
 sockaddr_to_str:
     ; sockaddr_to_str [rax] [rdi]
     ;  rax = pointer to sockaddr struct
@@ -59,10 +111,10 @@ sockaddr_to_str:
     ; from network to host i guess
     mov r8, 0
     mov r8b, byte [rax+SOCKADDR_PORT_OFFSET+1]
-    mov byte [generic_buffer_16+0], r8b
+    mov byte [swap_buffer_16+0], r8b
     mov r8b, byte [rax+SOCKADDR_PORT_OFFSET+0]
-    mov byte [generic_buffer_16+1], r8b
-    mov r8w, word [generic_buffer_16]
+    mov byte [swap_buffer_16+1], r8b
+    mov r8w, word [swap_buffer_16]
 
     ; the sockaddr port is a uint16_t
     ; but we have no int to str helper for that
