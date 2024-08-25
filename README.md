@@ -4,6 +4,8 @@ Basic light weight teeworlds 0.7 client written in pure assembly. Terminal only 
 
 [![asmr janina](https://i3.ytimg.com/vi/irZzz8Ul58Q/maxresdefault.jpg)](https://www.youtube.com/watch?v=irZzz8Ul58Q)
 
+![teeworlds asmr preview](https://raw.githubusercontent.com/ChillerDragon/cdn/master/teeworlds_asmr.png)
+
 ## deps
 
 ```
