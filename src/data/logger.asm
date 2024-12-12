@@ -41,3 +41,4 @@ l_s_print_i equ $ - s_print_i
 s_logger db "[logger] "
 l_s_logger equ $ - s_logger
 
+label_chat db "chat", 0x00

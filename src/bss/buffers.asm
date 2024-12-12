@@ -17,3 +17,4 @@ printf_arg_8_buf resb 8
 
 printf_num_args resb 4
 
+chat_message_buffer_2048 resb 2048

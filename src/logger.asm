@@ -1,6 +1,48 @@
 ; vim: set tabstop=4:softtabstop=4:shiftwidth=4
 ; vim: set expandtab:
 
+log_info:
+    ; log_info [rax]
+    ;  rax = null terminated label
+    ;  rdi = null terminated string
+
+    ; label
+    mov r9, rax
+    ; message
+    mov r10, rdi
+
+    ; offset into logger_line_buffer_2048
+    mov r11, 0
+
+    mov byte [logger_line_buffer_2048+r11], '['
+    inc r11
+
+    lea rax, [logger_line_buffer_2048+r11]
+    mov rdi, r9
+    mov rsi, 16 ; random max label len
+    call str_copy
+
+    ; Increment destination pointer by amount of bytes written
+    add r11, rax
+    mov byte [logger_line_buffer_2048+r11], ']'
+    inc r11
+    mov byte [logger_line_buffer_2048+r11], ' '
+    inc r11
+
+    lea rax, [logger_line_buffer_2048+r11]
+    mov rdi, r10 ; message
+    mov rsi, 2000 ; buffer max len minus label length
+    call str_copy
+
+    add r11, rax
+    mov byte [logger_line_buffer_2048+r11], 0x0a
+    inc r11
+    mov byte [logger_line_buffer_2048+r11], 0x00
+    inc r11
+
+    print_c_str logger_line_buffer_2048
+    ret
+
 ptr_to_str:
     ; ptr_to_str [rax] [rdi]
     ;  rax = pointer

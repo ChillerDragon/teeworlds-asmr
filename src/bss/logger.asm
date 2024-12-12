@@ -1,0 +1,1 @@
+logger_line_buffer_2048 resb 2048

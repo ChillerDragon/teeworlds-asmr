@@ -17,31 +17,49 @@ on_chat:
     call get_string
     mov r10, rax
 
-    print_label s_chat
+    ; r12 is offset into chat_message_buffer_2048
+    mov r12, 0
 
     ; check srv msg
     cmp r8w, -1
     jne .human_msg
 
     .server_msg:
-    print_label s_3_stars
+    mov byte [chat_message_buffer_2048+r12], '*'
+    inc r12
+    mov byte [chat_message_buffer_2048+r12], '*'
+    inc r12
+    mov byte [chat_message_buffer_2048+r12], '*'
+    inc r12
+    mov byte [chat_message_buffer_2048+r12], ' '
+    inc r12
     jmp .message_content
 
     .human_msg:
     ; get author name
     mov rbx, r8
     imul rbx, TW_CLIENT_SIZE
-    lea rsi, [tw_clients + rbx + TW_CLIENT_NAME_OFFSET]
-    print_c_str rsi
+    lea rax, [chat_message_buffer_2048+r12] ; append buffer dst
+    lea rdi, [tw_clients + rbx + TW_CLIENT_NAME_OFFSET] ; name append src
+    mov rsi, 32 ; use max name length here or something
+    call str_copy ; append name to buffer
+    add r12, rax ; increment buffer offset by name length
 
     .message_content:
-    call print_colon
-    call print_space
+    mov byte [chat_message_buffer_2048+r12], ':'
+    inc r12
+    mov byte [chat_message_buffer_2048+r12], ' '
+    inc r12
+
+    lea rax, [chat_message_buffer_2048+r12]
+    mov rdi, r10 ; chat message
+    mov rsi, 1024 ; random max msg length xd
+    call str_copy
 
     ; print message
-    print_c_str r10
-
-    call print_newline
+    mov rax, label_chat
+    mov rdi, chat_message_buffer_2048
+    call log_info
 
     pop_registers
     ret

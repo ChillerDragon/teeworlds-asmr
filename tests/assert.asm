@@ -36,6 +36,7 @@ section .bss
     %include "src/bss/huffman.asm"
     %include "src/bss/unpacker.asm"
     %include "src/bss/teeworlds_state.asm"
+    %include "src/bss/logger.asm"
 
     ; holds the path to the current source code file
     ; of the test as a null terminated C string
