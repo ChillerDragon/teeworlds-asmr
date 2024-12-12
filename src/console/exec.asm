@@ -27,6 +27,7 @@ _console_callback_matcher:
     match_cmd quit
     match_cmd ping
     match_cmd connect
+    match_cmd logfile
 
     _console_callback_matcher_unknown_command:
     print_label s_console_unknown_command

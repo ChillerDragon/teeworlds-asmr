@@ -20,3 +20,35 @@ _com_connect:
 
     jmp _console_callback_matcher_end
 
+_com_logfile:
+    ; rax = args
+
+    ; logfile
+    mov r9, rax
+
+    mov rax, logger_logfile_path
+    mov rdi, r9
+    mov rsi, 512
+    call str_copy
+
+    print "loggin to "
+    print_c_str logger_logfile_path
+    print " ..."
+
+    mov rax, logger_logfile_path
+    mov rdi, O_APPEND
+    call fopen
+
+    ; rax is set by open(2) and should be a valid (positive)
+    ; file descriptor
+    cmp rax, 0
+    jg .fopen_ok
+
+    printf "error: logger failed and got fd=%d", rax
+    exit 1
+
+    .fopen_ok:
+    call close
+
+    jmp _console_callback_matcher_end
+

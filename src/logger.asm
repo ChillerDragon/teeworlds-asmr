@@ -56,13 +56,18 @@ log_to_logfile:
     ;  rax = full log line to log
     push_registers
 
+    ; only log if there is a logpath set
+    ; if the first byte is NULL
+    ; it is either an empty c string or unset bss memory
+    cmp byte [logger_logfile_path], 0x00
+    je .logger_end
+
     ; string to write
     mov r9, rax
 
-    str_to_stack "logfile.txt"
+    mov rax, logger_logfile_path
     mov rdi, O_APPEND
     call fopen
-    mov rsp, rbp ; free stack str
 
     ; rax is set by open(2) and should be a valid (positive)
     ; file descriptor
@@ -79,6 +84,8 @@ log_to_logfile:
 
     ; fd is still in rax
     call close
+
+    .logger_end:
 
     pop_registers
     ret

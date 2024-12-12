@@ -1,1 +1,2 @@
 logger_line_buffer_2048 resb 2048
+logger_logfile_path resb 512
