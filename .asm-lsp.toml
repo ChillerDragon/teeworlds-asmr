@@ -4,15 +4,7 @@ assembler = "nasm"
 instruction_set = "x86-64"
 
 [default_config.opts]
+compiler = "nasm"
+compile_flags_txt = ['"-f elf64"']
 diagnostics = true
-default_diagnostics = true
-
-[[project]]
-path = ""
-version = "0.9.0"
-assembler = "nasm"
-instruction_set = "x86-64"
-
-[project.opts]
-diagnostics = true
-default_diagnostics = true
+default_diagnostics = false
