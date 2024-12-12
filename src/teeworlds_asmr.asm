@@ -121,6 +121,7 @@ section .bss
     %include "src/bss/huffman.asm"
     %include "src/bss/unpacker.asm"
     %include "src/bss/teeworlds_state.asm"
+    %include "src/bss/logger.asm"
 section .text
 
 %include "src/macros.asm"

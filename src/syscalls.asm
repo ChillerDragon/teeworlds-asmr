@@ -73,18 +73,14 @@ fopen:
 close:
     ; close [rax]
     ;  rax = file descriptor
-    push r9
-    push rdi
-    push rax
+    push_registers
 
     mov r9, rax
     mov rax, SYS_CLOSE
     mov rdi, r9
     syscall
 
-    pop rax
-    pop rdi
-    pop r9
+    pop_registers
     ret
 
 ; nanosleep [nanoseconds]

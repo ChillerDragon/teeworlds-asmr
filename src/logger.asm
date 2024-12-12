@@ -5,6 +5,7 @@ log_info:
     ; log_info [rax]
     ;  rax = null terminated label
     ;  rdi = null terminated string
+    push_registers
 
     ; label
     mov r9, rax
@@ -40,7 +41,46 @@ log_info:
     mov byte [logger_line_buffer_2048+r11], 0x00
     inc r11
 
+    ; log stdout
     print_c_str logger_line_buffer_2048
+
+    ; log to file
+    mov rax, logger_line_buffer_2048
+    call log_to_logfile
+
+    pop_registers
+    ret
+
+log_to_logfile:
+    ; log_to_logfile [rax]
+    ;  rax = full log line to log
+    push_registers
+
+    ; string to write
+    mov r9, rax
+
+    str_to_stack "logfile.txt"
+    mov rdi, O_APPEND
+    call fopen
+    mov rsp, rbp ; free stack str
+
+    ; rax is set by open(2) and should be a valid (positive)
+    ; file descriptor
+    cmp rax, 0
+    jg .fopen_ok
+
+    printf "error: logger failed and got fd=%d", rax
+    exit 1
+
+    .fopen_ok:
+
+    mov rdi, r9
+    call write_str_to_file
+
+    ; fd is still in rax
+    call close
+
+    pop_registers
     ret
 
 ptr_to_str:
