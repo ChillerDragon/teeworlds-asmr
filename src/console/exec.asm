@@ -50,11 +50,17 @@ exec_line:
     ;  mov rsp, rbp
     ;
     push_registers
+    mov rbp, rsp
 
-    ; mem_copy [rax] [rdi] [rsi]
-    ;   rax = destination buffer pointer
-    ;   rdi = source buffer pointer
-    ;   rsi = size
+    ; allocate two 512 byte buffers on the stack
+    ; the first is the command and the second its args
+    sub rsp, 512*2
+
+    ; cmd = ""
+    mov byte [rbp-1024], 0x00
+
+    ; args = ""
+    mov byte [rbp-512], 0x00
 
     ; *******
     ; command
@@ -71,7 +77,7 @@ exec_line:
 
     ; rax = destination buffer pointer
     push rax
-    mov rax, generic_buffer_128
+    lea rax, [rbp-1024] ; cmd buffer
     call mem_copy
     pop rax
 
@@ -94,13 +100,14 @@ exec_line:
     mov rsi, 512
 
     ;   rax = destination buffer pointer
-    mov rax, generic_buffer_512
+    lea rax, [rbp-512]
     call mem_copy
 
-    mov rax, generic_buffer_128 ; command
-    mov rdi, generic_buffer_512 ; args
+    lea rax, [rbp-1024] ; command
+    lea rdi, [rbp-512] ; args
     call _console_callback_matcher
 
+    mov rsp, rbp
     pop_registers
     ret
 
