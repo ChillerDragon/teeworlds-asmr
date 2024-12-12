@@ -26,6 +26,10 @@ _console_callback_matcher:
     ; r10 args
     mov r10, rdi
 
+    ; skip empty commands
+    cmp byte [r8], 0x00
+    je _console_callback_matcher_end
+
     print_label s_console_got_command
     print_c_str r8
     print_label s_console_with_args
@@ -50,13 +54,10 @@ _console_callback_matcher:
 exec_line:
     ; exec_line [rax]
     ;  rax = command str with arguments
-    ; supports semicolon separated commands with a few caveats:
+    ; supports semicolon separated commands with one caveat:
     ;
-    ;  1. It requires spaces after commands without args.
+    ;     It requires spaces after commands without args.
     ;     "ping;ping" does not work only "ping ;ping"
-    ;
-    ;  2. Because the code uses recursion the order of commands is reversed.
-    ;     "foo ;bar" will execute "bar" then "foo"
     ;
     ; example:
     ;
@@ -105,6 +106,8 @@ exec_line:
     ;   rdi = source buffer pointer
     lea rdi, [rax+rsi]
     cmp byte [rdi], 0x00
+    je .empty_arg
+    cmp byte [rdi], ';'
     je .empty_arg
     ; if there are no args we leave it at the null byte
     ; if there are args we assume the separator is one space
