@@ -1,8 +1,17 @@
+_console_match_cmd:
+    ; _console_match_cmd [rax] [rdi]
+    ;  rax = fixed command name
+    ;  rdi = user input to check
+    ; sets `je` flag if they match
+    push_registers
+    call str_comp
+    pop_registers
+    ret
+
 %macro match_cmd 1
     mov rdi, r8
     mov rax, _con_str_%1
-    call str_comp
-    mov rax, r10
+    call _console_match_cmd
     je _com_%1
 %endmacro
 
