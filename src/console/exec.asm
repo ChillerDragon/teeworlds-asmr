@@ -41,7 +41,13 @@ _console_callback_matcher:
 exec_line:
     ; exec_line [rax]
     ;  rax = command str with arguments
-    ; does only support one command with space separated args at a time
+    ; supports semicolon separated commands with a few caveats:
+    ;
+    ;  1. It requires spaces after commands without args.
+    ;     "ping;ping" does not work only "ping ;ping"
+    ;
+    ;  2. Because the code uses recursion the order of commands is reversed.
+    ;     "foo ;bar" will execute "bar" then "foo"
     ;
     ; example:
     ;
@@ -103,6 +109,26 @@ exec_line:
     lea rax, [rbp-512]
     call mem_copy
 
+    ; find ; in args and split command
+    lea rax, [rbp-512] ; args
+    mov rdi, ';'
+    call str_find_char
+    cmp rax, -1
+    jg .got_semicolon
+    jmp .got_no_semicolons
+    .got_semicolon:
+
+    ; replace semicolon with null terminator
+    lea rax, [rbp-512+rax]
+    mov byte [rax], 0x00
+
+    ; recurse to parse next command
+    ; by skipping the null byte and calling self
+    inc rax
+    call exec_line
+
+    .got_no_semicolons:
+
     lea rax, [rbp-1024] ; command
     lea rdi, [rbp-512] ; args
     call _console_callback_matcher
@@ -118,7 +144,9 @@ test_console:
     ; mov rsp, rbp
 
 
-    str_to_stack "ping"
+    str_to_stack "uwu;xxx;ping"
+    ; str_to_stack "ping"
+    ; str_to_stack "ping"
     call exec_line
     mov rsp, rbp
 

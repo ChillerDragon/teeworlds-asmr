@@ -33,7 +33,7 @@ _com_logfile:
 
     print "loggin to "
     print_c_str logger_logfile_path
-    print " ..."
+    puts " ..."
 
     mov rax, logger_logfile_path
     mov rdi, O_APPEND
