@@ -1,11 +1,13 @@
 ; vim: set tabstop=4:softtabstop=4:shiftwidth=4
 ; vim: set expandtab:
 
-log_info:
+build_log_line:
     ; log_info [rax]
     ;  rax = null terminated label
     ;  rdi = null terminated string
-    push_registers
+    ; returns into rax the full log line as null terminated string
+    ; adding the timestamp and label
+    push_registers_keep_rax
 
     ; label
     mov r9, rax
@@ -55,12 +57,44 @@ log_info:
     mov byte [logger_line_buffer_2048+r11], 0x00
     inc r11
 
+    pop_registers_keep_rax
+    ret
+
+log_info:
+    ; log_info [rax]
+    ;  rax = null terminated label
+    ;  rdi = null terminated string
+    push_registers
+
+    call build_log_line
+
     ; log stdout
     print_c_str logger_line_buffer_2048
 
     ; log to file
     mov rax, logger_line_buffer_2048
     call log_to_logfile
+
+    pop_registers
+    ret
+
+log_debug:
+    ; log_debug [rax]
+    ;  rax = null terminated label
+    ;  rdi = null terminated string
+    ; debug messages are not logged to the logfile
+    push_registers
+
+    call build_log_line
+
+    ; log stdout
+    print_c_str logger_line_buffer_2048
+
+    ; could put this in an if statement
+    ; and provide the user with a log debug config
+    ; ; log to file
+    ; mov rax, logger_line_buffer_2048
+    ; call log_to_logfile
 
     pop_registers
     ret

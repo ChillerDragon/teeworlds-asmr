@@ -68,10 +68,27 @@ on_system_msg_null:
 on_system_msg_map_change:
     ; on_system_msg_map_change [rax]
     ;  rax = message payload
-    print_label s_map_change
+    mov rbp, rsp
+    sub rsp, 2048 ; buffer for chat message
+
+    ; index into msg stack buffer
+    mov r9, -2048
+
+    lea rax, [rbp+r9]
+    mov rdi, c_map_change
+    call str_copy
+    add r9, rax
+
     call get_string
-    print_c_str rax
-    call print_newline
+    mov rdi, rax ; arg for str_copy
+    lea rax, [rbp+r9]
+    call str_copy
+
+    mov rax, label_client
+    lea rdi, [rbp-2048]
+    call log_debug
+
+    mov rsp, rbp
 
     call send_ready
 

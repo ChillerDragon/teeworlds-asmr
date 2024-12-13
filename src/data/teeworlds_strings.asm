@@ -43,8 +43,6 @@ s_got_end_of_packet_with_chunks_left db "[client] got end of packet with chunks 
 l_s_got_end_of_packet_with_chunks_left equ $ - s_got_end_of_packet_with_chunks_left
 s_parser_bytes_red db "[client] parser bytes red: "
 l_s_parser_bytes_red equ $ - s_parser_bytes_red
-s_map_change db "[client] got map change. new map: "
-l_s_map_change equ $ - s_map_change
 s_motd db "[motd] "
 l_s_motd equ $ - s_motd
 s_broadcast db "[broadcast] "

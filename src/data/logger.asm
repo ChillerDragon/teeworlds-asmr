@@ -41,5 +41,10 @@ l_s_print_i equ $ - s_print_i
 s_logger db "[logger] "
 l_s_logger equ $ - s_logger
 
+; null terminated C strings
+
+c_map_change db "got map change. new map: ", 0x00
+
 label_chat db "chat", 0x00
 label_broadcast db "broadcast", 0x00
+label_client db "client", 0x00
