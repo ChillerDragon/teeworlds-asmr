@@ -86,7 +86,7 @@ on_system_msg_map_change:
 
     mov rax, label_client
     lea rdi, [rbp-2048]
-    call log_debug
+    call log_info
 
     mov rsp, rbp
 
