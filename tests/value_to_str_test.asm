@@ -12,6 +12,33 @@ test_int_to_str:
     assert_str_eq rax, rdi, __LINE__
     mov rsp, rbp
 
+test_small_int64_to_str:
+    mov rax, 2147483650
+    mov rdi, assert_actual_buf
+    call int32_to_str
+
+    str_to_stack "2147483650"
+    assert_str_eq rax, rdi, __LINE__
+    mov rsp, rbp
+
+test_big_int64_to_str:
+    mov rax, 62147483650
+    mov rdi, assert_actual_buf
+    call int32_to_str
+
+    str_to_stack "62147483650"
+    assert_str_eq rax, rdi, __LINE__
+    mov rsp, rbp
+
+test_big_negative_int64_to_str:
+    mov rax, -962147483650
+    mov rdi, assert_actual_buf
+    call int32_to_str
+
+    str_to_stack "-962147483650"
+    assert_str_eq rax, rdi, __LINE__
+    mov rsp, rbp
+
 test_negative_int_to_str0:
     mov rax, -10
     mov rdi, assert_actual_buf

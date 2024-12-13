@@ -598,6 +598,9 @@ int32_to_str:
     ;  rax = signed integer
     ;  rdi = output buffer
     ; returns into rax the size written
+    ;
+    ; the 32 in the name is a bit misleading
+    ; the unit tests confirm that also 64 bit integers are supported
     push rdi
     push r9
 
