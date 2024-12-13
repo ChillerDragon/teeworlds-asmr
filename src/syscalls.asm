@@ -83,6 +83,17 @@ close:
     pop_registers
     ret
 
+time:
+    ; time
+    ;  returns into rax the current unix epoch
+    push_registers_keep_rax
+    mov rax, SYS_TIME
+    mov rdi, 0x00
+    syscall
+    pop_registers_keep_rax
+    ret
+
+
 ; nanosleep [nanoseconds]
 %macro nanosleep 1
     push_registers

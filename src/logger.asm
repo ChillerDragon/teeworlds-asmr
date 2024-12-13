@@ -15,6 +15,19 @@ log_info:
     ; offset into logger_line_buffer_2048
     mov r11, 0
 
+    ; timestamp
+    mov byte [logger_line_buffer_2048+r11], '['
+    inc r11
+
+    call time
+    lea rdi, [logger_line_buffer_2048+r11]
+    call int32_to_str
+    add r11, rax
+
+    mov byte [logger_line_buffer_2048+r11], ']'
+    inc r11
+
+    ; label
     mov byte [logger_line_buffer_2048+r11], '['
     inc r11
 
@@ -30,6 +43,7 @@ log_info:
     mov byte [logger_line_buffer_2048+r11], ' '
     inc r11
 
+    ; message
     lea rax, [logger_line_buffer_2048+r11]
     mov rdi, r10 ; message
     mov rsi, 2000 ; buffer max len minus label length
