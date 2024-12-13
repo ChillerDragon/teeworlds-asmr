@@ -57,7 +57,7 @@ on_chat:
     call str_copy
 
     ; print message
-    mov rax, label_chat
+    mov rax, c_chat
     mov rdi, chat_message_buffer_2048
     call log_info
 

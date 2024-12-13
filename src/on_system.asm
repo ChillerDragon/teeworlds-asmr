@@ -84,7 +84,7 @@ on_system_msg_map_change:
     lea rax, [rbp+r9]
     call str_copy
 
-    mov rax, label_client
+    mov rax, c_client
     lea rdi, [rbp-2048]
     call log_info
 

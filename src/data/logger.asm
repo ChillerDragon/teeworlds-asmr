@@ -44,7 +44,7 @@ l_s_logger equ $ - s_logger
 ; null terminated C strings
 
 c_map_change db "got map change. new map: ", 0x00
-
-label_chat db "chat", 0x00
-label_broadcast db "broadcast", 0x00
-label_client db "client", 0x00
+c_motd db "motd", 0x00
+c_chat db "chat", 0x00
+c_broadcast db "broadcast", 0x00
+c_client db "client", 0x00

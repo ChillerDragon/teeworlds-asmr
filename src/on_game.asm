@@ -90,11 +90,30 @@ on_game_msg_sv_motd:
     ;  rax = message payload
     call get_string
     cmp byte [rax], 0x00
+    mov r10, rax ; motd
     je on_game_message_end
 
-    print_label s_motd
-    print_c_str rax
-    call print_newline
+    mov rbp, rsp
+    sub rsp, 2048
+
+    ; offset into stack buffer
+    mov r9, -2048
+
+    lea rax, [rbp+r9]
+    mov rdi, c_motd
+    call str_copy
+    add r9, rax
+
+    lea rax, [rbp+r9]
+    mov rdi, r10 ; motd from the get_string
+    call str_copy
+
+    mov rax, c_motd
+    lea rdi, [rbp-2048]
+    call log_info
+
+    mov rsp, rbp
+
     jmp on_game_message_end
 
 on_game_msg_sv_broadcast:
@@ -102,7 +121,7 @@ on_game_msg_sv_broadcast:
     ;  rax = message payload
     call get_string
     mov rdi, rax
-    mov rax, label_broadcast
+    mov rax, c_broadcast
     call log_info
     jmp on_game_message_end
 
