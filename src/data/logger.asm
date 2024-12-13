@@ -42,3 +42,4 @@ s_logger db "[logger] "
 l_s_logger equ $ - s_logger
 
 label_chat db "chat", 0x00
+label_broadcast db "broadcast", 0x00

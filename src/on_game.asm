@@ -100,10 +100,10 @@ on_game_msg_sv_motd:
 on_game_msg_sv_broadcast:
     ; on_game_msg_sv_broadcast [rax]
     ;  rax = message payload
-    print_label s_broadcast
     call get_string
-    print_c_str rax
-    call print_newline
+    mov rdi, rax
+    mov rax, label_broadcast
+    call log_info
     jmp on_game_message_end
 
 on_game_msg_sv_chat:
