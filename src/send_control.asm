@@ -27,7 +27,35 @@ send_ctrl_close:
 
     ret
 
+send_ctrl_msg_connect6:
+    push rax
+
+    packet6_pack_byte MSG_CTRL_CONNECT
+    packet6_pack_raw MAGIC_TKEN, 4
+
+    mov byte [out_packet_header_flags], PACKETFLAG_CONTROL
+    mov byte [out_packet_header_num_chunks], 0
+    call send_packet
+
+    pop rax
+    ret
+
 send_ctrl_msg_connect:
+    push rax
+    mov al, byte [connection_version]
+    cmp al, 7
+    je .connect7
+    .connect6:
+    call send_ctrl_msg_connect6
+    jmp .end
+    .connect7:
+    call send_ctrl_msg_connect7
+    .end:
+    pop rax
+    ret
+
+
+send_ctrl_msg_connect7:
     push rax
 
     packet_pack_byte MSG_CTRL_CONNECT

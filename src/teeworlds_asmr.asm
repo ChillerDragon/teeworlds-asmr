@@ -257,6 +257,8 @@ _start:
     print_label s_menu
     call print_newline
 
+    mov byte [connection_version], 7
+
     ; setup state
     call non_blocking_keypresses
     call open_socket

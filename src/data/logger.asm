@@ -43,6 +43,8 @@ l_s_logger equ $ - s_logger
 
 ; null terminated C strings
 
+c_connect6 db "connecting using 0.6 ddnet protocol to ", 0x00
+c_connect7 db "connecting using 0.7 protocol to ", 0x00
 c_map_change db "got map change. new map: ", 0x00
 c_motd db "motd", 0x00
 c_chat db "chat", 0x00

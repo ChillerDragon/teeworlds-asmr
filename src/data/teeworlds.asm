@@ -1,6 +1,7 @@
 ; tw protocol
 
 PACKET_HEADER_LEN equ 7
+PACKET6_HEADER_LEN equ 3
 
 MSG_CTRL_CONNECT equ 1
 MSG_CTRL_ACCEPT equ 2
