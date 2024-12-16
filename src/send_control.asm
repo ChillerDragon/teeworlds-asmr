@@ -30,6 +30,8 @@ send_ctrl_close:
 send_ctrl_msg_connect6:
     push rax
 
+    mov qword [token], 0xff_ff_ff_ff
+
     packet6_pack_byte MSG_CTRL_CONNECT
     packet6_pack_raw MAGIC_TKEN, 4
 
