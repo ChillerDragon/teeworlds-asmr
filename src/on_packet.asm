@@ -145,6 +145,20 @@ on_message:
 
 on_packet:
     push rax
+    mov al, byte [connection_version]
+    cmp al, 7
+    je on_packet7 ; jumps to on_packet_end
+    jmp on_packet6 ; jumps to on_packet_end
+on_packet_end:
+    pop rax
+    ret
+
+on_packet6:
+    puts "0.6 not implemented yet"
+    jmp on_packet_end
+
+on_packet7:
+    push rax
     mov rax, udp_recv_buf
     call unpack_packet_header
     pop rax
@@ -187,6 +201,6 @@ on_packet:
     mov rsi, on_message
     call on_system_or_game_messages
 
-on_packet_end:
-    ret
+    ; TODO: i think this code is unreachable
+    jmp on_packet_end
 
