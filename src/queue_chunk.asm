@@ -5,10 +5,24 @@ queue_chunk:
     ;  rsi = payload size
     ;  rdx = msg id
     ;  r10 = system (CHUNK_SYSTEM or CHUNK_GAME)
+    ; supports both 0.6 and 0.7
 
     ; resend flag is not supported yet
 
     push_registers
+
+    ; r8 is packet header len depending on connection version
+    ; do not overwrite this anywhere in this function!
+    mov r8d, PACKET_HEADER_LEN
+
+    push rax
+    mov al, byte [connection_version]
+    cmp al, 7
+    je .version7
+    mov r8d, PACKET6_HEADER_LEN
+    .version7:
+    ._: ; clear label for debugger
+    pop rax
 
     ; increment num chunks
     push rax
@@ -51,7 +65,7 @@ queue_chunk:
 
     ; set output buffer
     mov dword r11d, [udp_payload_index]
-    lea rsi, [udp_send_buf + PACKET_HEADER_LEN + r11d]
+    lea rsi, [udp_send_buf + r8d + r11d]
 
     ; flags are already in rax
     call pack_chunk_header
@@ -82,7 +96,7 @@ queue_chunk:
     ; destination buffer
     mov r11, 0
     mov dword r11d, [udp_payload_index]
-    lea rax, [udp_send_buf + PACKET_HEADER_LEN + r11d]
+    lea rax, [udp_send_buf + r8d + r11d]
 
     ; source buffer is already in rdi
     ; size is already in rsi
