@@ -70,6 +70,7 @@ section .text
 %include "src/chunk_unpacker.asm"
 %include "src/chunk_packer.asm"
 %include "src/chunk_packer6.asm"
+%include "src/queue_chunk.asm"
 %include "src/send_control.asm"
 %include "src/send_system.asm"
 %include "src/send_game.asm"
