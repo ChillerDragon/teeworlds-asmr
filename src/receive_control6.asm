@@ -13,13 +13,13 @@ on_ctrl6_msg_connect_accept:
 on_ctrl6_msg_close:
     push rax
 
-    mov rax, [packet_payload + 1]
+    mov rax, [packet6_payload + 1]
     cmp rax, 0
     je .on_ctrl6_msg_close_no_reason
 
 .on_ctrl6_msg_close_reason:
     print_label s_got_disconnect_with_reason
-    lea rax, [packet_payload + 1]
+    lea rax, [packet6_payload + 1]
     print_c_str rax
     call print_newline
     jmp .on_ctrl6_msg_close_end
@@ -37,7 +37,7 @@ on_ctrl6_message:
 
     print_label s_got_ctrl_msg
 
-    mov al, [udp_recv_buf + PACKET_HEADER_LEN]
+    mov al, [udp_recv6_buf + PACKET6_HEADER_LEN]
     call println_uint32
 
     cmp al, MSG6_CTRL_CONNECTACCEPT

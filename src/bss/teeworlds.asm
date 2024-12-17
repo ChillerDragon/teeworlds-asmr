@@ -25,8 +25,12 @@ socket resb 4
 ; the compression flag
 ; if the compression flag is set there will be a decompressed payload in
 ; the label decompressed_packet_payload
-udp_recv_buf resb 7
+udp_recv_buf resb PACKET_HEADER_LEN
 packet_payload resb NET_MAX_PACKETSIZE ; 1400
+
+; 0.6.4 packet header offsets
+udp_recv6_buf resb PACKET6_HEADER_LEN
+packet6_payload resb NET_MAX_PACKETSIZE ; 1400
 
 ; only set if the packet is compressed
 ; otherwise look at the label packet_payload

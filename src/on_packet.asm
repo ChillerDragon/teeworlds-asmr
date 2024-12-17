@@ -156,7 +156,7 @@ on_packet_end:
 on_packet6:
 
     push rax
-    mov rax, udp_recv_buf
+    mov rax, udp_recv6_buf
     call unpack_packet_header6
     pop rax
 

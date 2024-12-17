@@ -151,14 +151,24 @@ open_socket:
     ret
 
 recv_udp:
-    ; recv_udp
+    ; recv_udp [rax]
+    ;  rax = buffer to write to
+    ;
+    ; example call:
+    ;
+    ; mov rax, udp_recv_buf
+    ; call recv_udp
     ;
     ; listens for udp packet on the
-    ; `socket` and fills the `udp_recv_buf`
+    ; `socket` and fills the buffer in rax
+    ; which usually is `udp_recv_buf` or `udp_recv6_buf`
     push_registers
+    ; output buffer
+    mov r9, rax
+
     mov rax, SYS_RECVFROM
     movzx rdi, byte [socket] ; then only set the lowest byte
-    lea rsi, udp_recv_buf
+    mov rsi, r9 ; pointer to buffer `udp_recv_buf` or `udp_recv6_buf`
     mov rdx, NET_MAX_PACKETSIZE
     ; flags
     xor r10, r10

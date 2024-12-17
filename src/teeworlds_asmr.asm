@@ -157,10 +157,24 @@ section .text
 %include "src/client_info.asm"
 %include "src/on_chat.asm"
 
+get_recv_buf:
+    ; returns into rax either `udp_recv_buf` or `udp_recv6_buf`
+    ; depending on the current connection version
+    mov al, byte [connection_version]
+    cmp al, 7
+    je .version7
+    .version6:
+    mov rax, udp_recv6_buf
+    jmp .end
+    .version7:
+    mov rax, udp_recv_buf
+    .end:
+    ret
+
 print_udp:
     print_label s_got_udp
     ; hexdump
-    mov rax, udp_recv_buf
+    call get_recv_buf
     mov rdi, [udp_read_len]
     call print_hexdump
     call print_newline
@@ -178,6 +192,7 @@ on_udp_packet:
 
 pump_network:
     ; print_label s_non_blocking_read
+    call get_recv_buf
     call recv_udp
     mov rax, [udp_read_len]
     test rax, rax
