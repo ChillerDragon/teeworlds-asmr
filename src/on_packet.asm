@@ -154,7 +154,15 @@ on_packet_end:
     ret
 
 on_packet6:
-    puts "0.6 not implemented yet"
+
+    push rax
+    mov rax, udp_recv_buf
+    call unpack_packet_header6
+    pop rax
+
+    is_packet_in_flag PACKETFLAG6_CONTROL
+    je on_ctrl6_message
+
     jmp on_packet_end
 
 on_packet7:

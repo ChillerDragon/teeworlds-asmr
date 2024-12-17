@@ -140,6 +140,7 @@ section .text
 %include "src/send_system.asm"
 %include "src/send_game.asm"
 %include "src/receive_control.asm"
+%include "src/receive_control6.asm"
 %include "src/system.asm"
 %include "src/string.asm"
 %include "src/packet_header.asm"
