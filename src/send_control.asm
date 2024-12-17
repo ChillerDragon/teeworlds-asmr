@@ -30,13 +30,22 @@ send_ctrl_close:
 send_ctrl_msg_connect6:
     push rax
 
-    mov byte [token+0], 0xff
-    mov byte [token+1], 0xff
-    mov byte [token+2], 0xff
-    mov byte [token+3], 0xff
 
-    packet6_pack_byte MSG_CTRL_CONNECT
+    packet6_pack_byte MSG6_CTRL_CONNECT
     packet6_pack_raw MAGIC_TKEN, 4
+
+    mov byte [out_packet_header_flags], PACKETFLAG6_CONTROL
+    mov byte [out_packet_header_num_chunks], 0
+    call send_packet
+
+    pop rax
+    ret
+
+send_ctrl6_msg_ack_accept:
+    push rax
+
+    packet6_pack_byte MSG6_CTRL_ACCEPT
+    ; packet6_pack_raw [peer_token], 4
 
     mov byte [out_packet_header_flags], PACKETFLAG6_CONTROL
     mov byte [out_packet_header_num_chunks], 0

@@ -43,6 +43,7 @@ l_s_logger equ $ - s_logger
 
 ; null terminated C strings
 
+c_invalid_length_ddnet_only db "error: got unexpected packet length for 0.6 connection. Only servers with ddnet security tokens are supported in 0.6", 0x00
 c_connect6 db "connecting using 0.6 ddnet protocol to ", 0x00
 c_connect7 db "connecting using 0.7 protocol to ", 0x00
 c_map_change db "got map change. new map: ", 0x00
@@ -50,3 +51,4 @@ c_motd db "motd", 0x00
 c_chat db "chat", 0x00
 c_broadcast db "broadcast", 0x00
 c_client db "client", 0x00
+c_error db "error", 0x00

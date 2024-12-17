@@ -1,11 +1,25 @@
 on_ctrl6_msg_connect_accept:
-    ; ignore cursed token only ddnet servers send
-    ; https://github.com/ddnet/ddnet/issues/8805
+    ; in addition to checking the length
+    ; we could also check for the "TKEN"
+    ; magic in front of the token
 
-    ; mov rax, [udp_recv_buf + 8]
-    ; mov [peer_token], rax
+    mov eax, dword [udp_read_len]
+    cmp eax, 12
+    je .len_ok
+    mov rax, c_invalid_length_ddnet_only
+    call throw_c_str
+    .len_ok:
+
+    mov rax, [udp_recv6_buf + PACKET6_HEADER_LEN + 5]
+    mov [peer_token], eax
+    print_label s_got_peer_token
+    mov rax, peer_token
+    mov rdi, 4
+    call print_hexdump
+    call print_newline
 
     print_label s_got_accept
+    call send_ctrl6_msg_ack_accept
     ; call send_msg_info
 
     jmp on_ctrl6_message_end

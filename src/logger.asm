@@ -1,6 +1,17 @@
 ; vim: set tabstop=4:softtabstop=4:shiftwidth=4
 ; vim: set expandtab:
 
+throw_c_str:
+    ; throw_c_str [rax]
+    ;  rax = null terminated string with error message
+    ; logs with log level error and terminates the process
+    mov r9, rax
+    mov rax, c_error
+    mov rdi, r9
+    call log_error
+    exit 1
+    ret
+
 build_log_line:
     ; log_info [rax]
     ;  rax = null terminated label
@@ -76,6 +87,13 @@ log_info:
     call log_to_logfile
 
     pop_registers
+    ret
+
+log_error:
+    ; log_error [rax]
+    ;  rax = null terminated label
+    ;  rdi = null terminated string
+    call log_info
     ret
 
 log_debug:
