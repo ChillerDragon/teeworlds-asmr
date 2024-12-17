@@ -92,6 +92,15 @@ send_packet6:
     ; call println_uint32
     ; pop rax
 
+    push rax
+    ; TODO: somehow we sent too much here
+    printlnf "size=%d", rdi
+    print "sending: "
+    mov rax, udp_send_buf
+    call print_hexdump
+    call print_newline
+    pop rax
+
     call send_udp
 
     ; this is for convenience so we can just queue new chunks

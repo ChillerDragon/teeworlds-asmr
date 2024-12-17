@@ -20,7 +20,7 @@ on_ctrl6_msg_connect_accept:
 
     print_label s_got_accept
     call send_ctrl6_msg_ack_accept
-    ; call send_msg_info
+    call send_msg6_info
 
     jmp on_ctrl6_message_end
 

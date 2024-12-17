@@ -23,6 +23,19 @@ send_msg_info:
     pop_registers
     ret
 
+send_msg6_info:
+    push_registers
+
+    packer_reset
+    pack_str GAME_NETVERSION6
+    pack_str cfg_password
+    send_msg MSG6_SYSTEM_INFO, CHUNKFLAG_VITAL, CHUNK_SYSTEM
+
+    call send_packet
+
+    pop_registers
+    ret
+
 send_msg_input:
     push_registers
 
