@@ -89,7 +89,7 @@ test_pack_chunk_header_big_size_and_big_seq:
 
 
 test_pack_queue_chunk:
-    packet_packer_reset
+    call packet_packer_reset
 
     ; queue_chunk [rax] [rdi] [rsi] [rdx] [r10]
     ;  rax = flags (vital & resend)
@@ -131,7 +131,7 @@ test_pack_queue_chunk:
     assert_al_eq 0x0A, __LINE__
 
     ; call again to verify sequence incrementing
-    packet_packer_reset
+    call packet_packer_reset
 
     ; rax: flags
     mov rax, 0
@@ -147,7 +147,7 @@ test_pack_queue_chunk:
 
 
     ; call again to verify sequence incrementing even more
-    packet_packer_reset
+    call packet_packer_reset
 
     ; rax: flags
     mov rax, 0
