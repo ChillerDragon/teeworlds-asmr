@@ -125,8 +125,15 @@
     mov rax, 0
     mov eax, r9d
 
+    ; r8 is packet header len depending on connection version
+    ; do not overwrite this anywhere in this function!
+    push rax
+    call get_packet_header_len
+    mov r8d, eax
+    pop rax
+
     mov dword edx, [udp_payload_index]
-    lea rdi, [udp_send_buf + PACKET_HEADER_LEN + edx]
+    lea rdi, [udp_send_buf + r8d + edx]
 
     ; _pack_int [rax] [rdi]
     ;  rax = integer
@@ -136,7 +143,7 @@
 
     ; write start
     mov dword edx, [udp_payload_index]
-    lea rdi, [udp_send_buf + PACKET_HEADER_LEN + edx]
+    lea rdi, [udp_send_buf + r8d + edx]
 
     ; rax is the returned write end pointer
     ; calculate amount of bytes written

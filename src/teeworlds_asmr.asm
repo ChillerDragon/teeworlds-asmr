@@ -143,6 +143,7 @@ section .text
 %include "src/send_game.asm"
 %include "src/receive_control.asm"
 %include "src/receive_control6.asm"
+%include "src/multi_protocol.asm"
 %include "src/system.asm"
 %include "src/string.asm"
 %include "src/packet_header.asm"
@@ -158,20 +159,6 @@ section .text
 %include "src/client.asm"
 %include "src/client_info.asm"
 %include "src/on_chat.asm"
-
-get_recv_buf:
-    ; returns into rax either `udp_recv_buf` or `udp_recv6_buf`
-    ; depending on the current connection version
-    mov al, byte [connection_version]
-    cmp al, 7
-    je .version7
-    .version6:
-    mov rax, udp_recv6_buf
-    jmp .end
-    .version7:
-    mov rax, udp_recv_buf
-    .end:
-    ret
 
 print_udp:
     print_label s_got_udp
