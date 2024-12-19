@@ -30,34 +30,18 @@
     push rdx
     push rdi
     push rsi
+    push r8
 
-    ; copy dest
-    mov dword edx, [udp_payload_index]
-    lea rax, [udp_send_buf + PACKET_HEADER_LEN + edx]
-    ; copy source
-    mov rdi, %1
-    ; copy size
-    mov rsi, %2
-    call mem_copy
-
-    add dword [udp_payload_index], %2
-
-    pop rsi
-    pop rdi
-    pop rdx
-    pop rax
-%endmacro
-
-; packet6_pack_raw [buffer] [buffer size]
-%macro packet6_pack_raw 2
+    ; r8 is packet header len depending on connection version
+    ; do not overwrite this anywhere in this function!
     push rax
-    push rdx
-    push rdi
-    push rsi
+    call get_packet_header_len
+    mov r8d, eax
+    pop rax
 
     ; copy dest
     mov dword edx, [udp_payload_index]
-    lea rax, [udp_send_buf + PACKET6_HEADER_LEN + edx]
+    lea rax, [udp_send_buf + r8d + edx]
     ; copy source
     mov rdi, %1
     ; copy size
@@ -66,6 +50,7 @@
 
     add dword [udp_payload_index], %2
 
+    pop r8
     pop rsi
     pop rdi
     pop rdx
@@ -77,37 +62,25 @@
     push rdx
     push rdi
     push rcx
+    push r8
 
-    ; copy one byte
-    mov dword edx, [udp_payload_index]
-    lea rdi, [udp_send_buf + PACKET_HEADER_LEN + edx]
-    mov byte [rdi], %1
-
-    ; increment payload index
-    inc edx
-    mov dword [udp_payload_index], edx
-
-    pop rcx
-    pop rdi
-    pop rdx
-    pop rax
-%endmacro
-
-%macro packet6_pack_byte 1
+    ; r8 is packet header len depending on connection version
+    ; do not overwrite this anywhere in this function!
     push rax
-    push rdx
-    push rdi
-    push rcx
+    call get_packet_header_len
+    mov r8d, eax
+    pop rax
 
     ; copy one byte
     mov dword edx, [udp_payload_index]
-    lea rdi, [udp_send_buf + PACKET6_HEADER_LEN + edx]
+    lea rdi, [udp_send_buf + r8d + edx]
     mov byte [rdi], %1
 
     ; increment payload index
     inc edx
     mov dword [udp_payload_index], edx
 
+    pop r8
     pop rcx
     pop rdi
     pop rdx

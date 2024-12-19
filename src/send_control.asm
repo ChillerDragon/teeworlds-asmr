@@ -31,8 +31,8 @@ send_ctrl_msg_connect6:
     push rax
 
 
-    packet6_pack_byte MSG6_CTRL_CONNECT
-    packet6_pack_raw MAGIC_TKEN, 4
+    packet_pack_byte MSG6_CTRL_CONNECT
+    packet_pack_raw MAGIC_TKEN, 4
 
     mov byte [out_packet_header_flags], PACKETFLAG6_CONTROL
     mov byte [out_packet_header_num_chunks], 0
@@ -44,8 +44,8 @@ send_ctrl_msg_connect6:
 send_ctrl6_msg_ack_accept:
     push rax
 
-    packet6_pack_byte MSG6_CTRL_ACCEPT
-    ; packet6_pack_raw [peer_token], 4
+    packet_pack_byte MSG6_CTRL_ACCEPT
+    ; packet_pack_raw [peer_token], 4
 
     mov byte [out_packet_header_flags], PACKETFLAG6_CONTROL
     mov byte [out_packet_header_num_chunks], 0

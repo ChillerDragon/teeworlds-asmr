@@ -75,7 +75,7 @@ send_packet6:
     call set_packet_header
 
     ; append ddnet security token at the end of all packet payloads
-    packet6_pack_raw peer_token, 4
+    packet_pack_raw peer_token, 4
 
     ; buf
     mov rax, udp_send_buf
