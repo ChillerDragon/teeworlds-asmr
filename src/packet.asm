@@ -2,14 +2,14 @@
 ; you can also push bytes into a packer buffer
 ; see packer.asm for that
 
-%macro packet_packer_reset 0
+packet_packer_reset:
     mov dword [udp_payload_index], 0
 
     mov byte [out_packet_header_flags], 0
     mov byte [out_packet_header_num_chunks], 0
-%endmacro
+    ret
 
-%macro hexdump_outgoing_packet 0
+hexdump_outgoing_packet:
     push rax
     push rdi
 
@@ -25,7 +25,7 @@
 
     pop rdi
     pop rax
-%endmacro
+    ret
 
 ; packet_pack_raw [buffer] [buffer size]
 %macro packet_pack_raw 2

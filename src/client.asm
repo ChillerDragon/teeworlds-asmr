@@ -1,5 +1,5 @@
 connect:
-    packet_packer_reset
+    call packet_packer_reset
     mov dword [peer_token], 0xFFFFFFFF
 
     mov rax, sockaddr_server

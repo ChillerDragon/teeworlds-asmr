@@ -85,27 +85,13 @@ send_packet6:
     mov edi, [udp_payload_index]
     add rdi, PACKET6_HEADER_LEN
 
-    ; ; dbg print
-    ; push rax
-    ; print_label s_sending_packet_with_size
-    ; mov rax, rdi
-    ; call println_uint32
-    ; pop rax
-
-    push rax
-    ; TODO: somehow we sent too much here
-    printlnf "size=%d", rdi
-    print "sending: "
-    mov rax, udp_send_buf
-    call print_hexdump
-    call print_newline
-    pop rax
+    call hexdump_outgoing_packet
 
     call send_udp
 
     ; this is for convenience so we can just queue new chunks
     ; and never have to worry about which chunk is the first
-    packet_packer_reset
+    call packet_packer_reset
 
     pop rdi
     pop rax
@@ -161,7 +147,7 @@ send_packet7:
 
     ; this is for convenience so we can just queue new chunks
     ; and never have to worry about which chunk is the first
-    packet_packer_reset
+    call packet_packer_reset
 
     pop rdi
     pop rax
@@ -197,6 +183,6 @@ send_packet_with_payload:
 
     ; this is for convenience so we can just queue new chunks
     ; and never have to worry about which chunk is the first
-    packet_packer_reset
+    call packet_packer_reset
 
     ret
