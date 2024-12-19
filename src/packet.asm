@@ -16,7 +16,10 @@
     print_label s_current_outgoing_packet_bytes
     mov rax, udp_send_buf
     mov dword edi, [udp_payload_index]
-    add edi, PACKET_HEADER_LEN
+    push rax
+    call get_packet_header_len
+    add edi, eax
+    pop rax
     call print_hexdump
     call print_newline
 
