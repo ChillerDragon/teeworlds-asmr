@@ -32,7 +32,7 @@ pack_chunk_header6:
     ; first byte is 2 bit flags (we xor them in)
     ; and the remaining 6 bit are the first part of size
     mov r8, rdi
-    shr r8, 6
+    shr r8, 4
     and r8b, 0b00111111
     mov byte [rsi], r8b
     xor byte [rsi], al
@@ -40,7 +40,7 @@ pack_chunk_header6:
     ; second byte is only the size
     ; the sequence number will also be inserted later if it is vital
     mov r8, rdi
-    and r8, 0b00001111
+    and r8, 0b00111111
     mov byte [rsi+1], r8b
 
     ; sequence only included if it is a vital chunk
@@ -52,7 +52,7 @@ pack_chunk_header6:
     mov r8, 0
     mov r8d, dword [connection_sequence]
     shr r8, 2
-    and r8, 0b11110000
+    and r8, 0b11000000
     or byte [rsi+1], r8b
 
     ; full 8 bit sequence into third byte
