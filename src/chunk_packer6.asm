@@ -51,8 +51,10 @@ pack_chunk_header6:
     ; if sequence is bigger than 8 bit
     mov r8, 0
     mov r8d, dword [connection_sequence]
-    shr r8, 2
-    and r8, 0b11110000
+    shr r8b, 2
+    and r8b, 0b11110000
+    ; teeworlds uses 11110000
+    ; and ddnet uses 11111100
     or byte [rsi+1], r8b
 
     ; full 8 bit sequence into third byte
