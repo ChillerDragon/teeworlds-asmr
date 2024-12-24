@@ -49,6 +49,37 @@ pack_chunk_header:
     ;  mov rsi, my_chunk_buffer
     ;  call pack_chunk_header
     ;
+    push rax
+    mov al, [connection_version]
+    cmp al, 7
+    pop rax
+    je .version7
+    .version7:
+    call pack_chunk_header7
+    jmp .end
+    .version6:
+    call pack_chunk_header6
+    .end:
+    ret
+
+
+pack_chunk_header7:
+    ; pack_chunk_header [rax] [rdi] [rsi]
+    ;   rax = flags
+    ;   rdi = size
+    ;   rsi = output buffer
+    ; returns into rax the size written
+    ;   will be either 2 for non vital
+    ;   or 3 for vital
+    ;
+    ; example:
+    ;
+    ;  mov rax, 0
+    ;  set_rax_flag CHUNKFLAG_VITAL
+    ;  mov rdi, 10
+    ;  mov rsi, my_chunk_buffer
+    ;  call pack_chunk_header
+    ;
     push_registers_keep_rax
 
     ; rcx will be used for tmp register holding the return value
@@ -80,7 +111,7 @@ pack_chunk_header:
 
     ; sequence only included if it is a vital chunk
     is_rax_flag CHUNKFLAG_VITAL
-    jne .pack_chunk_header_end
+    jne .pack_chunk_header7_end
 
     ; patch 2 bits in the second byte
     ; if sequence is bigger than 8 bit
@@ -97,7 +128,7 @@ pack_chunk_header:
     ; return size for vital chunks
     mov rcx, 3
 
-.pack_chunk_header_end:
+.pack_chunk_header7_end:
     mov rax, rcx
     pop_registers_keep_rax
     ret
