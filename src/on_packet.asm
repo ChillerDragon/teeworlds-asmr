@@ -162,6 +162,17 @@ on_packet6:
 
     is_packet_in_flag PACKETFLAG6_CONTROL
     je on_ctrl6_message
+    is_packet_in_flag PACKETFLAG6_COMPRESSION
+    jne .on_packet6_game_or_sys_not_compressed
+
+
+.on_packet6_game_or_sys_compressed:
+    puts "0.6 compression is not supported yet"
+    exit 1
+
+.on_packet6_game_or_sys_not_compressed:
+    puts "0.6 game or sys messages not supported yet"
+    exit 1
 
     jmp on_packet_end
 
