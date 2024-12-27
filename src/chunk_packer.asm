@@ -54,11 +54,11 @@ pack_chunk_header:
     cmp al, 7
     pop rax
     je .version7
-    .version7:
-    call pack_chunk_header7
-    jmp .end
     .version6:
     call pack_chunk_header6
+    jmp .end
+    .version7:
+    call pack_chunk_header7
     .end:
     ret
 
