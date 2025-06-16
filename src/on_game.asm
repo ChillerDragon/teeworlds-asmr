@@ -28,7 +28,7 @@ on_game_message:
     mov eax, [chunk_header_size]
     printf "[debug] got game msg with size %d\n", rax
     pop rax
-    call print_udp
+    ; call print_udp
 
     cmp r9d, MSG6_GAME_NULL
     je on_game_msg6_null
