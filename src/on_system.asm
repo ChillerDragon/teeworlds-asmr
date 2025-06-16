@@ -26,6 +26,8 @@ on_system_message:
     .version6:
     cmp r9d, MSG6_SYSTEM_NULL
     je on_system_msg6_null
+    cmp r9d, MSG6_SYSTEM_MAP_CHANGE
+    je on_system_msg6_map_change
 
     print_label s_unknown_system_msg
     mov rax, r9

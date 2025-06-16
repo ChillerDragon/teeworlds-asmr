@@ -172,7 +172,7 @@ on_packet6:
 
 .on_packet6_game_or_sys_not_compressed:
     ; set input arg for on_system_or_game_messages
-    mov rax, packet_payload
+    mov rax, packet6_payload
 
     ; set size arg for on_system_or_game_messages
     mov rdi, [udp_read_len]

@@ -24,8 +24,6 @@ on_game_message:
     je .version7
 
     .version6:
-    ; TODO: somehow r9d is always 0????
-
     cmp r9d, MSG6_GAME_NULL
     je on_game_msg6_null
 
