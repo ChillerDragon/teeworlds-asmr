@@ -29,7 +29,6 @@ on_system_msg6_map_change:
 
     mov rsp, rbp
 
-    ; TODO: send_ready6
-    ; call send_ready
+    call send_ready6
 
     jmp on_system_message_end

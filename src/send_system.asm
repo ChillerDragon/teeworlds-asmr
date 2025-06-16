@@ -9,6 +9,17 @@ send_ready:
     pop_registers
     ret
 
+send_ready6:
+    push_registers
+
+    packer_reset
+    send_msg MSG6_SYSTEM_READY, CHUNKFLAG_VITAL, CHUNK_SYSTEM
+
+    call send_packet
+
+    pop_registers
+    ret
+
 send_msg_info:
     push_registers
 
