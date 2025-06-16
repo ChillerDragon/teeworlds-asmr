@@ -24,14 +24,14 @@ on_game_message:
     je .version7
 
     .version6:
-    cmp r9d, MSG6_GAME_NULL
-    je on_game_msg6_null
-
     push rax
-    mov rax, [chunk_header_size]
+    mov eax, [chunk_header_size]
     printf "[debug] got game msg with size %d\n", rax
     pop rax
     call print_udp
+
+    cmp r9d, MSG6_GAME_NULL
+    je on_game_msg6_null
 
     print_label s_unknown_game_msg
     mov rax, r9

@@ -24,6 +24,12 @@ on_system_message:
     je .version7
 
     .version6:
+    push rax
+    mov eax, [chunk_header_size]
+    printf "[debug] got sys msg with size %d\n", rax
+    pop rax
+    call print_udp
+
     cmp r9d, MSG6_SYSTEM_NULL
     je on_system_msg6_null
     cmp r9d, MSG6_SYSTEM_MAP_CHANGE
