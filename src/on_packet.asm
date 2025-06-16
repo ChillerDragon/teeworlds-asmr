@@ -171,9 +171,20 @@ on_packet6:
     exit 1
 
 .on_packet6_game_or_sys_not_compressed:
-    puts "0.6 game or sys messages not supported yet"
-    exit 1
+    ; set input arg for on_system_or_game_messages
+    mov rax, packet_payload
 
+    ; set size arg for on_system_or_game_messages
+    mov rdi, [udp_read_len]
+    sub rdi, PACKET6_HEADER_LEN
+
+.on_packet6_game_or_sys:
+    ; rax is the input buffer (already set above in if branches)
+    ; rdi is the size (already set above in if branches)
+    mov rsi, on_message
+    call on_system_or_game_messages
+
+    ; TODO: i think this code is unreachable
     jmp on_packet_end
 
 on_packet7:

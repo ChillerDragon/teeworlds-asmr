@@ -16,6 +16,25 @@ on_game_message:
     ; payload to rax
     mov rax, r10
 
+    ; if 0.6 or 0.7
+    push r11
+    mov r11b, [connection_version]
+    cmp r11b, 7
+    pop r11
+    je .version7
+
+    .version6:
+    ; TODO: somehow r9d is always 0????
+
+    cmp r9d, MSG6_GAME_NULL
+    je on_game_msg6_null
+
+    print_label s_unknown_game_msg
+    mov rax, r9
+    call println_uint32
+    exit 1
+
+    .version7:
     cmp r9d, MSG_GAME_NULL
     je on_game_msg_null
     cmp r9d, MSG_GAME_SV_MOTD

@@ -16,6 +16,23 @@ on_system_message:
     ; payload to rax
     mov rax, r10
 
+    ; if 0.6 or 0.7
+    push r11
+    mov r11b, [connection_version]
+    cmp r11b, 7
+    pop r11
+    je .version7
+
+    .version6:
+    cmp r9d, MSG6_SYSTEM_NULL
+    je on_system_msg6_null
+
+    print_label s_unknown_system_msg
+    mov rax, r9
+    call println_uint32
+    exit 1
+
+    .version7:
     cmp r9d, MSG_SYSTEM_NULL
     je on_system_msg_null
     cmp r9d, MSG_SYSTEM_MAP_CHANGE
