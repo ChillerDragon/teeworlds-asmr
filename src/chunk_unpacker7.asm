@@ -13,6 +13,8 @@
 %endmacro
 
 print_chunk_header:
+    ; untested but should work for both 0.6 and 0.7
+    ; originally it was written for 0.7
     print_label s_got_chunk_header
     print_label s_size
     mov rax, 0
@@ -43,8 +45,8 @@ print_chunk_header:
 .print_chunk_header_end:
     ret
 
-unpack_chunk_header:
-    ; unpack_chunk_header [rax]
+unpack_chunk_header7:
+    ; unpack_chunk_header7 [rax]
     ;   rax = buffer
     push_registers
 
@@ -75,7 +77,7 @@ unpack_chunk_header:
     ; in non vital chunks
     mov dword [chunk_header_sequence], 0
     is_chunk_flag CHUNKFLAG_VITAL
-    jne .unpack_chunk_header_end
+    jne .unpack_chunk_header7_end
 
     ; first sequence byte
     mov rdx, 0
@@ -89,8 +91,23 @@ unpack_chunk_header:
     or ebx, edx
     mov [chunk_header_sequence], ebx
 
-.unpack_chunk_header_end:
+.unpack_chunk_header7_end:
 
     pop_registers
     ret
 
+unpack_chunk_header:
+    ; unpack_chunk_header [rax]
+    ;   rax = buffer
+    push rax
+    mov al, [connection_version]
+    cmp al, 7
+    pop rax
+    je .version7
+    .version6:
+    call unpack_chunk_header6
+    jmp .end
+    .version7:
+    call unpack_chunk_header7
+    .end:
+    ret

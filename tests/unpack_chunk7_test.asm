@@ -10,7 +10,7 @@ test_vital_low_seq_and_size:
     assert_input_buf_push_byte 0x05
 
     mov rax, assert_input_buf
-    call unpack_chunk_header
+    call unpack_chunk_header7
 
     mov rax, 0
     mov al, [chunk_header_flags]
@@ -32,7 +32,7 @@ test_vital_size_3_seq_201:
     assert_input_buf_push_byte 0xC9
 
     mov rax, assert_input_buf
-    call unpack_chunk_header
+    call unpack_chunk_header7
 
     mov rax, 0
     mov al, [chunk_header_flags]
@@ -54,7 +54,7 @@ test_vital_size_58_seq_1:
     assert_input_buf_push_byte 0x01
 
     mov rax, assert_input_buf
-    call unpack_chunk_header
+    call unpack_chunk_header7
 
     mov rax, 0
     mov al, [chunk_header_flags]
@@ -76,7 +76,7 @@ test_vital_maxed_all_set_size_4095_seq_1023:
     assert_input_buf_push_byte 0xFF
 
     mov rax, assert_input_buf
-    call unpack_chunk_header
+    call unpack_chunk_header7
 
     mov rax, 0
     mov al, [chunk_header_flags]
