@@ -70,7 +70,7 @@ hex_to_char:
 
     mov rbx, hex_str
     xchg ah, al
-    mov [rbx], rax
+    mov [rbx], ax
 
     pop rax
     pop rbx

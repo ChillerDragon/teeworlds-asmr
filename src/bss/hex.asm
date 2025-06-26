@@ -1,2 +1,2 @@
 ; this is too long
-hex_str resb 2
+hex_str resb 8
