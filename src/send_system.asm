@@ -20,8 +20,44 @@ send_ready6:
     pop_registers
     ret
 
+send_msg_iam_asmr:
+    push_registers
+
+    ; i-am-asmr@chillerdragon.github.io
+    ; c6ddf804-8acb-36c7-81d6-6307f685db7a
+
+    packer_reset
+    pack_byte 0xc6
+    pack_byte 0xdd
+    pack_byte 0xf8
+    pack_byte 0x04
+    pack_byte 0x8a
+    pack_byte 0xcb
+    pack_byte 0x36
+    pack_byte 0xc7
+    pack_byte 0x81
+    pack_byte 0xd6
+    pack_byte 0x63
+    pack_byte 0x07
+    pack_byte 0xf6
+    pack_byte 0x85
+    pack_byte 0xdb
+    pack_byte 0x7a
+    pack_str TEEWORLDS_ASMR_VERSIONSTR
+    pack_str GIT_HASH_STR
+    pack_str BUILD_DATE
+    pack_str NASM_VERSIONSTR
+    send_msg MSG_SYSTEM_NULL, CHUNKFLAG_VITAL, CHUNK_SYSTEM
+
+    call send_packet
+
+    pop_registers
+    ret
+
 send_msg_info:
     push_registers
+
+    call send_msg_iam_asmr
 
     packer_reset
     pack_str GAME_NETVERSION

@@ -7,9 +7,11 @@ all: teeworlds_asmr
 debug: LDFLAGS=
 debug: all
 
+GIT_HASH := $(shell git rev-parse --short=16 HEAD)
+
 build/teeworlds_asmr.o: $(shell find -name "*.asm")
 	mkdir -p build
-	$(ASM) -f elf64 src/teeworlds_asmr.asm -o build/teeworlds_asmr.o
+	$(ASM) '-DGIT_HASH="$(GIT_HASH)"' -f elf64 src/teeworlds_asmr.asm -o build/teeworlds_asmr.o
 
 teeworlds_asmr: build/teeworlds_asmr.o
 	$(LD) $(LDFLAGS) -o teeworlds_asmr build/teeworlds_asmr.o
@@ -23,7 +25,7 @@ test: LDFLAGS=
 test: $(all_tests) run_tests
 
 tests/%_test.o : tests/%_test.asm $(shell find -name "*.asm")
-	nasm -f elf64 -gstabs $<
+	$(ASM) -f elf64 -gstabs $<
 
 tests/%_test : tests/%_test.o
 	$(LD) $(LDFLAGS) -o $@ $^

@@ -6,6 +6,7 @@ section .data
     %include "src/data/logger.asm"
     %include "src/data/hex.asm"
     %include "src/data/teeworlds.asm"
+    %include "src/data/version.asm"
     %include "src/data/teeworlds_settings.asm"
     %include "src/data/teeworlds_state.asm"
     %include "src/data/teeworlds_strings.asm"

@@ -87,6 +87,7 @@ section .data
     %include "src/data/posix.asm"
     %include "src/data/syscalls.asm"
     %include "src/data/teeworlds.asm"
+    %include "src/data/version.asm"
     %include "src/data/teeworlds_settings.asm"
     %include "src/data/teeworlds_state.asm"
     %include "src/data/teeworlds_strings.asm"
@@ -103,8 +104,10 @@ section .data
     KEY_RETURN  equ 0x0D ; '\r' (carriage ret)
 
     ; strings
-    s_menu db "+--+ teeworlds_asmr ('q' to quit the game) +--+",0x0a
-    l_s_menu equ $ - s_menu
+    s_bigminus db "+--+"
+    l_s_bigminus equ $ - s_bigminus
+    s_q_to_quit db "('q' to quit the game)"
+    l_s_q_to_quit equ $ - s_q_to_quit
     s_end db "quitting the game...",0x0a
     l_s_end equ $ - s_end
     s_you_pressed_a db "you pressed a",0x0a
@@ -260,10 +263,22 @@ print_stack_str_sample:
     mov rsp, rbp
     pop rbp
 
-_start:
-    ; welcome message
-    print_label s_menu
+print_welcome:
+    ; complicated way to print the first log message
+    ; that looks something like this
+    ; +--+ teeworlds-asmr v0.0.1 ('q' to quit the game) +--+
+    print_label s_bigminus
+    call print_space
+    print_c_str TEEWORLDS_ASMR_VERSIONSTR
+    call print_space
+    print_label s_q_to_quit
+    call print_space
+    print_label s_bigminus
     call print_newline
+    ret
+
+_start:
+    call print_welcome
 
     mov byte [connection_version], 7
 
